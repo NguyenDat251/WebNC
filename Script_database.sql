@@ -1,37 +1,28 @@
-CREATE DATABASE MANAGER;
 
-CREATE TABLE `member` (
+CREATE TABLE `RealAccount` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
-  `birthdate` datetime DEFAULT NULL,
-  `projectID` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `member` VALUES ('1', 'Dat 1', '0343244644', '2020-01-01', 1);
-INSERT INTO `member` VALUES ('2', 'Dat 2', '0343244644', '2020-01-01', 2);
-INSERT INTO `member` VALUES ('3', 'Dat 3', '0343244644', '2020-01-01', 3);
+INSERT INTO `RealAccount` VALUES ('1', 'Dat1', '123456', 'Nguyen Dat', 'dat@gmail.com', '0343244644');
+INSERT INTO `RealAccount` VALUES ('2', 'Dat2', '123456', 'Nguyen Dat 2', 'dat2@gmail.com', '0343244644');
+INSERT INTO `RealAccount` VALUES ('3', 'Dat3', '123456', 'Nguyen Dat 3', 'dat3@gmail.com', '0343244644');
 
-INSERT INTO `member` VALUES ('4', 'Dat 1', '0343244644', '2020-01-01', 4);
-INSERT INTO `member` VALUES ('5', 'Dat 2', '0343244644', '2020-01-01', 5);
-INSERT INTO `member` VALUES ('6', 'Dat 3', '0343244644', '2020-01-01', 6);
-
-INSERT INTO `member` VALUES ('7', 'Dat 1', '0343244644', '2020-01-01', 7);
-INSERT INTO `member` VALUES ('8', 'Dat 2', '0343244644', '2020-01-01', 8);
-INSERT INTO `member` VALUES ('9', 'Dat 3', '0343244644', '2020-01-01', 9);
-
-INSERT INTO `member` VALUES ('10', 'Dat 1', '0343244644', '2020-01-01', 10);
-INSERT INTO `member` VALUES ('11', 'Dat 2', '0343244644', '2020-01-01', 11);
-INSERT INTO `member` VALUES ('12', 'Dat 3', '0343244644', '2020-01-01', 12);
-
-CREATE TABLE `project` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) ,
-  `description` varchar(255) ,
+CREATE TABLE `account` (
+  `Number` int(11) NOT NULL AUTO_INCREMENT,
+  `Money` varchar(255) DEFAULT NULL,
+  `Type` varchar(255) DEFAULT NULL,
+  `IdParent` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
-INSERT INTO `project` VALUES ('1', 'project 1', 'abcaaaaaaaaaaaaaa');
-INSERT INTO `project` VALUES ('2', 'project 2', 'abcaaaaaaaaaaaaaa');
-INSERT INTO `project` VALUES ('3', 'project 3', 'abcaaaaaaaaaaaaaa');
+INSERT INTO `account` VALUES ('1', '10000000', 1, '1');
+INSERT INTO `account` VALUES ('2', '5000000', 1, '2');
+INSERT INTO `account` VALUES ('3', '5000000', 1, '3');
+INSERT INTO `account` VALUES ('4', '500000', 2, '1');
+INSERT INTO `account` VALUES ('5', '200000', 2, '1');
