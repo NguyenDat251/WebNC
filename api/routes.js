@@ -7,6 +7,7 @@ module.exports = function(app) {
 
   app.route('/account/:accountId')
     .get(accountCtrl.detail)
+    .post(accountCtrl.addMoney)
     .put(accountCtrl.update);
 
   // todoList Routes

@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 require('dotenv').config()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 8080
 const urlClient = process.env.URL_CLIENT || 'http://localhost:3000'
 
 app.use(bodyParser.json())
