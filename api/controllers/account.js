@@ -1,9 +1,13 @@
 'use strict'
 
 const db = require('../mysql')
+const sig = require('../module/sig.js')
 
 module.exports = {
     detail: (req, res) => {
+
+        if(sig.checkSig(req.headers.sig)){
+
         let TransactionAccount = null;
         let SavingAccount = [];
 
@@ -55,6 +59,15 @@ module.exports = {
             }
                 )
         })
+
+    }else{
+        console.log("Access denied!")
+        res.json({
+            "returnCode": 0,
+            "returnMessage": "Access denied!",
+            "data": null
+        })
+    }
     },
     addMoney: async (req, res) => {
         let CurrentMoney;
