@@ -6,7 +6,9 @@ const sig = require('../module/sig.js')
 module.exports = {
     detail: (req, res) => {
 
-        if(sig.checkSig(req.headers.sig)){
+        // if(sig.checkSig(req.headers.sig)){
+
+            if(sig.checkPGPSig(req.headers.sig)){
 
         let TransactionAccount = null;
         let SavingAccount = [];

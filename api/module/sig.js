@@ -1,5 +1,6 @@
 const NodeRSA = require('node-rsa');
 const openpgp = require('openpgp');
+const fs = require('fs');
 
 let publicKey = "-----BEGIN PUBLIC KEY-----\
     MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSHgxSkQ2wHFcV/lxVOZPOemKd\
@@ -48,23 +49,19 @@ module.exports = {
     },
     checkPGPSig: async  ()=>{
 
-        const publicKeyArmored = `-----BEGIN PGP PUBLIC KEY BLOCK-----
-        Version: BCPG C# v1.6.1.0
-        
-        mQENBF7BXO4BCACg5y/A9QREnPlm8MjJ/1cdLM8EwsEoGMmH+99bV6mLut3XBi9u
-        OTxuSdkvruCpYsdEhgW0RhhWX59rDzGixHZHo9tq57vQJB/P5jSkap/MR602fmVR
-        2g4WAiVWxN7XOyI2SEYFrM2nw7GY5hHVKKGrmSBxAHmxsQeZBm6LzU/2ZA/FJzWv
-        Y/GrOyjzmtW587BiYQagVteNw0seUNcZFKwhyXAfWSsRgjaEw09nHCObyCH1IvId
-        KOGD6r3Z5b5ZoVVI9PBnSOmqm0lKShYNOkyH55Awf6ZlvKOWA+Rck+qvXVEr9H9S
-        grz73w/q3Na8S6hmP757q/HU6lq3kzUvmdg/ABEBAAG0AIkBHAQQAQIABgUCXsFc
-        7gAKCRD4olkg7iuWHHSHB/wNtgVOi8L6/GtYX8ultQdHqXI7Tzv2GXDmu9hnvioM
-        zx3qAXBrCj2XOAe3RBLV5VSn2Hq/1MpxhfHcrmX2mWqmkb5IsGPqI9XbSV8uRJI6
-        r96sxsDxSssRSY10uhEJ+gqMFnOON517iw4TlDKAOHAKEWeM+vV3LB4cTSH4zwVd
-        C6AntfSrf6sfAkwoVs4fLl83oqzUmSHe4txppzlJyyy6C5XE4KjA5Rink+mP80Nr
-        Tv+dy2NkhitcMK4hJ4JK86VV56YAOdPDCtpWjqv1DTDRFMmxI2FY2x9a2j9WG600
-        ZaCxxV0r9uCqaivvs7XrNh+hX9f8+oyPEgv81qGiwcde
-        =AFra
-        -----END PGP PUBLIC KEY BLOCK-----`;
+        let publicKeyArmored;
+
+            await new Promise((resolve, reject) => { 
+        fs.readFile('././pgp/public', function read(err, data) {
+        if (err) {
+            throw err;
+        }
+        publicKeyArmored = data;
+
+        resolve(true);
+    });
+   
+})
 
         const verified = await openpgp.verify({
             message: await openpgp.cleartext.readArmored(cleartext),           // parse armored message
@@ -81,3 +78,4 @@ module.exports = {
         // }
     }
 }
+
