@@ -78,44 +78,4 @@ console.log(publicKey.verify("bankdbb", sig, 'utf8', 'hex'))
     console.log("error verify: " + err);
 }
 
-
-
-  const axios = require('axios');
-
-  
-
-  let config = {
-    headers: {
-        sig: sig
-      }
-  }
-
-axios.get('http://localhost:8080/account/1', config)
-  .then(response => {
-    console.log(response.data.url);
-    console.log(response.data.explanation);
-  })
-  .catch(error => {
-    console.log(error);
-  });
-
-// console.log(sig)
-
-
-/*old way*/
-// tạo chữ kí
-// const sign = crypto.createSign('RSA-SHA256');
-// sign.update("bankdbb"); // đưa data cần kí vào đây
-// let sig;
-// try {
-//     sig = sign.sign(privateKey, 'hex'); // tạo chữ kí bằng private key
-// } catch (err) {
-//     console.log("error sig")
-// }
-// // Verify thì làm gì
-// const verify = crypto.createVerify('RSA-SHA256');
-// verify.write("bankdbb");
-// verify.end();
-
-
-// console.log(verify.verify(publicKey, sig, 'hex')); // truyen public key, chu ky vào để verify
+console.log(sig)
