@@ -15,7 +15,8 @@
     "mssql": "^6.2.0",
     "mysql": "^2.18.1",
     "node-rsa": "^1.0.8",
-    "openpgp": "^4.10.4"
+    "openpgp": "^4.10.4",
+    "sha1": "^1.1.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

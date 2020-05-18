@@ -1,6 +1,7 @@
 const NodeRSA = require('node-rsa');
 const openpgp = require('openpgp');
 const fs = require('fs');
+const sha1 = require('sha1');
 
 let publicKey = "-----BEGIN PUBLIC KEY-----\
     MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSHgxSkQ2wHFcV/lxVOZPOemKd\
@@ -76,6 +77,19 @@ module.exports = {
         // } else {
         //     throw new Error('signature could not be verified');
         // }
+    },
+    checkTime: (time)=> {
+        if(Math.floor(Date.now() / 1000) - time > 300){
+            return false;
+        }
+
+        return true;
+    },
+    checkHash: (hash, ts, data, secretKey) => {
+         return (hash === sha1(ts + ":" + data + ":" + secrectKey))
+    },
+    createHash: (ts, data, secrectKey) => {
+        console.log( sha1(ts + ":" + data + ":" + secrectKey))
     }
 }
 
