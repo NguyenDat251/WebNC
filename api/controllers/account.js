@@ -5,7 +5,54 @@ const sig = require('../module/sig.js')
 
 module.exports = {
     detail: (req, res) => {
-        if(sig.checkPGPSig(req.headers.sig)){
+
+        let secretKey = 'sacombank';
+        let publicKey = "";
+        let currentTime = Date.now();
+
+        //check id -> lấy secret key
+        if(req.headers.id == 'sacombank'){
+            secretKey = 'sacombank'
+            
+        }
+        else{
+            res.json({
+                "returnCode": 0,
+                "returnMessage": "Unknowed bank",
+                "data": null
+            })
+
+            return;
+        }
+
+        //check hash
+
+        
+        if(!sig.checkHash(req.headers.sig, req.headers.ts, req.body, secretKey)){
+            res.json({
+                "returnCode": 0,
+                "returnMessage": "The request has been fixed",
+                "data": null
+            })
+
+            return;
+        }
+
+        //check time
+
+        if(currentTime - req.headers.ts > 5000000){
+            res.json({
+                "returnCode": 0,
+                "returnMessage": "The request is out of date",
+                "data": null
+            })
+
+            return;
+        }
+
+        //trả res
+
+        // if(sig.checkPGPSig(req.headers.sig)){
 
         let TransactionAccount = null;
         let SavingAccount = [];
@@ -59,16 +106,85 @@ module.exports = {
                 )
         })
 
-    }else{
-        console.log("Access denied!")
-        res.json({
-            "returnCode": 0,
-            "returnMessage": "Access denied!",
-            "data": null
-        })
-    }
+    // }else{
+    //     console.log("Access denied!")
+    //     res.json({
+    //         "returnCode": 0,
+    //         "returnMessage": "Access denied!",
+    //         "data": null
+    //     })
+    // }
     },
     addMoney: async (req, res) => {
+        let secretKey = "";
+        let publicKey = "";
+        let currentTime = Date.now();
+
+        //check id -> lấy secret key
+        if(req.headers.id == 'sacombank'){
+            secretKey = 'sacombank'
+            
+        }
+
+
+        //giải nén
+        //const key = new NodeRSA(sig.privateKey)
+
+        //const request = key.decrypt(req.body.signature, 'hex')
+        const request = sig.decrypt(req);
+
+        if(!request){
+            res.json({
+                "returnCode": 0,
+                "returnMessage": "wrong key",
+                "data": null
+            })
+
+            return;
+        }
+
+        console.log(request);
+
+        //verify
+
+        if(!sig.checkRSASig(req.headers.verify)){
+            res.json({
+                "returnCode": 0,
+                "returnMessage": "Error verify!",
+                "data": null
+            })
+
+            return;
+        }
+
+    // if(key.encrypt("abc", 'hex', 'utf8'));
+
+        //check hash
+
+        if(!sig.checkHash(req.headers.sig, req.headers.ts, request, secretKey)){
+            res.json({
+                "returnCode": 0,
+                "returnMessage": "The request has been fixed",
+                "data": null
+            })
+
+            return;
+        }
+
+        //check time
+
+        if(currentTime - req.headers.ts > 500000){
+            res.json({
+                "returnCode": 0,
+                "returnMessage": "The request is out of date",
+                "data": null
+            })
+        }
+
+
+        //thực hiện api
+
+
         let CurrentMoney;
 
         let sql = 'SELECT * FROM account WHERE IdParent=?'

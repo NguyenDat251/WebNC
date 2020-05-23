@@ -43,11 +43,11 @@ const openpgp = require('openpgp'); // use as CommonJS, AMD, ES6 module or via w
     // -----END PGP PUBLIC KEY BLOCK-----`; // encrypted private key
 
 
-    const { privateKeyArmored, publicKeyArmored, revocationCertificate } = await openpgp.generateKey({
-        userIds: [{ name: 'Jon Smith', email: 'jon@example.com' }], // you can pass multiple user IDs
-        curve: 'ed25519',                                           // ECC curve name
-        passphrase: 'super long and hard to guess secret'           // protects the private key
-    });
+    // const { privateKeyArmored, publicKeyArmored, revocationCertificate } = await openpgp.generateKey({
+    //     userIds: [{ name: 'Jon Smith', email: 'jon@example.com' }], // you can pass multiple user IDs
+    //     curve: 'ed25519',                                           // ECC curve name
+    //     passphrase: 'super long and hard to guess secret'           // protects the private key
+    // });
  
     // console.log(privateKeyArmored);     // '-----BEGIN PGP PRIVATE KEY BLOCK ... '
     // console.log(publicKeyArmored);      // '-----BEGIN PGP PUBLIC KEY BLOCK ... '
@@ -67,27 +67,41 @@ const openpgp = require('openpgp'); // use as CommonJS, AMD, ES6 module or via w
 
 // })
 
-//     await new Promise((resolve, reject) => { 
-//         fs.readFile('pgp/public', function read(err, data) {
-//         if (err) {
-//             throw err;
-//         }
-//         publicKeyArmored = data;
+let privateKeyArmored, publicKeyArmored
 
-//         resolve(true);
-//     });
+await new Promise((resolve, reject) => { 
+    fs.readFile('pgp/private', function read(err, data) {
+    if (err) {
+        throw err;
+    }
+    privateKeyArmored = data;
+
+    resolve(true);
+});
+
+})
+
+    await new Promise((resolve, reject) => { 
+        fs.readFile('pgp/public', function read(err, data) {
+        if (err) {
+            throw err;
+        }
+        publicKeyArmored = data;
+
+        resolve(true);
+    });
    
-// })
+})
 
 
     console.log(privateKeyArmored);     // '-----BEGIN PGP PRIVATE KEY BLOCK ... '
     console.log(publicKeyArmored);  
 
 
-    const passphrase = `super long and hard to guess secret`; // what the private key is encrypted with
+    // const passphrase = `super long and hard to guess secret`; // what the private key is encrypted with
  
-    const { keys: [privateKey] } = await openpgp.key.readArmored(privateKeyArmored);
-    await privateKey.decrypt(passphrase);
+    // const { keys: [privateKey] } = await openpgp.key.readArmored(privateKeyArmored);
+    // await privateKey.decrypt(passphrase);
  
     
         const passphrase = `super long and hard to guess secret`; // what the private key is encrypted with

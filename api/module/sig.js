@@ -1,15 +1,17 @@
 const NodeRSA = require('node-rsa');
 const openpgp = require('openpgp');
+const crypto = require('crypto');
 const fs = require('fs');
 const sha1 = require('sha1');
+const md5 = require('md5');
 
-let publicKey = "-----BEGIN PUBLIC KEY-----\
-    MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSHgxSkQ2wHFcV/lxVOZPOemKd\
-    ho4Hpl95JSD0kUQE/3WYeroRUeGLNm86s8EWg5tREzLIi2CzJ1Q6fcHvPHjg8Mr/\
-    WLU4YvS8h5i1Jk+Kd7lf5VEaWFuAX+bEuQ7qt0TAx07o3HOJDNfG/d6k1rLg346y\
-    scQzONE8Ui++wGJM+wIDAQAB-----END PUBLIC KEY-----"
+let publicKeyRSA = `-----BEGIN PUBLIC KEY-----
+    MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSHgxSkQ2wHFcV/lxVOZPOemKd
+    ho4Hpl95JSD0kUQE/3WYeroRUeGLNm86s8EWg5tREzLIi2CzJ1Q6fcHvPHjg8Mr/
+    WLU4YvS8h5i1Jk+Kd7lf5VEaWFuAX+bEuQ7qt0TAx07o3HOJDNfG/d6k1rLg346y
+    scQzONE8Ui++wGJM+wIDAQAB-----END PUBLIC KEY-----`
 
-let privateKey = "-----BEGIN RSA PRIVATE KEY-----\
+let privateKeyRSA = "-----BEGIN RSA PRIVATE KEY-----\
     MIICXgIBAAKBgQCSHgxSkQ2wHFcV/lxVOZPOemKdho4Hpl95JSD0kUQE/3WYeroR\
     UeGLNm86s8EWg5tREzLIi2CzJ1Q6fcHvPHjg8Mr/WLU4YvS8h5i1Jk+Kd7lf5VEa\
     WFuAX+bEuQ7qt0TAx07o3HOJDNfG/d6k1rLg346yscQzONE8Ui++wGJM+wIDAQAB\
@@ -25,20 +27,37 @@ let privateKey = "-----BEGIN RSA PRIVATE KEY-----\
     HF8j2si5lqtf46VQOVzOg1NlcKy4QoGmVgdMejd/748oqQ==\
     -----END RSA PRIVATE KEY-----"
 
-privateKey = new NodeRSA(privateKey);
 
-publicKey = new NodeRSA(publicKey);
+
+let privateKey = new NodeRSA(privateKeyRSA);
+
+let publicKey = new NodeRSA(publicKeyRSA);
 
 module.exports = {
+    decrypt: (req)=>{
+        console.log("sig: " + req.body.signature)
+        let request;
+        try{
+         request =  privateKey.decrypt(req.body.signature, 'json')
+    }catch(err){
+        console.log(err)
+        console.log("Wrong key")
+        return false;
+    }
+
+    console.log(request);
+        return request;
+    },
     checkRSASig: (sig)=>{
         try {
-            let res = publicKey.verify("bankdbb", sig, 'utf8', 'hex')
+            let res = publicKey.verify("bankdbb", sig, 'base64', 'base64')
 
             console.log(res);
             return res;
 
         } catch (err) {
             console.log("error verify: " + err);
+            return false;
         }
     },
     generateRSASig: ()=>{
@@ -86,10 +105,30 @@ module.exports = {
         return true;
     },
     checkHash: (hash, ts, data, secretKey) => {
-         return (hash === sha1(ts + ":" + data + ":" + secrectKey))
+        console.log("hash: " + hash);
+
+        console.log("ts: " + ts);
+
+        data = JSON.stringify(data);
+
+        console.log("data: " + data );
+
+        console.log("secretKey: " + secretKey);
+
+        // console.log("hash check: " + sha1(ts + "/" + data + "/" + secretKey))
+
+        //console.log("hash check: " + sha1("1590203652347/{}/sacombank"))
+
+        // console.log(md5(ts + "/" + data + "/" + secretKey));
+
+
+        // console.log("hash check: " + crypto.createHash('sha256').update(ts + "/" + data + "/" + secretKey).digest('hex'))
+        console.log(md5(ts + "/" + data + "/" + secretKey)) 
+        
+        return (hash == md5(ts + "/" + data + "/" + secretKey))
     },
     createHash: (ts, data, secrectKey) => {
-        console.log( sha1(ts + ":" + data + ":" + secrectKey))
+        return sha1(ts + ":" + data + ":" + secrectKey)
     }
 }
 
