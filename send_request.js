@@ -5,9 +5,9 @@ let time = Date.now();
 
 axios.get('http://localhost:8080/account/1', {
   headers: {
-    sig: 'd99b0ff68091ca03d1273360d9cd255a8ee95688',
+    sig: '93e6e8b8ce95f1580814c21b235fa35496e8fb70',
     id: 'rsa-bank',
-    ts: 1590300963046
+    ts: 1590301762385
   }
 })
   .then(response => {

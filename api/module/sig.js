@@ -128,9 +128,9 @@ module.exports = {
 
 
         // console.log("hash check: " + crypto.createHash('sha256').update(ts + "/" + data + "/" + secretKey).digest('hex'))
-        console.log(sha1(ts + "/" + data + "/" + secretKey)) 
+        console.log(sha1(ts + ":" + data + ":" + secretKey)) 
         
-        return (hash == sha1(ts + "/" + data + "/" + secretKey))
+        return (hash == sha1(ts + ":" + data + ":" + secretKey))
     },
     createHash: (ts, data, secrectKey) => {
         return sha1(ts + ":" + data + ":" + secrectKey)

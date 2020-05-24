@@ -17,7 +17,7 @@ module.exports = {
         }
         else if(req.headers.id == 'rsa-bank')
         {
-            secretKey = 'rsa-bank'
+            secretKey = 'thisisatokenfroma'
         }
         else{
             res.json({
@@ -44,7 +44,7 @@ module.exports = {
 
         //check time
 
-        if(checkTime(req.headers.ts)){
+        if(sig.checkTime(req.headers.ts)){
             res.json({
                 "returnCode": 0,
                 "returnMessage": "The request is out of date",
