@@ -103,7 +103,7 @@ module.exports = {
         // }
     },
     checkTime: (time)=> {
-        if(Math.floor(Date.now() / 1000) - time > 300){
+        if(Math.floor(Date.now() - time)/1000 > 300){
             return false;
         }
 
@@ -133,7 +133,7 @@ module.exports = {
         return (hash == sha1(ts + ":" + data + ":" + secretKey))
     },
     createHash: (ts, data, secrectKey) => {
-        return sha1(ts + ":" + data + ":" + secrectKey)
+        return sha1(ts + ":" + JSON.stringify(data) + ":" + secrectKey)
     }
 }
 

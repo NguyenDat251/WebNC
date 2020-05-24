@@ -2,12 +2,13 @@ const axios = require('axios');
 const sig = require('../WebNC/api/module/sig.js');
 
 let time = Date.now();
+console.log(time)
 
-axios.get('http://localhost:8080/account/1', {
+axios.get('https://bankdbb.herokuapp.com/account/1', {
   headers: {
-    sig: '93e6e8b8ce95f1580814c21b235fa35496e8fb70',
+    sig: sig.createHash(time,{},'thisisatokenfroma'),
     id: 'rsa-bank',
-    ts: 1590301762385
+    ts: time
   }
 })
   .then(response => {

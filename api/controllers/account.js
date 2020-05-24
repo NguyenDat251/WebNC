@@ -44,15 +44,15 @@ module.exports = {
 
         //check time
 
-        if(sig.checkTime(req.headers.ts)){
-            res.json({
-                "returnCode": 0,
-                "returnMessage": "The request is out of date",
-                "data": null
-            })
+        // if(sig.checkTime(req.headers.ts)){
+        //     res.json({
+        //         "returnCode": 0,
+        //         "returnMessage": "The request is out of date",
+        //         "data": null
+        //     })
 
-            return;
-        }
+        //     return;
+        // }
 
         //trả res
 
