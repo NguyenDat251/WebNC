@@ -15,7 +15,7 @@ module.exports = {
             secretKey = 'sacombank'
             
         }
-        else if(req.headers.id == ' rsa-bank')
+        else if(req.headers.id == 'rsa-bank')
         {
             secretKey = 'rsa-bank'
         }
