@@ -15,6 +15,10 @@ module.exports = {
             secretKey = 'sacombank'
             
         }
+        else if(req.headers.id == ' rsa-bank')
+        {
+            secretKey = 'rsa-bank'
+        }
         else{
             res.json({
                 "returnCode": 0,
@@ -40,7 +44,7 @@ module.exports = {
 
         //check time
 
-        if(currentTime - req.headers.ts > 5000000){
+        if(checkTime(req.headers.ts)){
             res.json({
                 "returnCode": 0,
                 "returnMessage": "The request is out of date",
@@ -173,7 +177,7 @@ module.exports = {
 
         //check time
 
-        if(currentTime - req.headers.ts > 500000){
+        if(checkTime(req.headers.ts)){
             res.json({
                 "returnCode": 0,
                 "returnMessage": "The request is out of date",

@@ -27,7 +27,12 @@ let privateKeyRSA = "-----BEGIN RSA PRIVATE KEY-----\
     HF8j2si5lqtf46VQOVzOg1NlcKy4QoGmVgdMejd/748oqQ==\
     -----END RSA PRIVATE KEY-----"
 
-
+publickeyParnter = new NodeRSA(`-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEUZJwvTYorustQY+F3iqhJe+M
++vk10V1gd+tXAT5eQ6Bfx/EOEEoFiwnH/I5KmRx3D3a2GHgWYILDnCVo5Kn6HH/R
+Iuvi11rlvK5C798WYRjvNkOlcfI3M6ixQf+fAJSnflOqCcoPp/RM0HgcywoTkNWK
+PQYpPpk9tno/qlOcwwIDAQAB
+-----END PUBLIC KEY-----`)
 
 let privateKey = new NodeRSA(privateKeyRSA);
 
@@ -50,7 +55,7 @@ module.exports = {
     },
     checkRSASig: (sig)=>{
         try {
-            let res = publicKey.verify("bankdbb", sig, 'base64', 'base64')
+            let res = publickeyParnter.verify("bankdbb", sig, 'base64', 'base64')
 
             console.log(res);
             return res;
@@ -123,9 +128,9 @@ module.exports = {
 
 
         // console.log("hash check: " + crypto.createHash('sha256').update(ts + "/" + data + "/" + secretKey).digest('hex'))
-        console.log(md5(ts + "/" + data + "/" + secretKey)) 
+        console.log(sha1(ts + "/" + data + "/" + secretKey)) 
         
-        return (hash == md5(ts + "/" + data + "/" + secretKey))
+        return (hash == sha1(ts + "/" + data + "/" + secretKey))
     },
     createHash: (ts, data, secrectKey) => {
         return sha1(ts + ":" + data + ":" + secrectKey)
