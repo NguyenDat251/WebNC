@@ -31,7 +31,6 @@ module.exports = {
 
         //check hash
 
-        
         if(!sig.checkHash(req.headers.sig, req.headers.ts, req.body, secretKey)){
             res.json({
                 "returnCode": 0,
@@ -120,36 +119,18 @@ module.exports = {
     // }
     },
     addMoney: async (req, res) => {
-        let secretKey = "";
+        let secretKey = "thisisatokenfroma";
         let publicKey = "";
         let currentTime = Date.now();
 
         //check id -> lấy secret key
-        if(req.headers.id == 'sacombank'){
-            secretKey = 'sacombank'
-            
-        }
-
-
-        //giải nén
-        //const key = new NodeRSA(sig.privateKey)
-
-        //const request = key.decrypt(req.body.signature, 'hex')
-        const request = sig.decrypt(req);
-
-        if(!request){
-            res.json({
-                "returnCode": 0,
-                "returnMessage": "wrong key",
-                "data": null
-            })
-
-            return;
-        }
-
-        console.log(request);
 
         //verify
+
+        console.log("header: " + JSON.stringify(req.headers));
+        console.log("body: " +  JSON.stringify(req.body));
+
+        
 
         if(!sig.checkRSASig(req.headers.verify)){
             res.json({
@@ -165,7 +146,7 @@ module.exports = {
 
         //check hash
 
-        if(!sig.checkHash(req.headers.sig, req.headers.ts, request, secretKey)){
+        if(!sig.checkHash(req.headers.sig, req.headers.ts, req.body, secretKey)){
             res.json({
                 "returnCode": 0,
                 "returnMessage": "The request has been fixed",
@@ -177,7 +158,7 @@ module.exports = {
 
         //check time
 
-        if(checkTime(req.headers.ts)){
+        if(!sig.checkTime(req.headers.ts)){
             res.json({
                 "returnCode": 0,
                 "returnMessage": "The request is out of date",
@@ -188,6 +169,9 @@ module.exports = {
 
         //thực hiện api
 
+        console.log("begin api")
+
+        console.log(req.params.accountId)
 
         let CurrentMoney;
 
@@ -201,6 +185,8 @@ module.exports = {
                 })
             }
 
+            console.log("response: " + JSON.stringify(response))
+
             let i;
             for(i = 0; i < response.length; i++){
                 if(response[i].Type === '1'){
@@ -211,12 +197,22 @@ module.exports = {
 
             console.log("before: " + CurrentMoney);
 
+            if(!req.body.Money){
+                res.json({
+                    "returnCode": 0,
+                    "returnMessage": "Money to transaction is empty",
+                    "data": null
+                })
+
+                return;
+            }
+
             CurrentMoney += req.body.Money;
 
             console.log("after: " + CurrentMoney);
 
-            let res = null;
-            resolve(res); 
+            let res123 = null;
+            resolve(res123); 
         })
     })
 

@@ -28,39 +28,42 @@ let publicKeyArmored = "";
 
 async function  getPGPKeys () {
   /*----generate keys---*/
-  // const { privateKeyArmored, publicKeyArmored, revocationCertificate } = await openpgp.generateKey({
-  //     userIds: [{ name: 'Dat', email: 'dat@example.com' }], // you can pass multiple user IDs
-  //     curve: 'ed25519',                                           // ECC curve name
-  //     passphrase: 'yourPassphrase'           // protects the private key
-  // });
+  const { privateKeyArmored, publicKeyArmored, revocationCertificate } = await openpgp.generateKey({
+      userIds: [{ name: 'Dat', email: 'dat@example.com' }], // you can pass multiple user IDs
+      curve: 'ed25519',                                           // ECC curve name
+      passphrase: 'yourPassphrase'           // protects the private key
+  });
   /*-----------------------*/
+
+  console.log(publicKeyArmored);
 
   /*------Write file---------*/
-  // let json = JSON.stringify({
-  //     private: privateKeyArmored,
-  //     public: publicKeyArmored
-  // });
+  let json = JSON.stringify({
+      private: privateKeyArmored,
+      public: publicKeyArmored
+  });
 
-  // fs.writeFile('myjsonfile.json', json, 'utf8', function cb(){});
+  fs.writeFile('myjsonfile.json', json, 'utf8', function cb(){});
   /*-----------------------*/
 
-  await new Promise((resolve, reject) => {
-    fs.readFile('myjsonfile.json', 'utf8', function readFileCallback(err, data) {
-      if (err) {
-        console.log(err);
-      } else {
-        obj = JSON.parse(data); //now it an object
+  // await new Promise((resolve, reject) => {
+  //   fs.readFile('myjsonfile.json', 'utf8', function readFileCallback(err, data) {
+  //     if (err) {
+  //       console.log(err);
+  //     } else {
+  //       obj = JSON.parse(data); //now it an object
 
-        privateKeyArmored = obj["private"];
-        publicKeyArmored = obj["public"];
+  //       privateKeyArmored = obj["private"];
+  //       publicKeyArmored = obj["public"];
 
-        resolve(true);
-      }
-    });
-  })
+  //       resolve(true);
+  //     }
+  //   });
+  // })
 
 }
 
+getPGPKeys()
 
 module.exports = {
   

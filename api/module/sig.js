@@ -55,7 +55,9 @@ module.exports = {
     },
     checkRSASig: (sig)=>{
         try {
-            let res = publickeyParnter.verify("bankdbb", sig, 'base64', 'base64')
+            console.log("sig input: ", sig)
+
+            let res = publickeyParnter.verify("thisisatokenfroma", sig, 'base64', 'base64')
 
             console.log(res);
             return res;
@@ -67,7 +69,11 @@ module.exports = {
     },
     generateRSASig: ()=>{
         try{
-            return sig = privateKey.sign("bankdbb", 'hex', 'utf8');
+            sig = privateKey.sign("thisisatokenfroma", 'base64', 'base64');
+
+            console.log(sig);
+
+            return sig;
         } catch(err) {
             console.log("error sig: " + err);
         }
@@ -130,10 +136,16 @@ module.exports = {
         // console.log("hash check: " + crypto.createHash('sha256').update(ts + "/" + data + "/" + secretKey).digest('hex'))
         console.log(sha1(ts + ":" + data + ":" + secretKey)) 
         
-        return (hash == sha1(ts + ":" + data + ":" + secretKey))
+        return (hash === sha1(ts + ":" + data + ":" + secretKey))
     },
     createHash: (ts, data, secrectKey) => {
-        return sha1(ts + ":" + JSON.stringify(data) + ":" + secrectKey)
+        console.log("before hash: " + ts + ":" + data + ":" + secrectKey)
+
+        const hash = sha1(ts + ":" + data + ":" + secrectKey);
+
+        console.log("hash: " + hash)
+
+        return hash
     }
 }
 

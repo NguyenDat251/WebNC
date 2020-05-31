@@ -1,12 +1,13 @@
 const axios = require('axios');
-const sig = require('../WebNC/api/module/sig.js');
+const sig = require('../api/module/sig.js');
 
 let time = Date.now();
-console.log(time)
+console.log("time: " + time)
 
-axios.get('https://bankdbb.herokuapp.com/account/1', {
+ axios.get('http://d51236fa.ngrok.io/account/1', {
+  //axios.get('https://bankdbb.herokuapp.com/account/1', {
   headers: {
-    sig: sig.createHash(time,{},'thisisatokenfroma'),
+    sig: sig.createHash(time,JSON.stringify({}),'thisisatokenfroma'),
     id: 'rsa-bank',
     ts: time
   }
@@ -18,8 +19,7 @@ axios.get('https://bankdbb.herokuapp.com/account/1', {
 
     
   }else {
-    console.log(response.data.url);
-    console.log(response.data.explanation);
+    console.log(response.data.data);
   }
   })
   .catch(error => {
