@@ -54,7 +54,7 @@ app.use('/api/users', verify, require('./routes/user.route'));
 
 app.use((req, res, next) => {
   res.status(404).send('NOT FOUND');
-  res.status(401).send("abc");
+  //res.status(401).send("abc");
 })
 
 app.use(function (err, req, res, next) {

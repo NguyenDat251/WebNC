@@ -128,17 +128,17 @@ const mapCodeToHTTPStatus = {
 }
 
 /* Handle response */
-const response = (res, definedCode, data = null) => {
-    if (data === null)
-        res.status(mapCodeToHTTPStatus[definedCode]).json({
+const response = (res, err, msg, data = null) => {
+    if (err == 'err')
+        res.status(500).json({
             returnCode: 0,
-            message: mapCodeToMsg[definedCode],
+            message: msg,
             data: data
         })
     else
-        res.status(mapCodeToHTTPStatus[definedCode]).json({
+        res.status(200).json({
             returnCode: 1,
-            message: mapCodeToMsg[definedCode],
+            message: msg,
             data: data
         })
 };

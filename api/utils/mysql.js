@@ -13,4 +13,6 @@ const db = mysql.createConnection({
   database:  "sql12340276"
 });
 
+//const pool_query = 
+
 module.exports = db

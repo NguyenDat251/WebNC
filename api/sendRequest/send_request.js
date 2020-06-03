@@ -1,5 +1,5 @@
 const axios = require('axios');
-const sig = require('../api/module/sig.js');
+const sig = require('../module/sig.js');
 
 let time = Date.now();
 console.log("time: " + time)

@@ -1,14 +1,14 @@
 {
   "mysql": {
     "connectionLimit": 100,
-    "host": "sql12.freemysqlhosting.net",
-    "user": "sql12340276",
-    "password": "59ZfQ3r1wm",
-    "database": "sql12340276"
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "database": "test"
   },
   "auth": {
     "secret": "secretKey",
-    "expiresIn": "10m",
+    "expiresIn": "100m",
     "refreshTokenSz": 80
   }
 }

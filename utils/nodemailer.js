@@ -2,7 +2,7 @@ var nodemailer = require('nodemailer');
 var _ = require('lodash');
 var { response, DEFINED_CODE } = require('../config/response');
 
-const EMAIL_USERNAME = 'nhoxzolt16';
+const EMAIL_USERNAME = 'nhoxzolt16@gmail.com';
 const EMAIL_PASSWORD = '1373PhuocLong';
 
 var config = {

@@ -30,7 +30,10 @@ router.post('/', async (req, res) => {
     })
 }
 
-  const userId = ret.id;
+console.log("data login: ", JSON.stringify(ret))
+
+  const userId = ret.data.id;
+  console.log("userId: ", userId)
   const accessToken = generateAccessToken(userId);
 
   const refreshToken = randToken.generate(config.auth.refreshTokenSz);
@@ -71,7 +74,7 @@ router.post('/refresh', async (req, res) => {
 });
 
 const generateAccessToken = userId => {
-  const payload = { userId };
+  const payload = { userId: userId };
   const accessToken = jwt.sign(payload, config.auth.secret, {
     expiresIn: config.auth.expiresIn
   });

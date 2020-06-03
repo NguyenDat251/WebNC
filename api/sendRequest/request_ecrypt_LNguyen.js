@@ -1,6 +1,6 @@
 const axios = require('axios');
 const sha1 = require('sha1')
-const sig = require('../api/module/sig.js');
+const sig = require('../module/sig.js');
 const openpgp = require('openpgp');
 
 publicKeyArmored = `-----BEGIN PGP PUBLIC KEY BLOCK-----

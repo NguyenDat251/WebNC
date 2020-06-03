@@ -1,4 +1,4 @@
-const sig = require('./api/module/sig.js');
+const sig = require('../module/sig.js');
 
 sig.checkTime(123);
 

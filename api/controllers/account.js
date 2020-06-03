@@ -1,6 +1,6 @@
 'use strict'
 
-const db = require('../mysql')
+const db = require('../utils/mysql')
 const sig = require('../module/sig.js')
 
 module.exports = {

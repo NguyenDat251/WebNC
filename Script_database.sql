@@ -39,6 +39,5 @@ DROP TABLE IF EXISTS `userRefreshTokenExt`;
 CREATE TABLE `userRefreshTokenExt` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `refreshToken` varchar(255) NOT NULL,
-  `rtd` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
