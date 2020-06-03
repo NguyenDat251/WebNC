@@ -3,28 +3,59 @@ const moment = require('moment');
 const db = require('../utils/db');
 
 module.exports = {
-  add: entity => {
+  add: async entity => {
     // entity = {
     //   "username": "admin",
     //   "password_hash": "admin",
     //   "name": "admin",
     //   "email": "admin@g.c",
-    //   "dob": "1990-09-09",
-    //   "permission": 0
+    //   "phone": "0343244644,
+    //   "role": 1
     // }
     const hash = bcrypt.hashSync(entity.password_hash, 8);
     entity.password_hash = hash;
-    return db.add(entity, 'account');
+
+    const resultAddUser = await db.add(entity, 'account');
+
+    //resultAddUser
+
+    return db.add({money: 0, type: 1, idParent: resultAddUser.insertId}, 'MoneyAccount')
+
+    //return db.add(entity, 'account');
+  },
+
+
+
+  isUsernameExist: async username => {
+    console.log("check username exist")
+
+    const result = await db.load(`select * from account where username = '${username}'`)
+
+    if(result.length > 0)
+      return true
+
+    return false
+  },
+
+isEmailExist: async email => {
+    console.log("check email exist")
+
+    const result = await db.load(`select * from account where email = '${email}'`)
+
+    if(result.length > 0)
+      return true
+
+    return false
   },
 
   singleByUserName: userName => db.load(`select * from account where username = '${userName}'`),
 
   updateRefreshToken: async (userId, token) => {
 
-    await db.del({ ID: userId }, 'userRefreshTokenExt');
+    await db.del({ id: userId }, 'userRefreshTokenExt');
 
     const entity = {
-      ID: userId,
+      id: userId,
       refreshToken: token
       // rdt: moment().format('YYYY-MM-DD HH:mm:ss')
     }
