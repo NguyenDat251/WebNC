@@ -86,6 +86,8 @@ CREATE TABLE `debt_reminder` (
   `id_ower` int NOT NULL,
   `money_debt` int NOT NULL,
   `status` int NOT NULL,
+  `description` varchar(150) DEFAULT NULL,
+  `dateCreate` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_debt`),
   KEY `FK_DEBT_USER_idx` (`id_debtor`),
   KEY `FK_OWER_USER_idx` (`id_ower`),
@@ -272,4 +274,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-04 21:48:21
+-- Dump completed on 2020-06-05 22:53:03
