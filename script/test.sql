@@ -31,7 +31,6 @@ CREATE TABLE `account` (
   `phone` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL,
   `indentity_number` varchar(45) NOT NULL,
-  `currentToken` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `username` (`username`,`email`)
@@ -44,7 +43,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'dat','123','datt','dat@gmail.com','0333333333333','1','',NULL),(2,'admin','$2a$08$SJlc0p.hXTKYEAi3ted4EOD7yxeEazRqF38KjHpXDmwHUTFBxzePm','Nguyen Dat','nguyenquocdat2511998@gmail.com','0343244644','1','',NULL),(5,'admin123','$2a$08$x2L1M3GqxvsfnoCL0dJld.ezK85KNayNDg6B65J565APuAHBIBfJO','Nguyen Dat','nguyenquocdat2511998123@gmail.com','0343244644','1','',NULL),(6,'adminn','$2a$08$XPLZsyex9mnOJn2YGW.UBO7BCQBHBYspIjkVrKllzaA7V6rmrNTdq','Nguyen Dat','nguyenquocdat@gmail.com','0343244644','1','',NULL);
+INSERT INTO `account` VALUES (1,'dat','123','datt','dat@gmail.com','0333333333333','1',''),(2,'admin','$2a$08$SJlc0p.hXTKYEAi3ted4EOD7yxeEazRqF38KjHpXDmwHUTFBxzePm','Nguyen Dat','nguyenquocdat2511998@gmail.com','0343244644','1',''),(5,'admin123','$2a$08$x2L1M3GqxvsfnoCL0dJld.ezK85KNayNDg6B65J565APuAHBIBfJO','Nguyen Dat','nguyenquocdat2511998123@gmail.com','0343244644','1',''),(6,'adminn','$2a$08$XPLZsyex9mnOJn2YGW.UBO7BCQBHBYspIjkVrKllzaA7V6rmrNTdq','Nguyen Dat','nguyenquocdat@gmail.com','0343244644','1','');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -274,4 +273,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-05 22:53:03
+-- Dump completed on 2020-06-05 23:28:01
