@@ -31,6 +31,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const userModel = require('./models/user.model.js');
 require('express-async-errors');
 
 const verify = require('./middlewares/auth.mdw');
@@ -46,6 +47,11 @@ app.get('/', (req, res) => {
     msg: 'hello from nodejs express api'
   });
 })
+
+
+setInterval(function(){ userModel.deleteOTP() }, 3000);
+
+
 
 app.use('/api/auth', require('./routes/auth.route'));
 app.use('/api/users', require('./routes/user.route'));
