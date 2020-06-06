@@ -9,36 +9,36 @@ const router = express.Router();
 var { response, DEFINED_CODE } = require('../config/response');
 var { mailer } = require('../utils/nodemailer');
 
-router.post('/', async (req, res) => {
+router.post('/addUser', async (req, res) => {
   const checkUsernameExist = await userModel.isUsernameExist(req.body.username)
 
-  if(checkUsernameExist){
+  if (checkUsernameExist) {
     response(res, 'err', 'username has been exist')
     return;
-}
+  }
 
   const checkEmailExist = await userModel.isEmailExist(req.body.email)
 
-  if(checkEmailExist){
+  if (checkEmailExist) {
     response(res, 'err', 'email has been exist')
     return;
   }
-  
 
+  console.log('req.body:',req.body)
   const result = await userModel.add(req.body)
 
-    // var mailOptions = {
-    //   subject: "Account activation",
-    //   text:
-    //     `Dear customer. \n\n`
-    //     + 'You are receiving this because you (or someone else) have signed up to our website.\n\n'
-    //     + 'Please click on the following link, or paste this into your browser to complete the process:\n\n'
-       
-    //     + 'If you did not request this, please ignore this email and your account will not be activate.\n'
-    //     + 'F2L Support team',
-    // }
-    // mailer(mailOptions, 'BankDBB', req.body.email, res)
-  
+  // var mailOptions = {
+  //   subject: "Account activation",
+  //   text:
+  //     `Dear customer. \n\n`
+  //     + 'You are receiving this because you (or someone else) have signed up to our website.\n\n'
+  //     + 'Please click on the following link, or paste this into your browser to complete the process:\n\n'
+
+  //     + 'If you did not request this, please ignore this email and your account will not be activate.\n'
+  //     + 'F2L Support team',
+  // }
+  // mailer(mailOptions, 'BankDBB', req.body.email, res)
+
 
   console.log(result)
   const ret = {
@@ -54,7 +54,7 @@ router.post('/', async (req, res) => {
   });
 })
 
-router.post('/changePassword', async(req, res) => {
+router.post('/changePassword', async (req, res) => {
   const token = req.headers["x-access-token"]
   var decodedPayload = jwt.decode(token, {
     secret: config.auth.secret,
@@ -99,14 +99,14 @@ router.post('/changePassword', async(req, res) => {
 
   console.log(bcrypt.compareSync(OldPassword, CurrentPasswor))
 
-  if(bcrypt.compareSync(OldPassword, CurrentPasswor)){
-    let result = await userModel.changePassword({password_hash: NewPassword, userId: userId})
-       console.log("result: ", result)
+  if (bcrypt.compareSync(OldPassword, CurrentPasswor)) {
+    let result = await userModel.changePassword({ password_hash: NewPassword, userId: userId })
+    console.log("result: ", result)
 
-       response(res, '', 'change password successfull')
-  }else {
-      response(res, 'err', `Wrong current password!`);
-    }
+    response(res, '', 'change password successfull')
+  } else {
+    response(res, 'err', `Wrong current password!`);
+  }
 
   // const result = await userModel.changePassword(req.body)
 

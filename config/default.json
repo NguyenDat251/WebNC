@@ -3,8 +3,8 @@
     "connectionLimit": 100,
     "host": "localhost",
     "user": "root",
-    "password": "",
-    "database": "test"
+    "password": "root",
+    "database": "internetbanking"
   },
   "auth": {
     "secret": "secretKey",
