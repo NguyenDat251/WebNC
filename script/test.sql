@@ -15,6 +15,14 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+DROP TABLE IF EXISTS `otp`;
+CREATE TABLE `otp`(
+  `otp` varchar(6) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `time` int NOT NULL,
+  PRIMARY KEY (`otp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 --
 -- Table structure for table `account`
 --
@@ -167,7 +175,6 @@ DROP TABLE IF EXISTS `moneyaccount`;
 CREATE TABLE `moneyaccount` (
   `Number` int NOT NULL AUTO_INCREMENT,
   `Money` varchar(255) NOT NULL,
-  `Type` varchar(255) NOT NULL,
   `IdParent` int NOT NULL,
   PRIMARY KEY (`Number`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -179,7 +186,7 @@ CREATE TABLE `moneyaccount` (
 
 LOCK TABLES `moneyaccount` WRITE;
 /*!40000 ALTER TABLE `moneyaccount` DISABLE KEYS */;
-INSERT INTO `moneyaccount` VALUES (1,'50000','1',6);
+INSERT INTO `moneyaccount` VALUES (1,'50000',6);
 /*!40000 ALTER TABLE `moneyaccount` ENABLE KEYS */;
 UNLOCK TABLES;
 
