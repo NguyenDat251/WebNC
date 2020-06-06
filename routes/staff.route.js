@@ -67,6 +67,18 @@ router.get('/getInfoUserByUsername/:username', async (req, res) => {
         });
     }
 })
+router.get('/getInfoUserByWalletId/:idWallet', async (req, res) => {
+    
+    let idWallet = req.params.idWallet;
+    if (idWallet) {
+        const result = await userModel.getUserInfoByWalletId(idWallet)
+        res.status(200).json({
+            returnCode: 1,
+            message: `Get Data Success by Wallet Id: ${idWallet}`,
+            data: result
+        });
+    }
+})
 router.post('/changePassword', async (req, res) => {
     const token = req.headers["x-access-token"]
     var decodedPayload = jwt.decode(token, {

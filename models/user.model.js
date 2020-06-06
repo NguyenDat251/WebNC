@@ -20,7 +20,7 @@ module.exports = {
 
     //resultAddUser
 
-    return db.add({money: 0, type: 1, idParent: resultAddUser.insertId}, 'MoneyAccount')
+    return db.add({ money: 0, type: 1, idParent: resultAddUser.insertId }, 'MoneyAccount')
 
     //return db.add(entity, 'account');
   },
@@ -32,22 +32,27 @@ module.exports = {
 
     const result = await db.load(`select * from account where username = '${username}'`)
 
-    if(result.length > 0)
+    if (result.length > 0)
       return true
 
     return false
   },
-getUserInfoByUsername : async username =>{
-    return db.load(`select a.username,a.name,a.email,a.phone,a.indentity_number as indenityNumber,a.dob,m.Money as balance,m.Number as walletNumber
+  getUserInfoByUsername: async username => {
+    return db.load(`select a.username,a.name,a.email,a.phone,a.indentity_number as idenityNumber,a.dob,m.Money as balance,m.Number as walletNumber
     from account as a,moneyaccount as m 
     where a.id = m.IdParent and a.username = '${username}';`)
-},
-isEmailExist: async email => {
+  },
+  getUserInfoByWalletId: async walletId => {
+    return db.load(`select a.name,a.indentity_number as identityNumber,m.Money as balance,m.Number as walletNumber
+  from account as a,moneyaccount as m 
+  where a.id = m.IdParent and m.Number = '${walletId}';`)
+  },
+  isEmailExist: async email => {
     console.log("check email exist")
 
     const result = await db.load(`select * from account where email = '${email}'`)
 
-    if(result.length > 0)
+    if (result.length > 0)
       return true
 
     return false
@@ -96,7 +101,7 @@ isEmailExist: async email => {
     const hash = bcrypt.hashSync(entity.password_hash, 8);
     entity.password_hash = hash;
 
-    return db.edit({password_hash:entity.password_hash}, {id: entity.userId}, 'account')
+    return db.edit({ password_hash: entity.password_hash }, { id: entity.userId }, 'account')
   },
 
   checkOTPExisted: otp => {
@@ -113,6 +118,6 @@ isEmailExist: async email => {
   },
 
   forgetPassword: entity => {
-    
+
   }
 };
