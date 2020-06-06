@@ -15,7 +15,7 @@ const router = express.Router();
  * login
  */
 
-router.post('/', async (req, res) => {
+router.post('/login', async (req, res) => {
   // req.body = {
   //   "user": "admin",
   //   "pwd": "admin"
@@ -24,13 +24,13 @@ router.post('/', async (req, res) => {
   const ret = await authModel.login(req.body);
   if (!ret.boolean) {
     return res.json({
-        returnCode: 0,
+      returnCode: 0,
       message: ret.message,
       data: {}
     })
-}
+  }
 
-console.log("data login: ", JSON.stringify(ret))
+  console.log("data login: ", JSON.stringify(ret))
 
   const userId = ret.data.id;
   console.log("userId: ", userId)
@@ -44,9 +44,9 @@ console.log("data login: ", JSON.stringify(ret))
     returnCode: 1,
     message: "Login successful",
     data: {
-    accessToken,
-    refreshToken
-}
+      accessToken,
+      refreshToken
+    }
   })
 })
 

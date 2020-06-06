@@ -18,7 +18,7 @@ var {
 
 const TimeExistOTP = 6000;
 
-router.post('/', async (req, res) => {
+router.post('/addUser', async (req, res) => {
   const checkUsernameExist = await userModel.isUsernameExist(req.body.username)
 
   if (checkUsernameExist) {
@@ -34,6 +34,7 @@ router.post('/', async (req, res) => {
   }
 
 
+  console.log('req.body:',req.body)
   const result = await userModel.add(req.body)
 
   // var mailOptions = {

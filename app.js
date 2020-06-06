@@ -32,14 +32,22 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const userModel = require('./models/user.model.js');
+
 require('express-async-errors');
 
 const verify = require('./middlewares/auth.mdw');
 
 const app = express();
-
-app.use(morgan('dev'));
+// CORS fixed
 app.use(cors());
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
+app.use(morgan('dev'));
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -55,6 +63,7 @@ setInterval(function(){ userModel.deleteOTP() }, 3000);
 
 app.use('/api/auth', require('./routes/auth.route'));
 app.use('/api/users', require('./routes/user.route'));
+app.use('/api/staff', require('./routes/staff.route'));
 app.use('/api/money', require('./routes/money.route'));
 
 // app.use('/api/categories', verify, require('./routes/category.route'));
@@ -72,7 +81,7 @@ app.use(function (err, req, res, next) {
   //res.status(statusCode).send('View error log on console.');
 })
 
-const PORT = 3000;
+const PORT = 8000;
 app.listen(PORT, _ => {
   console.log(`API is running at http://localhost:${PORT}`);
 })
