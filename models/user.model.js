@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const moment = require('moment');
 const db = require('../utils/db');
 
+
 module.exports = {
   add: async entity => {
     console.log('entity:', entity)
@@ -110,6 +111,12 @@ module.exports = {
 
   addOTP: entity => {
     return db.add(entity, 'otp')
+  },
+
+  deleteOTP: () => {
+    const timeToCompare = Math.floor(Date.now()/1000) - 300;
+    console.log("delete otp time: ", timeToCompare)
+    return db.load(`delete from otp where time < '${timeToCompare}'`)
   },
 
   setPassword: entity => {
