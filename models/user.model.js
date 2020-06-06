@@ -99,6 +99,19 @@ isEmailExist: async email => {
     return db.edit({password_hash:entity.password_hash}, {id: entity.userId}, 'account')
   },
 
+  checkOTPExisted: otp => {
+    return db.load(`select * from otp where otp = '${otp}'`)
+  },
+
+  addOTP: entity => {
+    return db.add(entity, 'otp')
+  },
+
+  setPassword: entity => {
+    const pw = bcrypt.hashSync(entity.NewPassword, 8);
+    return db.load(`update account set password_hash = '${pw}' where email = '${entity.email}'`)
+  },
+
   forgetPassword: entity => {
     
   }

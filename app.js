@@ -59,6 +59,7 @@ app.use('/api/auth', require('./routes/auth.route'));
 app.use('/api/users', require('./routes/user.route'));
 app.use('/api/staff', require('./routes/staff.route'));
 app.use('/api/money', require('./routes/money.route'));
+
 // app.use('/api/categories', verify, require('./routes/category.route'));
 // app.use('/api/products', verify, require('./routes/product.route'));
 
@@ -71,7 +72,7 @@ app.use(function (err, req, res, next) {
   console.log(err.stack);
   // console.log(err.status);
   const statusCode = err.status || 500;
-  res.status(statusCode).send('View error log on console.');
+  //res.status(statusCode).send('View error log on console.');
 })
 
 const PORT = 8000;

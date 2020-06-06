@@ -3,11 +3,20 @@ const userModel = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const config = require('../config/default.json');
 const bcrypt = require('bcryptjs');
+const otp = require('otp-generator');
+const moment = require('moment');
 
 const router = express.Router();
 
-var { response, DEFINED_CODE } = require('../config/response');
-var { mailer } = require('../utils/nodemailer');
+var {
+  response,
+  DEFINED_CODE
+} = require('../config/response');
+var {
+  mailer
+} = require('../utils/nodemailer');
+
+const TimeExistOTP = 6000;
 
 router.post('/addUser', async (req, res) => {
   const checkUsernameExist = await userModel.isUsernameExist(req.body.username)
@@ -23,6 +32,7 @@ router.post('/addUser', async (req, res) => {
     response(res, 'err', 'email has been exist')
     return;
   }
+
 
   console.log('req.body:',req.body)
   const result = await userModel.add(req.body)
@@ -100,7 +110,10 @@ router.post('/changePassword', async (req, res) => {
   console.log(bcrypt.compareSync(OldPassword, CurrentPasswor))
 
   if (bcrypt.compareSync(OldPassword, CurrentPasswor)) {
-    let result = await userModel.changePassword({ password_hash: NewPassword, userId: userId })
+    let result = await userModel.changePassword({
+      password_hash: NewPassword,
+      userId: userId
+    })
     console.log("result: ", result)
 
     response(res, '', 'change password successfull')
@@ -118,6 +131,130 @@ router.post('/changePassword', async (req, res) => {
   // else{
   //   response(res, '200', {status: "ok"})
   // }
+})
+
+router.post('/forgetPassword', async (req, res) => {
+  const email = req.body.email;
+
+  let otpCode;
+  let result = false;
+  while (!result) {
+    //otpCode = otp.generate(6, { digits: false,  upperCase: false, specialChars: false });
+    otpCode = Math.floor(100000 + Math.random() * 900000);
+    console.log("otp: ", otpCode)
+    let rs
+    try {
+      rs = await userModel.checkOTPExisted()
+    } catch {
+      response(res, 'err', 'send otp fail', {})
+    }
+    console.log(rs.length)
+    result = rs.length == 0 ? true : false
+    console.log(result)
+  }
+  //let otpCode = 
+
+  let rsAddOTP = await userModel.addOTP({
+    otp: otpCode,
+    email: email,
+    time: Date.now() / 1000
+  })
+
+  if (rsAddOTP) {
+    var mailOptions = {
+      subject: "Reset password",
+      text: `Dear customer. \n\n` +
+        'You are receiving this because you have forgoten your password to login our website.\n\n' +
+        'Please use this otp: ' + otpCode + '\n\n'
+
+        +
+        'F2L Support team',
+    }
+    mailer(mailOptions, 'BankDBB', req.body.email, res)
+  } else {
+    response(res, 'err', 'send otp fail', {})
+  }
+
+
+  // var mailOptions = {
+  //     subject: "Reset password",
+  //     text:
+  //       `Dear customer. \n\n`
+  //       + 'You are receiving this because you have forgoten your password to login our website.\n\n'
+  //       + 'Please use this otp: '+ otpCode + '\n\n'
+
+  //       + 'F2L Support team',
+  //   }
+  //   mailer(mailOptions, 'BankDBB', req.body.email, res)
+
+  // await userModel.addOTP({
+  //   otp: otpCode,
+  //   email: email,
+  //   time: Date.now()/1000
+  // })
+
+  response(res, '', 'send otp successful', {})
+
+  console.log("otp: ", otpCode)
+})
+
+router.post('/sendOTP', async (req, res) => {
+  /* {
+    otp: '123456',
+    time: '11111111111111',
+    NewPassword: 'abcedf',
+    email: ''
+  } */
+
+  const otp = req.body.otp;
+  const time = req.body.time;
+  const email = req.body.email;
+
+  console.log("otp: ", otp)
+
+  const checkOTP = await userModel.checkOTPExisted(otp);
+  if (checkOTP.length > 0) {
+    console.log("email input: ", email)
+    console.log("email in data: ", checkOTP[0].email)
+    if(checkOTP[0].email !== email){
+      response(res, 'err', 'wrong otp', {})
+      console.log("abc after wrong otp")
+      return
+    }
+
+    console.log(time - checkOTP[0].time)
+    if (time - checkOTP[0].time > TimeExistOTP) {
+      response(res, 'err', 'otp is out of date', {})
+      return
+    } else {
+      const NewPassword = req.body.NewPassword
+      console.log("NewPassword: ", NewPassword)
+      const rs = await userModel.setPassword({
+        NewPassword,
+        email})
+
+      if (rs.affectedRows > 0) {
+        response(res, '', 'change password successful', {})
+        return
+      }
+    }
+  } else {
+    response(res, 'err', 'otp is not exist', {})
+    return
+  }
+
+})
+
+router.post('/setPassword', async (req, res) => {
+  /*{
+
+    NewPassword: 'abcedf'
+  }*/
+
+  const NewPassword = req.body.NewPassword
+
+  const rs = await userModel.setPassword(NewPassword)
+
 })
 
 module.exports = router;
