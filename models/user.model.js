@@ -38,13 +38,17 @@ module.exports = {
 
     return false
   },
+  getNameByWalletId: async id_wallet=>{
+    return db.load(`select a.name from account as a, moneyaccount as ma
+    where a.id = ma.IdParent and ma.Number =${id_wallet}`)
+  },
   getUserInfoByUsername: async username => {
     return db.load(`select a.username,a.name,a.email,a.phone,a.indentity_number as idenityNumber,a.dob,m.Money as balance,m.Number as walletNumber
     from account as a,moneyaccount as m 
     where a.id = m.IdParent and a.username = '${username}';`)
   },
   getUserInfoByWalletId: async walletId => {
-    return db.load(`select a.name,a.indentity_number as identityNumber,m.Money as balance,m.Number as walletNumber
+    return db.load(`select a.name,a.username,a.indentity_number as identityNumber,m.Money as balance,m.Number as walletNumber
   from account as a,moneyaccount as m 
   where a.id = m.IdParent and m.Number = '${walletId}';`)
   },
@@ -115,7 +119,7 @@ module.exports = {
 
   deleteOTP: () => {
     const timeToCompare = Math.floor(Date.now()/1000) - 300;
-    console.log("delete otp time: ", timeToCompare)
+    // console.log("delete otp time: ", timeToCompare)
     return db.load(`delete from otp where time < '${timeToCompare}'`)
   },
 
