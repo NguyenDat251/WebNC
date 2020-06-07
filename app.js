@@ -33,6 +33,8 @@ const cors = require('cors');
 const morgan = require('morgan');
 const userModel = require('./models/user.model.js');
 
+require('dotenv').config()
+
 require('express-async-errors');
 
 const verify = require('./middlewares/auth.mdw');
@@ -83,7 +85,7 @@ app.use(function (err, req, res, next) {
   //res.status(statusCode).send('View error log on console.');
 })
 
-const PORT = 8000;
+const PORT = process.env.DB_PORT || 8000;
 app.listen(PORT, _ => {
   console.log(`API is running at http://localhost:${PORT}`);
 })

@@ -95,12 +95,8 @@ CREATE TABLE `debt_reminder` (
   `status` int NOT NULL,
   `description` varchar(150) DEFAULT NULL,
   `dateCreate` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_debt`),
-  KEY `FK_DEBT_USER_idx` (`id_debtor`),
-  KEY `FK_OWER_USER_idx` (`id_ower`),
-  CONSTRAINT `FK_DEBTOR_USER` FOREIGN KEY (`id_debtor`) REFERENCES `account` (`id`),
-  CONSTRAINT `FK_OWER_USER` FOREIGN KEY (`id_ower`) REFERENCES `account` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id_debt`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,16 +117,12 @@ DROP TABLE IF EXISTS `history`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `history` (
   `id_history` int NOT NULL AUTO_INCREMENT,
-  `id_recipient` int NOT NULL,
-  `id_user` int NOT NULL,
-  `money_tranfer` int NOT NULL,
-  `sign` text,
-  PRIMARY KEY (`id_history`),
-  KEY `FK_HISTORY_RECIPIENT_idx` (`id_recipient`),
-  KEY `FK_HISTORY_USER_idx` (`id_user`),
-  CONSTRAINT `FK_HISTORY_RECIPIENT` FOREIGN KEY (`id_recipient`) REFERENCES `account` (`id`),
-  CONSTRAINT `FK_HISTORY_USER` FOREIGN KEY (`id_user`) REFERENCES `account` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `username` varchar(255) NOT NULL,
+  `money_transfer` int NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text,
+  PRIMARY KEY (`id_history`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

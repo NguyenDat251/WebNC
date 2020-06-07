@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const moneyModel = require('../models/money.model.js');
+const userModel = require('../models/user.model');
+
 const {
     promisify
 } = require('util');
@@ -44,6 +46,15 @@ const doTheMoney = async (username, money, res) => {
     return true
 }
 
+const addToHistory = async (username, money, title, content = null) => {
+    await moneyModel.addToHistory({
+        username: username,
+        money_transfer: money,
+        title: title,
+        content: content
+    })
+}
+
 router.post('/addMoney', async (req, res) => {
     //const result = await moneyModel.addMoney(req.body)
 
@@ -60,7 +71,11 @@ router.post('/addMoney', async (req, res) => {
     console.log(req.body)
     rs = await doTheMoney(req.body.username, req.body.money, res)
 
+    //const idReceiver = await userModel.getIdByUsername(req.body.username)
 
+   // await Promise.all(idReceiver)
+
+    await addToHistory(req.body.username, req.body.money, 'Receive money from employer')
 
 
     //    await new Promise( (resolve, reject) => {
@@ -138,11 +153,32 @@ router.post('/transferLocal', async (req, res) => {
 
     rs = await doTheMoney(receiver, moneyReceiverPaid, res)
 
+    //const idReceiver = await userModel.getIdByUsername(receiver)
+    //const idSender = await userModel.getIdByUsername(sender)
+
+    //Promise.all(idReceiver, idSender)
+//this.subscribe
+    await addToHistory(receiver, moneyReceiverPaid, `Receive money from ${sender}`, content)
+    await addToHistory(sender, moneySenderPaid, `Send money to ${sender}`, content)
+
     console.log("rs: " + rs)
     if (!rs)
         return
 
     response(res, '', 'transfer money successfull')
+})
+
+router.get('/history/:username', async (req, res) => {
+    const username = req.params.username
+
+    const result = await moneyModel.getHistory(username)
+    console.log(result)
+    console.log(result.length)
+    if(result.length == 0){
+        response(res, '', 'There is no exchange history')
+    }else{
+        response(res, '', 'get history successfull', result)
+    }
 })
 
 module.exports = router;
