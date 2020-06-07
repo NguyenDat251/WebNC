@@ -68,7 +68,7 @@ router.post('/addMoney', async (req, res) => {
     let rs;
 
 
-
+    console.log(req.body)
     rs = await doTheMoney(req.body.username, req.body.money, res)
 
     //const idReceiver = await userModel.getIdByUsername(req.body.username)

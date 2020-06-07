@@ -8,6 +8,7 @@ const router = express.Router();
 
 var { response, DEFINED_CODE } = require('../config/response');
 var { mailer } = require('../utils/nodemailer');
+const moneyModel = require('../models/money.model.js');
 
 router.post('/addUser', async (req, res) => {
     const checkUsernameExist = await userModel.isUsernameExist(req.body.username)
@@ -54,10 +55,10 @@ router.post('/addUser', async (req, res) => {
     });
 })
 router.get('/getInfoUserByUsername/:username', async (req, res) => {
-    
+
     let username = req.params.username;
     console.log(req.params);
-    console.log('username: ',username);
+    console.log('username: ', username);
     if (username) {
         const result = await userModel.getUserInfoByUsername(username)
         res.status(200).json({
@@ -68,7 +69,7 @@ router.get('/getInfoUserByUsername/:username', async (req, res) => {
     }
 })
 router.get('/getInfoUserByWalletId/:idWallet', async (req, res) => {
-    
+
     let idWallet = req.params.idWallet;
     if (idWallet) {
         const result = await userModel.getUserInfoByWalletId(idWallet)
@@ -78,6 +79,72 @@ router.get('/getInfoUserByWalletId/:idWallet', async (req, res) => {
             data: result
         });
     }
+})
+const doTheMoney = async (username, money, res) => {
+    const rsGetCurrentMoney = await moneyModel.getCurrentMoney(username)
+
+    console.log(rsGetCurrentMoney)
+
+    if (rsGetCurrentMoney.length == 0) {
+        response(res, 'err', 'not found user to do the transfer')
+        return false
+    }
+
+
+    let CurrentMoney = parseInt(rsGetCurrentMoney[0].money) + parseInt(money)
+    console.log("current money: ", CurrentMoney)
+
+    if (CurrentMoney < 0) {
+        response(res, 'err', 'Your account is not enough money')
+        return false
+    }
+
+    const result = await moneyModel.setMoney({
+        idParent: rsGetCurrentMoney[0].idParent,
+        CurrentMoney,
+    })
+
+    if (!result.affectedRows) {
+        response(res, 'err', 'err transfer')
+        return false
+    }
+    // else{
+    //     response(res, '', 'transaction money successfull')
+    // }
+
+    return true
+}
+
+router.post('/addMoney', async (req, res) => {
+    //const result = await moneyModel.addMoney(req.body)
+
+    /*{
+        username: "adminn",
+        money: 10000
+    }
+     */
+    //const rs = await doTheMoney(req.body.username, req.body.money, res)
+
+    let rs;
+
+
+
+    rs = await doTheMoney(req.body.username, req.body.money, res)
+
+
+
+
+    //    await new Promise( (resolve, reject) => {
+    //     rs =  doTheMoney(req.body.username, req.body.money, res)
+    //     resolve(true)
+    //    })
+
+    console.log(rs)
+    if (rs) {
+        response(res, '', 'transaction money successfull')
+        return;
+    }
+
 })
 router.post('/changePassword', async (req, res) => {
     const token = req.headers["x-access-token"]
