@@ -20,6 +20,10 @@ module.exports = {
         return db.load(`select a.* from account a, moneyaccount m where a.id = m.idParent and m.Number = '${id}'`);
     },
 
+    addToHistory: entity => {
+        return db.add(entity, 'history')
+    }
+
     // minusMoney: async entity => {
     //     // console.log(entity.username)
     //     // let MoneyEntity = await db.load(`select m.money, m.idParent from MoneyAccount m, account a where m.idParent = a.id and a.username='${entity.username}'`)

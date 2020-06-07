@@ -26,7 +26,13 @@ module.exports = {
     //return db.add(entity, 'account');
   },
 
+  getIdByUsername: async username => {
+    console.log("get id by username")
 
+    const result = await db.load(`select * from account where username = '${username}'`)
+
+    return result;
+  },
 
   isUsernameExist: async username => {
     console.log("check username exist")
@@ -115,7 +121,7 @@ module.exports = {
 
   deleteOTP: () => {
     const timeToCompare = Math.floor(Date.now()/1000) - 300;
-    console.log("delete otp time: ", timeToCompare)
+    //console.log("delete otp time: ", timeToCompare)
     return db.load(`delete from otp where time < '${timeToCompare}'`)
   },
 
