@@ -257,4 +257,48 @@ router.post('/setPassword', async (req, res) => {
 
 })
 
+router.get('/:role', async (req, res) => {
+  const role = req.params.role
+  const result = await userModel.getList(role)
+
+  let type;
+
+  if(role == 1)
+    type = 'customer'
+  else if(role == 2)
+    type = 'employer'
+  else
+    type = 'admin'
+
+  if(!result){
+    response(res, 'err', `Can not get list ${type}`)
+  }
+  else{
+    response(res, '', `get list ${type} successful`, result)
+  }
+})
+
+router.put('/:username', async (req, res) => {
+  /*
+    {
+  "name": "Nguyen Dat test",
+  "email": "nguyendat2511998@gmail.commm",
+  "phone": "034324464t",
+  "role": 3,
+  "identity_number": "225900611",
+    }
+   */
+
+   const username = req.params.username
+
+  const result = await userModel.updateUser(username, req.body)
+
+  if(!result){
+    response(res, 'err', 'Error edit user')
+  }else{
+    response(res, '', 'update user successful')
+  }
+})
+
+
 module.exports = router;

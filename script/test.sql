@@ -38,7 +38,7 @@ CREATE TABLE `account` (
   `email` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL,
-  `indentity_number` varchar(45) NOT NULL,
+  `identity_number` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `username` (`username`,`email`)
@@ -167,7 +167,7 @@ DROP TABLE IF EXISTS `moneyaccount`;
 CREATE TABLE `moneyaccount` (
   `Number` int NOT NULL AUTO_INCREMENT,
   `Money` varchar(255) NOT NULL,
-  `IdParent` int NOT NULL,
+  `username` varchar(255) NOT NULL,
   PRIMARY KEY (`Number`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -196,10 +196,7 @@ CREATE TABLE `recipients` (
   `name_recipient` varchar(45) DEFAULT NULL,
   KEY `FK_RECIPIENTS_ACCOUNT_idx` (`id_user`),
   KEY `FK_RECIPIENTS_LINKBANK_idx` (`bank_LinkId`),
-  KEY `FK_RECIPIENTS_RECIPIENT_idx` (`id_recipient`),
-  CONSTRAINT `FK_RECIPIENTS_ACCOUNT` FOREIGN KEY (`id_user`) REFERENCES `account` (`id`),
-  CONSTRAINT `FK_RECIPIENTS_LINKBANK` FOREIGN KEY (`bank_LinkId`) REFERENCES `linkbanks` (`id_link_bank`),
-  CONSTRAINT `FK_RECIPIENTS_RECIPIENT` FOREIGN KEY (`id_recipient`) REFERENCES `account` (`id`)
+  KEY `FK_RECIPIENTS_RECIPIENT_idx` (`id_recipient`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -222,11 +219,9 @@ DROP TABLE IF EXISTS `savinglist`;
 CREATE TABLE `savinglist` (
   `id_saving` int NOT NULL AUTO_INCREMENT,
   `spending` int NOT NULL,
-  `id_user` int NOT NULL,
+  `username` varchar(255) NOT NULL,
   `name_saving` varchar(45) NOT NULL,
-  `target_date` date NOT NULL,
-  PRIMARY KEY (`id_saving`),
-  CONSTRAINT `FK_SAVINGLIST_ACCOUNT` FOREIGN KEY (`id_saving`) REFERENCES `account` (`id`)
+  PRIMARY KEY (`id_saving`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
