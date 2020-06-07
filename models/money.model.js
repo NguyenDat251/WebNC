@@ -22,6 +22,11 @@ module.exports = {
 
     addToHistory: entity => {
         return db.add(entity, 'history')
+    },
+
+    getHistory: username => {
+        console.log("username: ", username)
+        return db.load(`select * from history where username = '${username}'`)
     }
 
     // minusMoney: async entity => {

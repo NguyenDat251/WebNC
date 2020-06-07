@@ -168,8 +168,17 @@ router.post('/transferLocal', async (req, res) => {
     response(res, '', 'transfer money successfull')
 })
 
-router.get('/histort/:username', async (req, res) => {
-    
+router.get('/history/:username', async (req, res) => {
+    const username = req.params.username
+
+    const result = await moneyModel.getHistory(username)
+    console.log(result)
+    console.log(result.length)
+    if(result.length == 0){
+        response(res, '', 'There is no exchange history')
+    }else{
+        response(res, '', 'get history successfull', result)
+    }
 })
 
 module.exports = router;
