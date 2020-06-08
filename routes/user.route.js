@@ -65,7 +65,12 @@ router.post('/addUser', async (req, res) => {
 })
 
 router.post('/changePassword', async (req, res) => {
-  const token = req.headers["x-access-token"]
+  let token;
+  try{
+    token = req.headers["x-access-token"]
+  } catch{
+    response(res, 'err', 'undifined access token')
+  }
   var decodedPayload = jwt.decode(token, {
     secret: config.auth.secret,
   });
@@ -133,8 +138,9 @@ router.post('/changePassword', async (req, res) => {
   // }
 })
 
-router.post('/forgetPassword', async (req, res) => {
+router.post('/getOTP', async (req, res) => {
   const email = req.body.email;
+  // const type = req.body.type;
 
   let otpCode;
   let result = false;
@@ -159,6 +165,10 @@ router.post('/forgetPassword', async (req, res) => {
     email: email,
     time: Date.now() / 1000
   })
+
+  // let text;
+  // if(type == 'Password')
+  //   text
 
   if (rsAddOTP) {
     var mailOptions = {
@@ -198,7 +208,7 @@ router.post('/forgetPassword', async (req, res) => {
   console.log("otp: ", otpCode)
 })
 
-router.post('/sendOTP', async (req, res) => {
+router.post('/sendOTPAndNewPassword', async (req, res) => {
   /* {
     otp: '123456',
     time: '11111111111111',
@@ -292,7 +302,7 @@ router.put('/:username', async (req, res) => {
    const username = req.params.username
 
   const result = await userModel.updateUser(username, req.body)
-
+s
   if(!result){
     response(res, 'err', 'Error edit user')
   }else{
