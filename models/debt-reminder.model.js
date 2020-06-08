@@ -25,13 +25,16 @@ module.exports = {
     getDebtReminder: async (id_debtor) => {
         let query = `
         SELECT a.name as creditor,ma.Number as walletID,dr.* FROM debt_reminder as dr, account as a, moneyaccount as ma 
-        where dr.id_owner = a.id  and ma.IdParent = a.id  and dr.id_debtor = ${id_debtor}`
+        where dr.id_owner = a.id  and ma.IdParent = a.id  and dr.id_debtor = ${id_debtor}
+        ORDER BY dr.dateCreate desc`
+        
         return db.load(query);
     },
     getDebtOwner: async (id_owner) => {
         let query = `
         SELECT a.name as debtor,ma.Number as walletID,dr.* FROM debt_reminder as dr, account as a, moneyaccount as ma 
-        where dr.id_debtor = a.id  and ma.IdParent = a.id  and dr.id_owner = ${id_owner}`
+        where dr.id_debtor = a.id  and ma.IdParent = a.id  and dr.id_owner = ${id_owner}
+        ORDER BY dr.dateCreate desc`
         return db.load(query);
     }
 
