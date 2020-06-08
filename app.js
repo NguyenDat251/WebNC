@@ -67,8 +67,12 @@ app.use('/api/auth', require('./routes/auth.route'));
 app.use('/api/users', require('./routes/user.route'));
 app.use('/api/staff', require('./routes/staff.route'));
 app.use('/api/money', require('./routes/money.route'));
+<<<<<<< HEAD
+app.use('/api/moneyAccount', require('./routes/moneyAccount.route'));
+=======
 app.use('/api/debt-reminder/', require('./routes/debt-reminder.route'));
 
+>>>>>>> 9fa76acae515dd353535070f233f77f1279bc157
 
 // app.use('/api/categories', verify, require('./routes/category.route'));
 // app.use('/api/products', verify, require('./routes/product.route'));
