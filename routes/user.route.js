@@ -163,12 +163,18 @@ router.post('/forgetPassword', async (req, res) => {
   if (rsAddOTP) {
     var mailOptions = {
       subject: "Reset password",
+      html:`<p stlye="color:black">Dear customer. <br></br>` +
+      'You are receiving this because you have forgoten your password to login our website.<br></br>' +
+      'Please use this otp: ' + `<h2>${otpCode}</h2>` + '<br></br>'
+
+      +
+      'BankDBB Support team<p>',
       text: `Dear customer. \n\n` +
         'You are receiving this because you have forgoten your password to login our website.\n\n' +
         'Please use this otp: ' + otpCode + '\n\n'
 
         +
-        'F2L Support team',
+        'BankDBB Support team',
     }
     mailer(mailOptions, 'BankDBB', req.body.email, res)
   } else {
