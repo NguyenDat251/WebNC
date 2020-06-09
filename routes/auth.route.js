@@ -74,7 +74,8 @@ router.post('/refresh', async (req, res) => {
 });
 
 const generateAccessToken = params => {
-  const payload = { userId: params.id, role: params.role, email: params.email };
+  console.log('params:', params)
+  const payload = { userId: params.id, role: params.role,username:params.username,Number:params.Number,balance:params.Money, email: params.email,name:params.name,dob:params.dob,phone:params.phone };
   const accessToken = jwt.sign(payload, config.auth.secret, {
     expiresIn: config.auth.expiresIn
   });

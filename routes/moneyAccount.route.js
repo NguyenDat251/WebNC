@@ -4,6 +4,7 @@ const config = require('../config/default.json');
 const bcrypt = require('bcryptjs');
 const otp = require('otp-generator');
 const moment = require('moment');
+var _ =require('lodash')
 var {
     response,
     DEFINED_CODE
@@ -13,7 +14,6 @@ const router = express.Router();
 
 router.get('/:username', async (req, res) => {
     const username = req.params.username
-
     let listMoneyAccount = await moneyAccountModel.getMoneyAccount(username)
     let listSaving = await moneyAccountModel.getSaving(username)
 
@@ -21,9 +21,13 @@ router.get('/:username', async (req, res) => {
         response(res, 'err', 'error get list money account')
     }
     else{
+        let data =[]
+        //Concat 2 arrays by using lodash
+        data = _.concat(listMoneyAccount, listSaving)
+        console.log('data:', data);
+        data[0].name_saving="Main Account"
         response(res, '', 'get list money account successful', {
-            MainAccount: listMoneyAccount,
-            Saving: listSaving
+            data
         })
     }
 })

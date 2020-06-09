@@ -34,7 +34,7 @@ router.post('/addUser', async (req, res) => {
   }
 
 
-  console.log('req.body:',req.body)
+  console.log('req.body:', req.body)
   const result = await userModel.add(req.body)
 
   // var mailOptions = {
@@ -66,7 +66,7 @@ router.post('/addUser', async (req, res) => {
 
 router.post('/changePassword', async (req, res) => {
   let token;
-  try{
+  try {
     token = req.headers["x-access-token"]
   } catch{
     response(res, 'err', 'undifined access token')
@@ -172,16 +172,16 @@ router.post('/getOTP', async (req, res) => {
 
   if (rsAddOTP) {
     var mailOptions = {
-      subject: "Reset password",
-      html:`<p stlye="color:black">Dear customer. <br></br>` +
-      'You are receiving this because you have forgoten your password to login our website.<br></br>' +
-      'Please use this otp: ' + `<h2>${otpCode}</h2>` + '<br></br>'
+      subject: "[OTP Service] from DBB Bank",
+      html: `<p stlye="color:black">Dear customer. <br></br>` +
+        'You are receiving this because you have private service from us.<br></br>' +
+        'Please use this OTP to confirm your service: ' + `<h2>${otpCode}</h2>` + '<br></br>'
 
-      +
-      'BankDBB Support team<p>',
+        +
+        'BankDBB Support team<p>',
       text: `Dear customer. \n\n` +
-        'You are receiving this because you have forgoten your password to login our website.\n\n' +
-        'Please use this otp: ' + otpCode + '\n\n'
+        'You are receiving this because you have private service from us.\n\n' +
+        'Please use this OTP to confirm your service: ' + otpCode + '\n\n'
 
         +
         'BankDBB Support team',
@@ -193,7 +193,7 @@ router.post('/getOTP', async (req, res) => {
 
 
   // var mailOptions = {
-  //     subject: "Reset password",
+  //     subject: "OTP Service DBB Bank",
   //     text:
   //       `Dear customer. \n\n`
   //       + 'You are receiving this because you have forgoten your password to login our website.\n\n'
@@ -232,7 +232,7 @@ router.post('/sendOTPAndNewPassword', async (req, res) => {
   if (checkOTP.length > 0) {
     console.log("email input: ", email)
     console.log("email in data: ", checkOTP[0].email)
-    if(checkOTP[0].email !== email){
+    if (checkOTP[0].email !== email) {
       response(res, 'err', 'wrong otp', {})
       console.log("abc after wrong otp")
       return
@@ -247,7 +247,8 @@ router.post('/sendOTPAndNewPassword', async (req, res) => {
       console.log("NewPassword: ", NewPassword)
       const rs = await userModel.setPassword({
         NewPassword,
-        email})
+        email
+      })
 
       if (rs.affectedRows > 0) {
         response(res, '', 'change password successful', {})
@@ -260,7 +261,36 @@ router.post('/sendOTPAndNewPassword', async (req, res) => {
   }
 
 })
+router.post('/me', async (req, res) => {
+  var token = req.headers.authorization.slice(7)
+  var dataDecode = jwt.decode(token, {
+    secret: config.auth.secret,
+  });
+  if (dataDecode.userId) {
+    const result = await userModel.getUserInfoByUsername(dataDecode.username)
+    if (result) {
+      response(res, '', 'Get data success', result)
 
+    }
+    else {
+      response(res, 'err', 'Get data fail')
+
+    }
+
+
+  }
+  else {
+    response(res, 'err', 'Get data fail')
+
+  }
+  /*{
+
+    NewPassword: 'abcedf'
+  }*/
+
+
+
+})
 router.post('/setPassword', async (req, res) => {
   /*{
 
@@ -279,21 +309,20 @@ router.get('/:role', async (req, res) => {
 
   let type;
 
-  if(role == 1)
+  if (role == 1)
     type = 'customer'
-  else if(role == 2)
+  else if (role == 2)
     type = 'employer'
   else
     type = 'admin'
 
-  if(!result){
+  if (!result) {
     response(res, 'err', `Can not get list ${type}`)
   }
-  else{
+  else {
     response(res, '', `get list ${type} successful`, result)
   }
 })
-
 router.put('/:username', async (req, res) => {
   /*
     {
@@ -305,13 +334,13 @@ router.put('/:username', async (req, res) => {
     }
    */
 
-   const username = req.params.username
+  const username = req.params.username
 
   const result = await userModel.updateUser(username, req.body)
-s
-  if(!result){
+  s
+  if (!result) {
     response(res, 'err', 'Error edit user')
-  }else{
+  } else {
     response(res, '', 'update user successful')
   }
 })
