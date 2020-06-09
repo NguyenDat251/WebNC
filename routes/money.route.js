@@ -73,7 +73,7 @@ router.post('/addMoney', async (req, res) => {
 
     //const idReceiver = await userModel.getIdByUsername(req.body.username)
 
-   // await Promise.all(idReceiver)
+    // await Promise.all(idReceiver)
 
     await addToHistory(req.body.username, req.body.money, 'Receive money from employer')
 
@@ -111,6 +111,7 @@ router.get('/info/:id', async (req, res) => {
 
 router.post('/transferLocal', async (req, res) => {
     /*{
+        otp: 
         from: 'abc' username money account
         to: 'username' username money account
         money: 100000
@@ -120,52 +121,67 @@ router.post('/transferLocal', async (req, res) => {
     }
      */
 
-    const fee = 3000;
-    //
-    const Money = parseInt(req.body.money);
-    const sender = req.body.from
-    const receiver = req.body.to
-    const content = req.body.content
-    const paidBy = req.body.paidBy
+    const checkOTP = await userModel.checkOTPExisted(otp);
+    if (checkOTP.length > 0) {
+        console.log("email input: ", email)
+        console.log("email in data: ", checkOTP[0].email)
+        if (checkOTP[0].email !== email) {
+            response(res, 'err', 'wrong otp', {})
+            console.log("abc after wrong otp")
+            return
+        }
 
-    let moneySenderPaid, moneyReceiverPaid;
-    if (paidBy == 1) {
-        moneySenderPaid = -1 * (Money + fee)
-        moneyReceiverPaid = Money
+        const fee = 3000;
+        //
+        const Money = parseInt(req.body.money);
+        const sender = req.body.from
+        const receiver = req.body.to
+        const content = req.body.content
+        const paidBy = req.body.paidBy
+
+        let moneySenderPaid, moneyReceiverPaid;
+        if (paidBy == 1) {
+            moneySenderPaid = -1 * (Money + fee)
+            moneyReceiverPaid = Money
+        } else {
+            moneySenderPaid = -1 * Money
+            moneyReceiverPaid = Money - fee
+        }
+
+        console.log("minus money")
+
+        let rs;
+
+        rs = await doTheMoney(sender, moneySenderPaid, res)
+
+
+        if (!rs)
+            return
+
+        console.log("add money")
+
+        //rs =  await doTheMoney(receiver, moneyReceiverPaid, res)
+
+        rs = await doTheMoney(receiver, moneyReceiverPaid, res)
+
+        //const idReceiver = await userModel.getIdByUsername(receiver)
+        //const idSender = await userModel.getIdByUsername(sender)
+
+        //Promise.all(idReceiver, idSender)
+        //this.subscribe
+        await addToHistory(receiver, moneyReceiverPaid, `Receive money from ${sender}`, content)
+        await addToHistory(sender, moneySenderPaid, `Send money to ${sender}`, content)
+
+        console.log("rs: " + rs)
+        if (!rs)
+            return
+
+        response(res, '', 'transfer money successfull')
+
     } else {
-        moneySenderPaid = -1 * Money
-        moneyReceiverPaid = Money - fee
+        response(res, 'err', 'otp is not exist', {})
+        return
     }
-
-    console.log("minus money")
-
-    let rs;
-
-    rs = await doTheMoney(sender, moneySenderPaid, res)
-
-
-    if (!rs)
-        return
-
-    console.log("add money")
-
-    //rs =  await doTheMoney(receiver, moneyReceiverPaid, res)
-
-    rs = await doTheMoney(receiver, moneyReceiverPaid, res)
-
-    //const idReceiver = await userModel.getIdByUsername(receiver)
-    //const idSender = await userModel.getIdByUsername(sender)
-
-    //Promise.all(idReceiver, idSender)
-//this.subscribe
-    await addToHistory(receiver, moneyReceiverPaid, `Receive money from ${sender}`, content)
-    await addToHistory(sender, moneySenderPaid, `Send money to ${sender}`, content)
-
-    console.log("rs: " + rs)
-    if (!rs)
-        return
-
-    response(res, '', 'transfer money successfull')
 })
 
 router.get('/history/:username', async (req, res) => {
@@ -174,9 +190,9 @@ router.get('/history/:username', async (req, res) => {
     const result = await moneyModel.getHistory(username)
     console.log(result)
     console.log(result.length)
-    if(result.length == 0){
+    if (result.length == 0) {
         response(res, '', 'There is no exchange history')
-    }else{
+    } else {
         response(res, '', 'get history successfull', result)
     }
 })
