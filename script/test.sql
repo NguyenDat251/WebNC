@@ -303,3 +303,27 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2020-06-10  0:37:47
+
+DROP TABLE IF EXISTS `OtherBankTransaction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `OtherBankTransaction` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `BankCode` varchar(255) NOT NULL,
+  `Time` int NOT NULL,
+  `Money` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+DROP TABLE IF EXISTS `OtherBank`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `OtherBank` (
+  `BankCode` varchar(255) NOT NULL,
+  `Name` varchar(255) NOT NULL,
+  PRIMARY KEY (`BankCode`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
