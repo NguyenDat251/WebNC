@@ -77,7 +77,7 @@ module.exports = {
 
     const entity = {
       id: userId,
-      refreshToken: tokenw
+      refreshToken: token
       // rdt: moment().format('YYYY-MM-DD HH:mm:ss')
     }
     return db.add(entity, 'userRefreshTokenExt');

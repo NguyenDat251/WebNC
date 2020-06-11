@@ -45,9 +45,9 @@ router.put('/editRecipient', async (req, res) => {
 })
 router.delete('/deleteRecipient', async (req, res) => {
     console.log("req.body: ", req.body);
-    let id_debt = req.body.id_debt;
-    if (id_debt) {
-        RecipientModel.deleteRecipient(id_debt).then(data => {
+    
+    if (req.body) {
+        RecipientModel.deleteRecipient(req.body).then(data => {
             console.log('data:', data)
             res.status(201).json({
                 returnCode: 1,
@@ -65,6 +65,26 @@ router.delete('/deleteRecipient', async (req, res) => {
         })
 
 });
+router.get('/getAllRecipient/:username', async (req, res) => {
+
+    let username = req.params.username;
+    console.log('username:', username)
+    if (username) {
+        const result = await RecipientModel.getAllRecipients(username)
+        result.forEach(element => {
+            if(element.isLocal)
+            {
+                element.name="VietNam BBD Bank"
+            }
+        })
+
+        res.status(200).json({
+            returnCode: 1,
+            message: `Get Data Recipient`,
+            data: result
+        });
+    }
+})
 router.get('/getRecipientLocal/:username', async (req, res) => {
 
     let username = req.params.username;

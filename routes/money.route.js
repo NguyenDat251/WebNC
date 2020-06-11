@@ -138,6 +138,7 @@ router.post('/transferLocal', async (req, res) => {
         const receiver = req.body.to
         const content = req.body.content
         const paidBy = req.body.paidBy
+        const isSaving = req.body.isSaving
 
         let moneySenderPaid, moneyReceiverPaid;
         if (paidBy == 1) {
