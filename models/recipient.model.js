@@ -16,10 +16,23 @@ module.exports = {
         return db.edit(entity, { username }, 'recipients')
 
     },
-    deleteRecipient: async (username_recipient, username) => {
+    deleteRecipient: async (data) => {
         // return db.load(`DELETE FROM debt_reminder WHERE id_debtor=${data.id_debtor} and id_owner=${data.id_owner}`)
-        return db.load(`DELETE FROM debt_reminder WHERE username_recipient=${username_recipient} and username=${username}`)
+        return db.load(`DELETE FROM recipients WHERE walletId='${data.walletId}' and isLocal=${data.isLocal} and username='${data.username}'`)
 
+    },
+    getInfoUserRecipientByWalletId: async (walletId)=>{
+        return db.load(`select a.name
+        from moneyaccount as ma, account as a
+        where ma.username = a.username and ma.Number = ${walletId};`);
+    },
+    getAllRecipients: async (username) => {
+        let query = `
+        
+        select  distinct r.*,lb.* from recipients as r left join linkbanks as lb on r.bank_LinkId = lb.id_link_bank
+        where r.username = '${username}';`
+
+        return db.load(query);
     },
     getRecipientLocal: async (username) => {
         let query = `
