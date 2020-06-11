@@ -235,14 +235,14 @@ CREATE TABLE IF NOT EXISTS `moneyaccount` (
   `Money` varchar(255) NOT NULL,
   `id` varchar(255) NOT NULL,
   PRIMARY KEY (`Number`),
-  KEY `FK_MA_ACCOUNT_idx` (`username`)
+  KEY `FK_MA_ACCOUNT_idx` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `moneyaccount`
 --
 
-INSERT INTO `moneyaccount` (`Number`, `Money`, `username`) VALUES
+INSERT INTO `moneyaccount` (`Number`, `Money`, `id`) VALUES
 (1, '50000', '6'),
 (2, '77598233', '5'),
 (3, '42000000', '8'),
@@ -396,7 +396,7 @@ CREATE TABLE IF NOT EXISTS `savinglist` (
 -- Dumping data for table `savinglist`
 --
 
-INSERT INTO `savinglist` (`id_saving`, `spending`, `username`, `name_saving`, `target_date`) VALUES
+INSERT INTO `savinglist` (`id_saving`, `spending`, `id`, `name_saving`, `target_date`) VALUES
 (1, 3000000, '12', 'Tiết kiệm 1', '2020-09-06'),
 (2, 4000000, '12', 'Tiết kiệm 2', '2020-09-06'),
 (3, 5000000, '12', 'Tiết kiệm 3', '2020-09-06'),
