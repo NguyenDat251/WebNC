@@ -12,10 +12,10 @@ var {
 
 const router = express.Router();
 
-router.get('/:username', async (req, res) => {
-    const username = req.params.username
-    let listMoneyAccount = await moneyAccountModel.getMoneyAccount(username)
-    let listSaving = await moneyAccountModel.getSaving(username)
+router.get('/:id', async (req, res) => {
+    const id = req.params.id
+    let listMoneyAccount = await moneyAccountModel.getMoneyAccount(id)
+    let listSaving = await moneyAccountModel.getSaving(id)
 
     if(!listMoneyAccount || !listSaving){
         response(res, 'err', 'error get list money account')
@@ -25,7 +25,8 @@ router.get('/:username', async (req, res) => {
         //Concat 2 arrays by using lodash
         data = _.concat(listMoneyAccount, listSaving)
         console.log('data:', data);
-        data[0].name_saving="Main Account"
+        data[0].name_saving="Main Account";
+        data[0].spending = data[0].Money;
         response(res, '', 'get list money account successful', {
             data
         })

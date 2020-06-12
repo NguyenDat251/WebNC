@@ -68,7 +68,7 @@ router.delete('/deleteDebtReminder', async (req, res) => {
 router.get('/getDebtReminder/:id_debtor', async (req, res) => {
 
     let id_debtor = req.params.id_debtor;
-
+    console.log('id_debtor:', id_debtor)
     if (id_debtor) {
         const result = await debtReminderModel.getDebtReminder(id_debtor)
 

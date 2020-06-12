@@ -46,17 +46,17 @@ module.exports = {
   },
   getNameByWalletId: async id_wallet=>{
     return db.load(`select a.name,a.id from account as a, moneyaccount as ma
-    where a.username = ma.username and ma.Number =${id_wallet}`)
+    where a.id = ma.id and ma.Number =${id_wallet}`)
   },
   getUserInfoByUsername: async username => {
     return db.load(`select a.username,a.name,a.email,a.phone,a.indentity_number as idenityNumber,a.dob,m.Money as balance,m.Number as walletNumber
     from account as a,moneyaccount as m 
-    where a.id = m.username and a.username = '${username}';`)
+    where a.id = m.id and a.username = '${username}';`)
   },
   getUserInfoByWalletId: async walletId => {
     return db.load(`select a.name,a.username,a.indentity_number as identityNumber,m.Money as balance,m.Number as walletNumber
   from account as a,moneyaccount as m 
-  where a.id = m.username and m.Number = '${walletId}';`)
+  where a.id = m.id and m.Number = '${walletId}';`)
   },
   isEmailExist: async email => {
     console.log("check email exist")
@@ -69,7 +69,7 @@ module.exports = {
     return false
   },
 
-  singleByUserName: userName => db.load(`select account.*,moneyaccount.Number,moneyaccount.Money from account,moneyaccount where account.username = '${userName}' and account.username=moneyaccount.username`),
+  singleByUserName: userName => db.load(`select account.*,moneyaccount.Number,moneyaccount.Money from account,moneyaccount where account.username = '${userName}' and account.id=moneyaccount.id`),
 
   updateRefreshToken: async (userId, token) => {
 

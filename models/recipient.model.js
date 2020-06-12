@@ -18,7 +18,7 @@ module.exports = {
     },
     deleteRecipient: async (data) => {
         // return db.load(`DELETE FROM debt_reminder WHERE id_debtor=${data.id_debtor} and id_owner=${data.id_owner}`)
-        return db.load(`DELETE FROM recipients WHERE walletId='${data.walletId}' and isLocal=${data.isLocal} and username='${data.username}'`)
+        return db.load(`DELETE FROM recipients WHERE walletId='${data.walletId}' and isLocal=${data.isLocal} and id='${data.id}'`)
 
     },
     getInfoUserRecipientByWalletId: async (walletId)=>{
@@ -26,33 +26,33 @@ module.exports = {
         from moneyaccount as ma, account as a
         where ma.username = a.username and ma.Number = ${walletId};`);
     },
-    getAllRecipients: async (username) => {
+    getAllRecipients: async (id) => {
         let query = `
         
-        select  distinct r.*,lb.* from recipients as r left join linkbanks as lb on r.bank_LinkId = lb.id_link_bank
-        where r.username = '${username}';`
+        select  distinct r.*,ob.* from recipients as r left join otherbank as ob on r.bankCode= ob.BankCode
+        where r.id = ${id};`
 
         return db.load(query);
     },
-    getRecipientLocal: async (username) => {
+    getRecipientLocal: async (id) => {
         let query = `
         
-        select * from recipients where username ='${username}'and isLocal =1;`
+        select * from recipients where id ='${id}'and isLocal =1;`
 
         return db.load(query);
     },
     trackRecipientLocal: async (walletId) => {
         let query = `
         
-        select distinct a.name as fullname,a.email,r.bank_LinkId,lb.name from account as a, recipients as r left join linkbanks as lb on r.bank_LinkId = lb.id_link_bank
-        where walletId = '${walletId}' and a.username = r.username_recipient and isLocal =1`
+        select distinct a.name as fullname,a.email,r.bankCode,ob.Name from account as a, recipients as r left join otherbank as ob on r.bankCode = ob.BankCode,moneyaccount as ma
+            where ma.Number = ${walletId} and ma.id = a.id and a.id = r.id_recipient and isLocal =1`
 
         return db.load(query);
     },
-    getRecipientForeign: async (username) => {
+    getRecipientForeign: async (id) => {
         let query = `
         
-        select * from recipients where username ='${username}'and isLocal =0;`
+        select * from recipients where id ='${id}'and isLocal =0;`
 
         return db.load(query);
     },

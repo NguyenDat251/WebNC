@@ -65,16 +65,16 @@ router.delete('/deleteRecipient', async (req, res) => {
         })
 
 });
-router.get('/getAllRecipient/:username', async (req, res) => {
+router.get('/getAllRecipient/:id', async (req, res) => {
 
-    let username = req.params.username;
-    console.log('username:', username)
-    if (username) {
-        const result = await RecipientModel.getAllRecipients(username)
+    let id = req.params.id;
+    console.log('id:', id)
+    if (id) {
+        const result = await RecipientModel.getAllRecipients(id)
         result.forEach(element => {
             if(element.isLocal)
             {
-                element.name="VietNam BBD Bank"
+                element.Name="VietNam BBD Bank"
             }
         })
 
@@ -85,12 +85,12 @@ router.get('/getAllRecipient/:username', async (req, res) => {
         });
     }
 })
-router.get('/getRecipientLocal/:username', async (req, res) => {
+router.get('/getRecipientLocal/:id', async (req, res) => {
 
-    let username = req.params.username;
-    console.log('username:', username)
-    if (username) {
-        const result = await RecipientModel.getRecipientLocal(username)
+    let id = req.params.id;
+    console.log('id:', id)
+    if (id) {
+        const result = await RecipientModel.getRecipientLocal(id)
 
 
         res.status(200).json({
@@ -112,12 +112,12 @@ router.get('/trackRecipientLocal/:walletId', async (req, res) => {
     });
 
 })
-router.get('/getRecipientForeign/:username', async (req, res) => {
+router.get('/getRecipientForeign/:id', async (req, res) => {
 
-    let username = req.params.username;
-    console.log('username:', username)
-    if (username) {
-        const result = await RecipientModel.getRecipientForeign(username)
+    let id = req.params.id;
+    console.log('id:', id)
+    if (id) {
+        const result = await RecipientModel.getRecipientForeign(id)
 
 
         res.status(200).json({

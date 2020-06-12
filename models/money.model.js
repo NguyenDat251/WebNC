@@ -17,7 +17,7 @@ module.exports = {
     },
 
     getAccount: async id => {
-        return db.load(`select a.* from account a, moneyaccount m where a.id = m.idParent and m.Number = '${id}'`);
+        return db.load(`select a.* from account a, moneyaccount m where a.id = m.id and m.Number = '${id}'`);
     },
 
     addToHistory: entity => {

@@ -46,12 +46,13 @@ const doTheMoney = async (username, money, res) => {
     return true
 }
 
-const addToHistory = async (username, money, title, content = null) => {
+const addToHistory = async (id_recipient,id_user, money, time = null) => {
     await moneyModel.addToHistory({
-        username: username,
+        id_recipient: id_recipient,
+        id_user:id_user,
         money_transfer: money,
-        title: title,
-        content: content
+        time: time,
+
     })
 }
 
