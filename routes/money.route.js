@@ -11,14 +11,14 @@ var {
     DEFINED_CODE
 } = require('../config/response');
 
-const doTheMoney = async (username, money, res) => {
-    const rsGetCurrentMoney = await moneyModel.getCurrentMoney(username)
+const doTheMoney = async (id, money, res) => {
+    const rsGetCurrentMoney = await moneyModel.getCurrentMoney(id)
 
     console.log(rsGetCurrentMoney)
 
     if (rsGetCurrentMoney.length == 0) {
         response(res, 'err', 'not found user to do the transfer')
-        return false
+        return 
     }
 
 
@@ -27,7 +27,7 @@ const doTheMoney = async (username, money, res) => {
 
     if (CurrentMoney < 0) {
         response(res, 'err', 'Your account is not enough money')
-        return false
+        return 
     }
 
     const result = await moneyModel.setMoney({
@@ -37,7 +37,7 @@ const doTheMoney = async (username, money, res) => {
 
     if (!result.affectedRows) {
         response(res, 'err', 'err transfer')
-        return false
+        return 
     }
     // else{
     //     response(res, '', 'transaction money successfull')
@@ -46,13 +46,14 @@ const doTheMoney = async (username, money, res) => {
     return true
 }
 
-const addToHistory = async (id_recipient,id_user, money, time = null) => {
+const addToHistory = async (user,partner, type, money, time) => {
+    console.log("add to history")
     await moneyModel.addToHistory({
-        id_recipient: id_recipient,
-        id_user:id_user,
+        user: user,
+        partner: partner,
+        type: type,
         money_transfer: money,
-        time: time,
-
+        time: time/1000
     })
 }
 
@@ -60,7 +61,7 @@ router.post('/addMoney', async (req, res) => {
     //const result = await moneyModel.addMoney(req.body)
 
     /*{
-        username: "adminn",
+        id: "01",
         money: 10000
     }
      */
@@ -70,13 +71,17 @@ router.post('/addMoney', async (req, res) => {
 
 
     console.log(req.body)
-    rs = await doTheMoney(req.body.username, req.body.money, res)
+    rs = await doTheMoney(req.body.id, req.body.money, res)
+
+    if(!rs){
+        return;
+    }
 
     //const idReceiver = await userModel.getIdByUsername(req.body.username)
 
     // await Promise.all(idReceiver)
 
-    await addToHistory(req.body.username, req.body.money, 'Receive money from employer')
+    await addToHistory(req.body.id, '-1', '1', req.body.money, Date.now())
 
 
     //    await new Promise( (resolve, reject) => {
@@ -113,8 +118,9 @@ router.get('/info/:id', async (req, res) => {
 router.post('/transferLocal', async (req, res) => {
     /*{
         otp: 
-        from: 'abc' username money account
-        to: 'username' username money account
+        email: 
+        from: '1' id money account
+        to: '2' id money account
         money: 100000
         content: 'a'
         paidBy: 1 -> sender
@@ -122,11 +128,11 @@ router.post('/transferLocal', async (req, res) => {
     }
      */
 
-    const checkOTP = await userModel.checkOTPExisted(otp);
+    const checkOTP = await userModel.checkOTPExisted(req.body.otp);
     if (checkOTP.length > 0) {
-        console.log("email input: ", email)
+        console.log("email input: ", req.body.email)
         console.log("email in data: ", checkOTP[0].email)
-        if (checkOTP[0].email !== email) {
+        if (checkOTP[0].email !== req.body.email) {
             response(res, 'err', 'wrong otp', {})
             console.log("abc after wrong otp")
             return
@@ -137,7 +143,7 @@ router.post('/transferLocal', async (req, res) => {
         const Money = parseInt(req.body.money);
         const sender = req.body.from
         const receiver = req.body.to
-        const content = req.body.content
+        //const content = req.body.content
         const paidBy = req.body.paidBy
         const isSaving = req.body.isSaving
 
@@ -171,8 +177,8 @@ router.post('/transferLocal', async (req, res) => {
 
         //Promise.all(idReceiver, idSender)
         //this.subscribe
-        await addToHistory(receiver, moneyReceiverPaid, `Receive money from ${sender}`, content)
-        await addToHistory(sender, moneySenderPaid, `Send money to ${sender}`, content)
+        await addToHistory(receiver, sender, `1`, moneyReceiverPaid, Date.now())
+        await addToHistory(sender, receiver, `2`, moneySenderPaid, Date.now())
 
         console.log("rs: " + rs)
         if (!rs)
@@ -186,10 +192,10 @@ router.post('/transferLocal', async (req, res) => {
     }
 })
 
-router.get('/history/:username', async (req, res) => {
-    const username = req.params.username
+router.get('/history/:id', async (req, res) => {
+    const id = req.params.id
 
-    const result = await moneyModel.getHistory(username)
+    const result = await moneyModel.getHistory(id)
     console.log(result)
     console.log(result.length)
     if (result.length == 0) {

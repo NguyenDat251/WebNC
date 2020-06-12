@@ -188,14 +188,15 @@ INSERT INTO `debt_reminder` (`id_debt`, `id_debtor`, `id_owner`, `money_debt`, `
 
 DROP TABLE IF EXISTS `history`;
 CREATE TABLE IF NOT EXISTS `history` (
-  `id_history` int(11) NOT NULL AUTO_INCREMENT,
-  `id_recipient` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `money_tranfer` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user` int(11) NOT NULL,
+  `partner` int(11) NOT NULL,
+  `type` int NOT NULL,
+  `money_transfer` int(11) NOT NULL,
   `time` int NOT NULL,
-  PRIMARY KEY (`id_history`),
-  KEY `FK_HISTORY_RECIPIENT_idx` (`id_recipient`),
-  KEY `FK_HISTORY_USER_idx` (`id_user`)
+  PRIMARY KEY (`id`),
+  KEY `FK_HISTORY_RECIPIENT_idx` (`user`),
+  KEY `FK_HISTORY_USER_idx` (`partner`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -233,16 +234,16 @@ DROP TABLE IF EXISTS `moneyaccount`;
 CREATE TABLE IF NOT EXISTS `moneyaccount` (
   `Number` int(11) NOT NULL AUTO_INCREMENT,
   `Money` varchar(255) NOT NULL,
-  `id` varchar(255) NOT NULL,
+  `idParent` varchar(255) NOT NULL,
   PRIMARY KEY (`Number`),
-  KEY `FK_MA_ACCOUNT_idx` (`id`)
+  KEY `FK_MA_ACCOUNT_idx` (`idParent`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `moneyaccount`
 --
 
-INSERT INTO `moneyaccount` (`Number`, `Money`, `id`) VALUES
+INSERT INTO `moneyaccount` (`Number`, `Money`, `idParent`) VALUES
 (1, '50000', '6'),
 (2, '77598233', '5'),
 (3, '42000000', '8'),

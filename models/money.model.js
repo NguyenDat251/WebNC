@@ -2,8 +2,8 @@ const bcrypt = require('bcryptjs');
 const db = require('../utils/db');
 
 module.exports = {
-    getCurrentMoney: username => {
-        return db.load(`select m.money, m.idParent from MoneyAccount m, account a where m.idParent = a.id and a.username='${username}'`)
+    getCurrentMoney: id => {
+        return db.load(`select m.money, m.idParent from MoneyAccount m, account a where m.idParent = a.id and a.id='${id}'`)
     },
 
     setMoney: async entity => {
@@ -24,9 +24,9 @@ module.exports = {
         return db.add(entity, 'history')
     },
 
-    getHistory: username => {
-        console.log("username: ", username)
-        return db.load(`select * from history where username = '${username}'`)
+    getHistory: id => {
+        console.log("id: ", id)
+        return db.load(`select * from history where sender = '${id}' or receiver = '${id}'`)
     }
 
     // minusMoney: async entity => {
