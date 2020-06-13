@@ -138,6 +138,10 @@ module.exports = {
     return db.load(`select * from account where role = '${role}'`)
   },
 
+  getUserById: id => {
+    return db.load(`select name, email, phone, identity_number from account where id = ${id}`)
+  },
+
   updateUser: (username, entity) => {
     // return db.load(`update from account where username = '${entity.username}' set name = '${entity.name}', email = '${entity.email}', phone = '${entity.phone}', role = '${entity.role}', identity_number = '${entity.identity_number}'`)
     return db.edit(entity, {username}, 'account')

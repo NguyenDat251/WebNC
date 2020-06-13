@@ -4,11 +4,11 @@ const sig = require('../module/sig.js');
 let time = Date.now();
 console.log("time: " + time)
 
- axios.get('http://d51236fa.ngrok.io/account/1', {
+ axios.get('http://localhost:3000/api/partner-bank/info/1', {
   //axios.get('https://bankdbb.herokuapp.com/account/1', {
   headers: {
-    sig: sig.createHash(time,JSON.stringify({}),'thisisatokenfroma'),
-    id: 'rsa-bank',
+    sig: sig.createHash(time,JSON.stringify({}),'bankdbb'),
+    id: 'bankdbb',
     ts: time
   }
 })
@@ -23,5 +23,6 @@ console.log("time: " + time)
   }
   })
   .catch(error => {
-    console.log(error);
+    console.log("error")
+    //console.log(error);
   });

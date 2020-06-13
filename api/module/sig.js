@@ -38,6 +38,8 @@ let privateKey = new NodeRSA(privateKeyRSA);
 
 let publicKey = new NodeRSA(publicKeyRSA);
 
+const secretKey = "bankdbb";
+
 module.exports = {
     decrypt: (req)=>{
         console.log("sig: " + req.body.signature)
@@ -69,7 +71,7 @@ module.exports = {
     },
     generateRSASig: ()=>{
         try{
-            sig = privateKey.sign("thisisatokenfroma", 'base64', 'base64');
+            sig = privateKey.sign(secretKey, 'base64', 'base64');
 
             console.log(sig);
 

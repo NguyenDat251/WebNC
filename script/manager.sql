@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `account` (
   `email` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL,
-  `indentity_number` varchar(45) NOT NULL,
+  `identity_number` varchar(45) NOT NULL,
   `dob` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `account` (
 -- Dumping data for table `account`
 --
 
-INSERT INTO `account` (`id`, `username`, `password_hash`, `name`, `email`, `phone`, `role`, `indentity_number`, `dob`) VALUES
+INSERT INTO `account` (`id`, `username`, `password_hash`, `name`, `email`, `phone`, `role`, `identity_number`, `dob`) VALUES
 (1, 'dat', '123', 'datt', 'dat@gmail.com', '0333333333333', '1', '', NULL),
 (2, 'admin', '$2a$08$SJlc0p.hXTKYEAi3ted4EOD7yxeEazRqF38KjHpXDmwHUTFBxzePm', 'Nguyen Dat', 'nguyenquocdat2511998@gmail.com', '0343244644', '1', '', NULL),
 (5, 'admin123', '$2a$08$x2L1M3GqxvsfnoCL0dJld.ezK85KNayNDg6B65J565APuAHBIBfJO', 'Nguyen Dat', 'nguyenquocdat2511998123@gmail.com', '0343244644', '1', '', NULL),
@@ -194,6 +194,7 @@ CREATE TABLE IF NOT EXISTS `history` (
   `type` int NOT NULL,
   `money_transfer` int(11) NOT NULL,
   `time` int NOT NULL,
+  `content` text,
   PRIMARY KEY (`id`),
   KEY `FK_HISTORY_RECIPIENT_idx` (`user`),
   KEY `FK_HISTORY_USER_idx` (`partner`)
@@ -288,9 +289,12 @@ INSERT INTO `otherbank` (`BankCode`, `Name`) VALUES
 DROP TABLE IF EXISTS `otherbanktransaction`;
 CREATE TABLE IF NOT EXISTS `otherbanktransaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user` int NOT NULL,
+  `partner` varchar(255) NOT NULL,
   `BankCode` varchar(255) NOT NULL,
   `Time` int(11) NOT NULL,
   `Money` int(11) NOT NULL,
+  `Content` text,
   PRIMARY KEY (`id`),
   KEY `BankCode` (`BankCode`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

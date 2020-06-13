@@ -4,25 +4,33 @@ const sig = require('../module/sig.js');
 let time = Date.now();
 console.log("time: " + time)
 
- axios.post('http://d30cd9e5.ngrok.io/account/1',{data: {}} ,{
+const body = {
+  Money: 10000,
+  username: `Dat`,
+  content: `abc`
+}
+
+ axios.post('http://localhost:3000/api/partner-bank/add-money/1',body ,{
   //axios.get('https://bankdbb.herokuapp.com/account/1', {
   headers: {
-    sig: sig.createHash(time,JSON.stringify({data: {}}),"thisisatokenfroma"),
-    id: 'rsa-bank',
+    sig: sig.createHash(time,JSON.stringify(body),"bankdbb"),
+    id: 'bankdbb',
     ts: time,
     verify: sig.generateRSASig()
   }
 })
   .then(response => {
     if(response.data.returnCode == ''){
-
-      console.log(response.data.returnMessage)
+      console.log("message")
+      //console.log(response.data.returnMessage)
 
     
   }else {
-    console.log(response.data.data);
+    console.log("data")
+    //console.log(response.data.data);
   }
   })
   .catch(error => {
-    console.log(error);
+    console.log("error")
+    //console.log(error);
   });

@@ -197,5 +197,8 @@ module.exports = {
             if (err) throw err
             res.json({message: 'Update success!'})
         })
+    },
+    addToHistory: entity => {
+        db.add(entity, `otherbanktransaction`)
     }
 }
