@@ -10,15 +10,24 @@ var {
     response,
     DEFINED_CODE
 } = require('../config/response');
+const { decodeWalletId } = require('../middlewares/convertWalletId.mdw.js');
 
-const doTheMoney = async (id, money, res) => {
-    const rsGetCurrentMoney = await moneyModel.getCurrentMoney(id)
-    
-    console.log(rsGetCurrentMoney)
+const doTheMoney = async (id, money, isSaving, res) => {
+    var rsGetCurrentMoney = null;
+    if (isSaving === null || !isSaving) {
+        rsGetCurrentMoney = await moneyModel.getCurrentMoney(id)
+    }
+    else if (isSaving) {
+        console.log("go inside isSaving")
+        console.log('id:', id);
+        rsGetCurrentMoney = await moneyModel.getCurrentMoneySaving(id)
+
+    }
+    console.log('rsGetCurrentMoney:', rsGetCurrentMoney)
 
     if (rsGetCurrentMoney.length == 0) {
         response(res, 'err', 'not found user to do the transfer')
-        return 
+        return
     }
 
 
@@ -27,34 +36,47 @@ const doTheMoney = async (id, money, res) => {
 
     if (CurrentMoney < 0) {
         response(res, 'err', 'Your account is not enough money')
-        return 
+        return
+    }
+    var result = null;
+    if (isSaving === null || !isSaving) {
+        result = await moneyModel.setMoney({
+            id: rsGetCurrentMoney[0].id,
+            CurrentMoney,
+        })
+    }
+    else {
+        result = await moneyModel.setMoneySaving({
+            id_saving: id,
+            spending: CurrentMoney,
+        })
     }
 
-    const result = await moneyModel.setMoney({
-        idParent: rsGetCurrentMoney[0].idParent,
-        CurrentMoney,
-    })
 
     if (!result.affectedRows) {
         response(res, 'err', 'err transfer')
-        return 
+        return
     }
     // else{
     //     response(res, '', 'transaction money successfull')
     // }
 
     return true
+
+
+
 }
 
-const addToHistory = async (user,partner, type, money,description, time) => {
+const addToHistory = async (user, partner, type, money, description, time) => {
     console.log("add to history")
+
     await moneyModel.addToHistory({
         user: user,
         partner: partner,
         type: type,
         description,
         money_transfer: money,
-        time: time/1000
+        time: time / 1000
     })
 }
 
@@ -64,7 +86,7 @@ router.post('/addMoney', async (req, res) => {
     /*{
         id: "01",
         money: 10000
-    }
+    }503560
      */
     //const rs = await doTheMoney(req.body.username, req.body.money, res)
 
@@ -72,9 +94,9 @@ router.post('/addMoney', async (req, res) => {
 
 
     console.log(req.body)
-    rs = await doTheMoney(req.body.id, req.body.money, res)
+    rs = await doTheMoney(req.body.id, req.body.money, false, res)
 
-    if(!rs){
+    if (!rs) {
         return;
     }
 
@@ -82,7 +104,7 @@ router.post('/addMoney', async (req, res) => {
 
     // await Promise.all(idReceiver)
 
-    await addToHistory(req.body.id, '-1', '1', req.body.money, Date.now())
+    await addToHistory(req.body.id, '-1', '1', req.body.money, req.description, Date.now())
 
 
     //    await new Promise( (resolve, reject) => {
@@ -141,13 +163,13 @@ router.post('/transferLocal', async (req, res) => {
 
         const fee = 3000;
         //
+        const isSaving = req.body.isSaving;
         const Money = parseInt(req.body.money);
-        const sender = req.body.from
-        const receiver = req.body.to
-        //const content = req.body.content
+        const sender = decodeWalletId(req.body.from, isSaving);
+        const receiver = decodeWalletId(req.body.to, false);
+        const description = req.body.description
         const paidBy = req.body.paidBy
-        const isSaving = req.body.isSaving
-
+        console.log('isSaving:', isSaving)
         let moneySenderPaid, moneyReceiverPaid;
         if (paidBy == 1) {
             moneySenderPaid = -1 * (Money + fee)
@@ -161,8 +183,7 @@ router.post('/transferLocal', async (req, res) => {
 
         let rs;
 
-        rs = await doTheMoney(sender, moneySenderPaid, res)
-
+        rs = await doTheMoney(sender, moneySenderPaid, isSaving, res);
 
         if (!rs)
             return
@@ -171,15 +192,15 @@ router.post('/transferLocal', async (req, res) => {
 
         //rs =  await doTheMoney(receiver, moneyReceiverPaid, res)
 
-        rs = await doTheMoney(receiver, moneyReceiverPaid, res)
+        rs = await doTheMoney(receiver, moneyReceiverPaid, false, res)
 
         //const idReceiver = await userModel.getIdByUsername(receiver)
         //const idSender = await userModel.getIdByUsername(sender)
 
         //Promise.all(idReceiver, idSender)
         //this.subscribe
-        await addToHistory(receiver, sender, `1`, moneyReceiverPaid, Date.now())
-        await addToHistory(sender, receiver, `2`, moneySenderPaid, Date.now())
+        await addToHistory(receiver, sender, `1`, moneyReceiverPaid, description, Date.now())
+        await addToHistory(sender, receiver, `2`, moneySenderPaid, description, Date.now())
 
         console.log("rs: " + rs)
         if (!rs)

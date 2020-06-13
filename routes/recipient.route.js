@@ -9,7 +9,7 @@ var moment = require('moment')
 var { response, DEFINED_CODE } = require('../config/response');
 var { mailer } = require('../utils/nodemailer');
 const RecipientModel = require('../models/recipient.model.js');
-
+var { encodeWalletId, decodeWalletId } = require('../middlewares/convertWalletId.mdw');
 
 router.post('/addRecipient', async (req, res) => {
     RecipientModel.addRecipient(req.body).then(data => {
@@ -45,7 +45,7 @@ router.put('/editRecipient', async (req, res) => {
 })
 router.delete('/deleteRecipient', async (req, res) => {
     console.log("req.body: ", req.body);
-    
+
     if (req.body) {
         RecipientModel.deleteRecipient(req.body).then(data => {
             console.log('data:', data)
@@ -72,9 +72,8 @@ router.get('/getAllRecipient/:id', async (req, res) => {
     if (id) {
         const result = await RecipientModel.getAllRecipients(id)
         result.forEach(element => {
-            if(element.isLocal)
-            {
-                element.Name="VietNam BBD Bank"
+            if (element.isLocal) {
+                element.Name = "VietNam BBD Bank"
             }
         })
 
@@ -91,18 +90,27 @@ router.get('/getRecipientLocal/:id', async (req, res) => {
     console.log('id:', id)
     if (id) {
         const result = await RecipientModel.getRecipientLocal(id)
+        if (result) {
+            result.forEach(element => {
+                element.walletId = encodeWalletId(element.walletId,false);
+            });
+            console.log('result:', result)
 
+            res.status(200).json({
+                returnCode: 1,
+                message: `Get Data Recipient`,
+                data: result
+            });
+        }
 
-        res.status(200).json({
-            returnCode: 1,
-            message: `Get Data Recipient`,
-            data: result
-        });
     }
 })
 router.get('/trackRecipientLocal/:walletId', async (req, res) => {
 
     let walletId = req.params.walletId;
+    console.log('walletId:', walletId)
+    walletId = decodeWalletId(walletId,false);
+    console.log('walletId:', walletId)
     const result = await RecipientModel.trackRecipientLocal(walletId)
 
     res.status(200).json({
@@ -118,7 +126,10 @@ router.get('/getRecipientForeign/:id', async (req, res) => {
     console.log('id:', id)
     if (id) {
         const result = await RecipientModel.getRecipientForeign(id)
-
+        result.forEach(element => {
+            element.walletId = encodeWalletId(element.walletId,false);
+        });
+        console.log('result:', result)
 
         res.status(200).json({
             returnCode: 1,
