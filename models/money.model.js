@@ -34,9 +34,18 @@ module.exports = {
         return db.add(entity, 'history')
     },
 
-    getHistory: id => {
+    getHistoryFromWallet: id => {
         console.log("id: ", id)
-        return db.load(`select * from history where sender = '${id}' or receiver = '${id}'`)
+        return db.load(`select  a.id,a.name,h.*,ma.Number
+        from history as h,account as a,moneyaccount as ma  
+        where ma.id= a.id and (ma.Number = h.user or ma.Number = h.partner) and a.id= ${id} and h.isSaving = 0;`)
+    },
+    getHistoryFromSaving: id => {
+        console.log("id: ", id)
+        return db.load(`
+        select  a.id,a.name,h.*,sl.id_saving
+        from history as h,account as a,savinglist as sl  
+        where sl.id= a.id and (sl.id_saving = h.user or sl.id_saving = h.partner) and a.id= ${id} and h.isSaving = 1;`)
     }
 
     // minusMoney: async entity => {

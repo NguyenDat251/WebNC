@@ -10,6 +10,8 @@ var {
     response,
     DEFINED_CODE
 } = require('../config/response');
+var _ = require('lodash')
+
 const { decodeWalletId } = require('../middlewares/convertWalletId.mdw.js');
 
 const doTheMoney = async (id, money, isSaving, res) => {
@@ -67,13 +69,14 @@ const doTheMoney = async (id, money, isSaving, res) => {
 
 }
 
-const addToHistory = async (user, partner, type, money, description, time) => {
+const addToHistory = async (user, partner, type, money, description, time, isSaving) => {
     console.log("add to history")
 
     await moneyModel.addToHistory({
         user: user,
         partner: partner,
         type: type,
+        isSaving,
         description,
         money_transfer: money,
         time: time / 1000
@@ -104,7 +107,7 @@ router.post('/addMoney', async (req, res) => {
 
     // await Promise.all(idReceiver)
 
-    await addToHistory(req.body.id, '-1', '1', req.body.money, req.description, Date.now())
+    await addToHistory(req.body.id, '-1', '1', req.body.money, req.description, Date.now(), false)
 
 
     //    await new Promise( (resolve, reject) => {
@@ -166,7 +169,10 @@ router.post('/transferLocal', async (req, res) => {
         const isSaving = req.body.isSaving;
         const Money = parseInt(req.body.money);
         const sender = decodeWalletId(req.body.from, isSaving);
+
         const receiver = decodeWalletId(req.body.to, false);
+        console.log('sender:', sender)
+        console.log('receiver:', receiver)
         const description = req.body.description
         const paidBy = req.body.paidBy
         console.log('isSaving:', isSaving)
@@ -199,8 +205,8 @@ router.post('/transferLocal', async (req, res) => {
 
         //Promise.all(idReceiver, idSender)
         //this.subscribe
-        await addToHistory(receiver, sender, `1`, moneyReceiverPaid, description, Date.now())
-        await addToHistory(sender, receiver, `2`, moneySenderPaid, description, Date.now())
+        await addToHistory(receiver, sender, `1`, moneyReceiverPaid, description, Date.now(), isSaving)
+        await addToHistory(sender, receiver, `2`, moneySenderPaid, description, Date.now(), isSaving)
 
         console.log("rs: " + rs)
         if (!rs)
@@ -214,16 +220,19 @@ router.post('/transferLocal', async (req, res) => {
     }
 })
 
-router.get('/history/:id', async (req, res) => {
+router.get('/historyLocal/:id', async (req, res) => {
     const id = req.params.id
 
-    const result = await moneyModel.getHistory(id)
-    console.log(result)
-    console.log(result.length)
-    if (result.length == 0) {
+    const historyFromWallet = await moneyModel.getHistoryFromWallet(id);
+    const historyFromSaving = await moneyModel.getHistoryFromSaving(id);
+    if (historyFromWallet.length == 0 && historyFromSaving.length == 0) {
         response(res, '', 'There is no exchange history')
     } else {
-        response(res, '', 'get history successfull', result)
+        let result = [];
+        //Concat 2 arrays by using lodash
+        result = _.concat(historyFromWallet, historyFromSaving);
+        console.log('result:', result)
+        response(res, '', 'Get history successfull', result)
     }
 })
 
