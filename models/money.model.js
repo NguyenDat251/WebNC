@@ -3,17 +3,17 @@ const db = require('../utils/db');
 
 module.exports = {
     getCurrentMoney: id => {
-        return db.load(`select m.money, m.idParent from MoneyAccount m, account a where m.idParent = a.id and a.id='${id}'`)
+        return db.load(`select m.money, m.id from MoneyAccount m, account a where m.id = a.id and a.id='${id}'`)
     },
 
     setMoney: async entity => {
-        // let MoneyEntity = await db.load(`select m.money, m.idParent from MoneyAccount m, account a where m.idParent = a.id and a.username='${entity.username}'`)
+        // let MoneyEntity = await db.load(`select m.money, m.id from MoneyAccount m, account a where m.id = a.id and a.username='${entity.username}'`)
 
         // console.log("MoneyEntity: ", JSON.stringify(MoneyEntity[0]))
 
         // currentMoney = parseInt(MoneyEntity[0].money) + parseInt(entity.money) 
 
-        return db.edit({Money: entity.CurrentMoney}, {idParent: parseInt(entity.idParent)}, 'MoneyAccount')
+        return db.edit({Money: entity.CurrentMoney}, {id: parseInt(entity.id)}, 'MoneyAccount')
     },
 
     getAccount: async id => {
@@ -31,7 +31,7 @@ module.exports = {
 
     // minusMoney: async entity => {
     //     // console.log(entity.username)
-    //     // let MoneyEntity = await db.load(`select m.money, m.idParent from MoneyAccount m, account a where m.idParent = a.id and a.username='${entity.username}'`)
+    //     // let MoneyEntity = await db.load(`select m.money, m.id from MoneyAccount m, account a where m.id = a.id and a.username='${entity.username}'`)
 
     //     // if(MoneyEntity.length == 0)
     //     //     return 'false'
@@ -43,6 +43,6 @@ module.exports = {
     //     // if(currentMoney < 0)
     //     //     return false
 
-    //     return db.edit({money: entity.currentMoney}, {idParent: parseInt(entity.idParent)}, 'MoneyAccount') 
+    //     return db.edit({money: entity.currentMoney}, {id: parseInt(entity.id)}, 'MoneyAccount') 
     // }
 }

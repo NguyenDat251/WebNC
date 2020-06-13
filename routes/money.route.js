@@ -13,7 +13,7 @@ var {
 
 const doTheMoney = async (id, money, res) => {
     const rsGetCurrentMoney = await moneyModel.getCurrentMoney(id)
-
+    
     console.log(rsGetCurrentMoney)
 
     if (rsGetCurrentMoney.length == 0) {
@@ -46,12 +46,13 @@ const doTheMoney = async (id, money, res) => {
     return true
 }
 
-const addToHistory = async (user,partner, type, money, time) => {
+const addToHistory = async (user,partner, type, money,description, time) => {
     console.log("add to history")
     await moneyModel.addToHistory({
         user: user,
         partner: partner,
         type: type,
+        description,
         money_transfer: money,
         time: time/1000
     })
@@ -184,10 +185,10 @@ router.post('/transferLocal', async (req, res) => {
         if (!rs)
             return
 
-        response(res, '', 'transfer money successfull')
+        response(res, '', 'Transfer money successfull')
 
     } else {
-        response(res, 'err', 'otp is not exist', {})
+        response(res, 'err', 'Otp is not exist', {})
         return
     }
 })
