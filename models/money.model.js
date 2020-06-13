@@ -3,7 +3,7 @@ const db = require('../utils/db');
 
 module.exports = {
     getCurrentMoney: id => {
-        return db.load(`select m.money, m.id from MoneyAccount m, account a where m.id = a.id and a.id='${id}'`)
+        return db.load(`select m.money, m.idParent from MoneyAccount m, account a where m.idParent = a.id and a.id='${id}'`)
     },
 
     setMoney: async entity => {
@@ -13,7 +13,7 @@ module.exports = {
 
         // currentMoney = parseInt(MoneyEntity[0].money) + parseInt(entity.money) 
 
-        return db.edit({Money: entity.CurrentMoney}, {id: parseInt(entity.id)}, 'MoneyAccount')
+        return db.edit({Money: entity.CurrentMoney}, {idParent: parseInt(entity.idParent)}, 'MoneyAccount')
     },
 
     getAccount: async id => {
