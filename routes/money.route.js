@@ -191,14 +191,21 @@ router.post('/transferLocal', async (req, res) => {
 
         rs = await doTheMoney(sender, moneySenderPaid, isSaving, res);
 
-        if (!rs)
+        if (!rs){
+            response(res, 'err', 'set money false for sender')
             return
+        }
 
         console.log("add money")
 
         //rs =  await doTheMoney(receiver, moneyReceiverPaid, res)
 
         rs = await doTheMoney(receiver, moneyReceiverPaid, false, res)
+
+        if (!rs){
+            response(res, 'err', 'set money false for receiver')
+            return
+        }
 
         //const idReceiver = await userModel.getIdByUsername(receiver)
         //const idSender = await userModel.getIdByUsername(sender)
