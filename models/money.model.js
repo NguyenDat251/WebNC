@@ -36,16 +36,16 @@ module.exports = {
 
     getHistoryFromWallet: id => {
         console.log("id: ", id)
-        return db.load(`select  a.id,a.name,h.*,ma.Number
+        return db.load(`select  a.id,a.name,h.*,ma.Number,'Main Account' as name
         from history as h,account as a,moneyaccount as ma  
-        where ma.id= a.id and (ma.Number = h.user or ma.Number = h.partner) and a.id= ${id} and h.isSaving = 0;`)
+        where ma.id= a.id and ma.Number = h.user  and a.id= ${id} and h.isSaving = 0;`)
     },
     getHistoryFromSaving: id => {
         console.log("id: ", id)
         return db.load(`
-        select  a.id,a.name,h.*,sl.id_saving
+        select  a.id,a.name,h.*,sl.id_saving,sl.name_saving as name
         from history as h,account as a,savinglist as sl  
-        where sl.id= a.id and (sl.id_saving = h.user or sl.id_saving = h.partner) and a.id= ${id} and h.isSaving = 1;`)
+        where sl.id= a.id and sl.id_saving = h.user and a.id= ${id} and h.isSaving = 1;`)
     }
 
     // minusMoney: async entity => {

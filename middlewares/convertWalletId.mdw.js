@@ -7,10 +7,10 @@ const numberWallet = 1000;
 
 
 module.exports = {
-    encodeWalletId: (number, isSaving) => {
+    encodeWalletId: (number, isSaving = false) => {
         return isSaving ? firstNumberSaving * numberWallet + number * minusNumberWallet + lastNumberWallet : firstNumberWallet * numberWallet + number * minusNumberWallet + lastNumberWallet;
     },
-    decodeWalletId: (walletId, isSaving) => {
+    decodeWalletId: (walletId, isSaving = false) => {
         return isSaving ? (walletId - lastNumberWallet) % (firstNumberSaving * numberWallet) / minusNumberWallet : (walletId - lastNumberWallet) % (firstNumberWallet * numberWallet) / minusNumberWallet
     }
 }

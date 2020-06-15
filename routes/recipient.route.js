@@ -13,7 +13,7 @@ var { encodeWalletId, decodeWalletId } = require('../middlewares/convertWalletId
 
 router.post('/addRecipient', async (req, res) => {
     RecipientModel.addRecipient(req.body).then(data => {
-        console.log('data:', data)
+        
         res.status(201).json({
             returnCode: 1,
             message: `Add Debt Reminder Successs`,
@@ -23,10 +23,11 @@ router.post('/addRecipient', async (req, res) => {
     })
 })
 router.put('/editRecipient', async (req, res) => {
-    let id_debt = req.body.id_debt
+    let id_debt = req.body.id_debt;
+    
     if (id_debt) {
         RecipientModel.editRecipient(req.body, id_debt).then(data => {
-            console.log('data:', data)
+            
             res.status(201).json({
                 returnCode: 1,
                 message: `Edit Debt Reminder Successs`,
@@ -44,11 +45,10 @@ router.put('/editRecipient', async (req, res) => {
 
 })
 router.delete('/deleteRecipient', async (req, res) => {
-    console.log("req.body: ", req.body);
-
+   
+    req.body.walletId = decodeWalletId(req.body.walletId);
     if (req.body) {
         RecipientModel.deleteRecipient(req.body).then(data => {
-            console.log('data:', data)
             res.status(201).json({
                 returnCode: 1,
                 message: `Delete Debt Reminder Successs`,
@@ -68,13 +68,16 @@ router.delete('/deleteRecipient', async (req, res) => {
 router.get('/getAllRecipient/:id', async (req, res) => {
 
     let id = req.params.id;
-    console.log('id:', id)
+    
     if (id) {
         const result = await RecipientModel.getAllRecipients(id)
+        
         result.forEach(element => {
             if (element.isLocal) {
                 element.Name = "VietNam BBD Bank"
             }
+            element.walletId= encodeWalletId(element.walletId);
+
         })
 
         res.status(200).json({
@@ -87,14 +90,14 @@ router.get('/getAllRecipient/:id', async (req, res) => {
 router.get('/getRecipientLocal/:id', async (req, res) => {
 
     let id = req.params.id;
-    console.log('id:', id)
+    
     if (id) {
         const result = await RecipientModel.getRecipientLocal(id)
         if (result) {
             result.forEach(element => {
                 element.walletId = encodeWalletId(element.walletId,false);
             });
-            console.log('result:', result)
+            
 
             res.status(200).json({
                 returnCode: 1,
@@ -108,9 +111,9 @@ router.get('/getRecipientLocal/:id', async (req, res) => {
 router.get('/trackRecipientLocal/:walletId', async (req, res) => {
 
     let walletId = req.params.walletId;
-    console.log('walletId:', walletId)
+    
     walletId = decodeWalletId(walletId,false);
-    console.log('walletId:', walletId)
+    
     const result = await RecipientModel.trackRecipientLocal(walletId)
 
     res.status(200).json({
@@ -123,13 +126,13 @@ router.get('/trackRecipientLocal/:walletId', async (req, res) => {
 router.get('/getRecipientForeign/:id', async (req, res) => {
 
     let id = req.params.id;
-    console.log('id:', id)
+    
     if (id) {
         const result = await RecipientModel.getRecipientForeign(id)
         result.forEach(element => {
             element.walletId = encodeWalletId(element.walletId,false);
         });
-        console.log('result:', result)
+        
 
         res.status(200).json({
             returnCode: 1,
