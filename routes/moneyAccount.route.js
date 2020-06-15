@@ -25,7 +25,6 @@ router.get('/:id', async (req, res) => {
         let data = []
         //Concat 2 arrays by using lodash
         data = _.concat(listMoneyAccount, listSaving)
-        console.log('data:', data);
         data[0].name_saving = "Main Account";
         data[0].spending = data[0].Money;
         data.forEach(element => {

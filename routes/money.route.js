@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const moneyModel = require('../models/money.model.js');
 const userModel = require('../models/user.model');
-
+const moment = require('moment');
 const {
     promisify
 } = require('util');
@@ -12,7 +12,7 @@ var {
 } = require('../config/response');
 var _ = require('lodash')
 
-const { decodeWalletId } = require('../middlewares/convertWalletId.mdw.js');
+const { encodeWalletId, decodeWalletId } = require('../middlewares/convertWalletId.mdw.js');
 
 const doTheMoney = async (id, money, isSaving, res) => {
     var rsGetCurrentMoney = null;
@@ -20,12 +20,9 @@ const doTheMoney = async (id, money, isSaving, res) => {
         rsGetCurrentMoney = await moneyModel.getCurrentMoney(id)
     }
     else if (isSaving) {
-        console.log("go inside isSaving")
-        console.log('id:', id);
         rsGetCurrentMoney = await moneyModel.getCurrentMoneySaving(id)
 
     }
-    console.log('rsGetCurrentMoney:', rsGetCurrentMoney)
 
     if (rsGetCurrentMoney.length == 0) {
         response(res, 'err', 'not found user to do the transfer')
@@ -34,7 +31,6 @@ const doTheMoney = async (id, money, isSaving, res) => {
 
 
     let CurrentMoney = parseInt(rsGetCurrentMoney[0].money) + parseInt(money)
-    console.log("current money: ", CurrentMoney)
 
     if (CurrentMoney < 0) {
         response(res, 'err', 'Your account is not enough money')
@@ -70,7 +66,6 @@ const doTheMoney = async (id, money, isSaving, res) => {
 }
 
 const addToHistory = async (user, partner, type, money, description, time, isSaving) => {
-    console.log("add to history")
 
     await moneyModel.addToHistory({
         user: user,
@@ -96,7 +91,6 @@ router.post('/addMoney', async (req, res) => {
     let rs;
 
 
-    console.log(req.body)
     rs = await doTheMoney(req.body.id, req.body.money, false, res)
 
     if (!rs) {
@@ -125,10 +119,8 @@ router.post('/addMoney', async (req, res) => {
 
 router.get('/info/:id', async (req, res) => {
     const id = req.params.id
-    console.log("id: ", id)
     const rs = await moneyModel.getAccount(id)
 
-    console.log(rs)
 
     if (rs.length > 0) {
         response(res, '', 'get infomation money account successful', {
@@ -238,6 +230,29 @@ router.get('/historyLocal/:id', async (req, res) => {
         let result = [];
         //Concat 2 arrays by using lodash
         result = _.concat(historyFromWallet, historyFromSaving);
+        //Encode id_saving and Number to walletId;
+        result.forEach(element => {
+            if (element.isSaving) {
+                if (element.type == 2) {
+                    element.user = encodeWalletId(element.user, element.isSaving);
+                    element.partner = encodeWalletId(element.partner);
+                }
+                else {
+                    element.user = encodeWalletId(element.user);
+                    element.partner = encodeWalletId(element.partner, element.isSaving);
+                }
+            }
+            else {
+                element.user = encodeWalletId(element.user);
+                element.partner = encodeWalletId(element.partner);
+
+            }
+            element.user = element.type == 2 ? element.name + ` (${element.user})`: element.user;
+            element.partner = element.type == 1 ? element.name  + ` (${element.partner})`: element.partner;
+            element.time = moment(element.time * 1000).format("DD-MM-YYYY hh:mm a")
+            element.type = (element.type == 1 ? 'Credited' : (element.type == 2 ? 'Transfer' : 'Debted'));
+
+        });
         console.log('result:', result)
         response(res, '', 'Get history successfull', result)
     }

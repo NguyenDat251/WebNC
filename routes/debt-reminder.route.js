@@ -8,6 +8,8 @@ const router = express.Router();
 var moment = require('moment')
 var { response, DEFINED_CODE } = require('../config/response');
 var { mailer } = require('../utils/nodemailer');
+const { encodeWalletId, decodeWalletId } = require('../middlewares/convertWalletId.mdw.js');
+
 const debtReminderModel = require('../models/debt-reminder.model.js');
 
 
@@ -100,6 +102,7 @@ router.get('/getDebtOwner/:id_owner', async (req, res) => {
 })
 router.get('/getNameByWalletId/:id_wallet', async (req, res) => {
     let id_wallet = req.params.id_wallet;
+    id_wallet= decodeWalletId(id_wallet);
     userModel.getNameByWalletId(id_wallet).then(data => {
         res.status(200).json({
             returnCode: 1,
