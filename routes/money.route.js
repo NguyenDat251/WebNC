@@ -12,6 +12,8 @@ var {
 } = require('../config/response');
 var _ = require('lodash')
 
+const FEE = 3000;
+
 const { encodeWalletId, decodeWalletId } = require('../middlewares/convertWalletId.mdw.js');
 
 const doTheMoney = async (id, money, isSaving, res) => {
@@ -156,7 +158,7 @@ router.post('/transferLocal', async (req, res) => {
             return
         }
 
-        const fee = 3000;
+        const fee = FEE;
         //
         const isSaving = req.body.isSaving;
         const Money = parseInt(req.body.money);

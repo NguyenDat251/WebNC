@@ -14,14 +14,14 @@ module.exports = {
     //   "phone": "0343244644,
     //   "role": 1
     // }
-    const hash = bcrypt.hashSync(entity.password, 8);
+    const hash = bcrypt.hashSync(entity.password_hash, 8);
     entity.password_hash = hash;
     delete entity.password;
     const resultAddUser = await db.add(entity, 'account');
 
     //resultAddUser
 
-    return db.add({ money: 0, type: 1, idParent: resultAddUser.insertId }, 'MoneyAccount')
+    return db.add({ money: 0, id: resultAddUser.insertId }, 'MoneyAccount')
 
     //return db.add(entity, 'account');
   },
@@ -147,7 +147,7 @@ module.exports = {
     return db.edit(entity, {username}, 'account')
   },
 
-  forgetPassword: entity => {
-
+  deleteUser: id => {
+    return db.del(id, `account`)
   }
 };

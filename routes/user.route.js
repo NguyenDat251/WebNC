@@ -323,7 +323,7 @@ router.get('/:role', async (req, res) => {
     response(res, '', `get list ${type} successful`, result)
   }
 })
-router.put('/:username', async (req, res) => {
+router.put('/:id', async (req, res) => {
   /*
     {
   "name": "Nguyen Dat test",
@@ -337,7 +337,7 @@ router.put('/:username', async (req, res) => {
   const username = req.params.username
 
   const result = await userModel.updateUser(username, req.body)
-  s
+  
   if (!result) {
     response(res, 'err', 'Error edit user')
   } else {
@@ -345,5 +345,16 @@ router.put('/:username', async (req, res) => {
   }
 })
 
+router.delete('/:id', async(req, res) => {
+  const id = req.params.id;
+
+  const result = await userModel.deleteUser(id);
+
+  if(!result){
+    response(res, 'err', 'Error delete user')
+  } else {
+    response(res, '', 'delete user successful')
+  }
+})
 
 module.exports = router;

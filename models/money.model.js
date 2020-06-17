@@ -2,6 +2,9 @@ const bcrypt = require('bcryptjs');
 const db = require('../utils/db');
 
 module.exports = {
+    getCurrentMoneyFromIdUser: id => {
+        return db.load(`select money, id from moneyaccount where id = ${id}`)
+    },
     getCurrentMoney: id => {
         return db.load(`select m.money, m.id from MoneyAccount m, account a where m.id = a.id and m.Number='${id}'`)
     },

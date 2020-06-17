@@ -36,6 +36,11 @@ module.exports = {
         where dr.id_debtor = a.id  and ma.id = a.id  and dr.id_owner = ${id_owner}
         ORDER BY dr.dateCreate desc`
         return db.load(query);
+    },
+    getDebt: async id_debt => {
+        return db.load(`SELECT * FROM debt_reminder WHERE id_debt = ${id_debt}`)
+    },
+    changeStatus: async (id_debt) => {
+        return db.load(`UPDATE debt_reminder SET status = 1 WHERE id_debt = ${id_debt}`)
     }
-
 };
