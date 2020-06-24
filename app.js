@@ -41,25 +41,24 @@ const verify = require('./middlewares/auth.mdw');
 
 const app = express();
 // CORS fixed
-app.use(cors());
+//app.use(cors());
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.json({
-    msg: 'hello from nodejs express api'
-  });
-})
+// app.get('/', (req, res) => {
+//   res.json({
+//     msg: 'hello from nodejs express api'
+//   });
+// })
 
 
-setInterval(function(){ userModel.deleteOTP() }, 3000);
 
 
 
@@ -73,6 +72,8 @@ app.use('/api/moneyAccount', require('./routes/moneyAccount.route'));
 app.use('/api/debt-reminder/', require('./routes/debt-reminder.route'));
 app.use('/api/recipient/', require('./routes/recipient.route'));
 app.use('/api/partner-bank/', require('./routes/partnerBank.route'));
+
+setInterval(function(){ userModel.deleteOTP() }, 3000);
 
 
 // app.use('/api/categories', verify, require('./routes/category.route'));
