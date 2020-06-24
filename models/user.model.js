@@ -51,12 +51,12 @@ module.exports = {
   getUserInfoByUsername: async username => {
     return db.load(`select a.username,a.name,a.email,a.phone,a.indentity_number as idenityNumber,a.dob,m.Money as balance,m.Number as walletNumber
     from account as a,moneyaccount as m 
-    where a.id = m.id and a.username = '${username}';`)
+    where a.id = m.idParent and a.username = '${username}';`)
   },
   getUserInfoByWalletId: async walletId => {
     return db.load(`select a.name,a.username,a.indentity_number as identityNumber,m.Money as balance,m.Number as walletNumber
   from account as a,moneyaccount as m 
-  where a.id = m.id and m.Number = '${walletId}';`)
+  where a.id = m.idParent and m.Number = '${walletId}';`)
   },
   isEmailExist: async email => {
     console.log("check email exist")
@@ -69,22 +69,22 @@ module.exports = {
     return false
   },
 
-  singleByUserName: userName => db.load(`select account.*,moneyaccount.Number,moneyaccount.Money from account,moneyaccount where account.username = '${userName}' and account.id=moneyaccount.id`),
+  singleByUserName: userName => db.load(`select a.* from account a where a.username = '${userName}'`),
 
   updateRefreshToken: async (userId, token) => {
 
-    await db.del({ id: userId }, 'userRefreshTokenExt');
+    await db.del({ id: userId }, 'userrefreshtokenext');
 
     const entity = {
       id: userId,
       refreshToken: token
       // rdt: moment().format('YYYY-MM-DD HH:mm:ss')
     }
-    return db.add(entity, 'userRefreshTokenExt');
+    return db.add(entity, 'userrefreshtokenext');
   },
 
   verifyRefreshToken: async (userId, token) => {
-    const sql = `select * from userRefreshTokenExt where ID = ${userId} and refreshToken = '${token}'`;
+    const sql = `select * from userrefreshtokenext where ID = ${userId} and refreshToken = '${token}'`;
     const rows = await db.load(sql);
     if (rows.length > 0)
       return true;

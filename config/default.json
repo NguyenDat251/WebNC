@@ -1,10 +1,10 @@
 {
   "mysql": {
     "connectionLimit": 100,
-    "host": "167.179.80.90:3306",
+    "host": "167.179.80.90",
     "user": "datnq",
     "password": "6h5K8dapxfFdVKAS",
-    "database": "manager"
+    "database": "bank_manager"
   },
   "auth": {
     "secret": "secretKey",

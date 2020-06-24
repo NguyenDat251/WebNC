@@ -2,9 +2,9 @@ const mysql = require('mysql');
 const { promisify } = require('util');
 // const promisify = require('util').promisify;
 require('dotenv').config()
-const config = require('../config/default.json');
+const config = require('../config/default.json').mysql;
 
-console.log("host: ", process.env.DB_HOST || "root")
+console.log("config: ", config)
 
 /*"connectionLimit": 100,
     "host": "localhost",
@@ -14,11 +14,11 @@ console.log("host: ", process.env.DB_HOST || "root")
 
 // const pool = mysql.createPool(config.mysql);
 const pool = mysql.createPool({
-  connectionLimit: 100,
-  host: process.env.DB_HOST || config.host,
-  user: process.env.DB_USER || config.username,
-  password: process.env.DB_PASS || config.password,
-  database: process.env.DB_NAME || config.database,
+  connectionLimit: config.connectionLimit,
+  host: config.host,
+  user:config.user,
+  password: config.password,
+  database: config.database,
   typeCast: function castField(field, useDefaultTypeCasting) {
 
     // We only want to cast bit fields that have a single-bit in them. If the field
@@ -39,9 +39,6 @@ const pool = mysql.createPool({
   }
 });
 
-console.log("user: ", process.env.DB_USER || "root")
-console.log("pass: ", process.env.DB_PASS || "root")
-console.log("database: ", process.env.DB_NAME || "internetbanking2")
 
 
 const pool_query = promisify(pool.query).bind(pool);
