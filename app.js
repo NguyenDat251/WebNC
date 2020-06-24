@@ -92,7 +92,7 @@ app.use(function (err, req, res, next) {
 
 //module.exports = app;
 
-const PORT = process.env.DB_PORT || 8000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, _ => {
   console.log(`API is running at http://localhost:${PORT}`);
 })
