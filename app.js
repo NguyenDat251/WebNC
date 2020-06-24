@@ -90,7 +90,9 @@ app.use(function (err, req, res, next) {
   //res.status(statusCode).send('View error log on console.');
 })
 
-const PORT = process.env.DB_PORT || 8000;
-app.listen(PORT, _ => {
-  console.log(`API is running at http://localhost:${PORT}`);
-})
+module.exports = app;
+
+// const PORT = process.env.DB_PORT || 8000;
+// app.listen(PORT, _ => {
+//   console.log(`API is running at http://localhost:${PORT}`);
+// })
