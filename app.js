@@ -52,11 +52,11 @@ app.use(function (req, res, next) {
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.json({
-    msg: 'hello from nodejs express api'
-  });
-})
+// app.get('/', (req, res) => {
+//   res.json({
+//     msg: 'hello from nodejs express api'
+//   });
+// })
 
 
 
