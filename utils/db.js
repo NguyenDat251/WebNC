@@ -15,10 +15,10 @@ console.log("host: ", process.env.DB_HOST || "root")
 // const pool = mysql.createPool(config.mysql);
 const pool = mysql.createPool({
   connectionLimit: 100,
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASS || "root",
-  database: process.env.DB_NAME || "internetbanking2",
+  host: process.env.DB_HOST || config.host,
+  user: process.env.DB_USER || config.username,
+  password: process.env.DB_PASS || config.password,
+  database: process.env.DB_NAME || config.database,
   typeCast: function castField(field, useDefaultTypeCasting) {
 
     // We only want to cast bit fields that have a single-bit in them. If the field
