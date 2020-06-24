@@ -49,7 +49,7 @@ app.use(function (req, res, next) {
   next();
 });
 //app.use(morgan('dev'));
-
+app.use(express.static(path.join(__dirname, 'template')));
 app.use(express.json());
 
 app.get('/', (req, res) => {
