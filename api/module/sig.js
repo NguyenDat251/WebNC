@@ -111,7 +111,7 @@ module.exports = {
         // }
     },
     checkTime: (time)=> {
-        if(Math.floor(Date.now() - time)/1000 > 300){
+        if(Math.floor(Date.now()/1000 - time) > 300){
             return false;
         }
 
@@ -143,7 +143,7 @@ module.exports = {
     createHash: (ts, data, secrectKey) => {
         console.log("before hash: " + ts + ":" + data + ":" + secrectKey)
 
-        const hash = sha1(ts + ":" + data + ":" + secrectKey);
+        const hash = sha1(ts + ":" + JSON.stringify(data) + ":" + secrectKey);
 
         console.log("hash: " + hash)
 

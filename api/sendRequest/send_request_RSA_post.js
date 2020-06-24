@@ -1,22 +1,20 @@
 const axios = require('axios');
 const sig = require('../module/sig.js');
+const sha256 = require('js-sha256');
 
-let time = Date.now();
+let time = Date.now()/1000;
 console.log("time: " + time)
 
-const body = {
-  Money: 10000,
-  username: `Dat`,
-  content: `abc`
-}
+const body = {"credit_number":"565572661049","amount":200000}
 
- axios.post('http://localhost:3000/api/partner-bank/add-money/1',body ,{
+ axios.post('http://bank-backend.khuedoan.com/api/partner/deposit',body ,{
   //axios.get('https://bankdbb.herokuapp.com/account/1', {
   headers: {
-    sig: sig.createHash(time,body,"bankdbb"),
-    id: 'bankdbb',
-    ts: time,
-    verify: sig.generateRSASig()
+    "partner-code": "bankdbb",
+"timestamp": time,
+"authen-hash": sha256(time + 'bankdbb' + {}),
+"authen-sig": sig.generateRSASig()
+
   }
 })
   .then(response => {

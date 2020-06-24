@@ -1,17 +1,19 @@
 const axios = require('axios');
 const sig = require('../module/sig.js');
+const sha256 = require('js-sha256');
 
-let time = Date.now();
+
+let time = Date.now()/1000;
 console.log("time: " + time)
 
 //  axios.get('https://bankdbb.herokuapp.com/api/partner-bank/info/1', {
   //axios.get('https://bankdbb.herokuapp.com/account/1', {
 
-    axios.get('http://localhost:3000/api/partner-bank/info/1', {
+    axios.get('http://bank-backend.khuedoan.com/api/partner/get-account-info?credit_number=565572661049', {
   headers: {
-    sig: sig.createHash(time,{},'bankdbb'),
-    id: 'bankdbb',
-    ts: time
+    "authen-hash":sha256(time + 'bankdbb' + {}),
+    "partner-code": 'bankdbb',
+    "timestamp": time
   }
 })
   .then(response => {
