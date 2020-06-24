@@ -67,7 +67,7 @@ module.exports = {
         let TransactionAccount = null;
         let SavingAccount = [];
 
-        let sql = 'SELECT * FROM account WHERE IdParent=?'
+        let sql = 'SELECT * FROM moneyaccount WHERE id=?'
         db.query(sql, [req.params.accountId], (err, response) => {
             if (err){
                 res.json({
@@ -92,7 +92,7 @@ module.exports = {
             console.log("Saving: " + SavingAccount);
         })
 
-         sql = 'SELECT * FROM RealAccount WHERE id = ?'
+         sql = 'SELECT * FROM account WHERE id = ?'
         db.query(sql, [req.params.accountId], (err, response) => {
             if (err){
                 res.json({
@@ -126,9 +126,7 @@ module.exports = {
     // }
     },
     addMoney: async (req, res) => {
-        
-
-        let sql = 'SELECT * FROM account WHERE IdParent=?'
+        let sql = 'SELECT * FROM moneyaccount WHERE id=?'
         await new Promise((resolve, reject) => {db.query(sql, [req.params.accountId], (err, response) => {
             if (err){
                 res.json({
@@ -172,7 +170,7 @@ module.exports = {
     console.log("abc")
         console.log(CurrentMoney)
 
-        sql = "UPDATE account SET Money = ? WHERE IdParent = ? and Type = 1"
+        sql = "UPDATE moneyaccount SET Money = ? WHERE id = ?"
         db.query(sql, [CurrentMoney.toString(), req.params.accountId], (err, response) => {
             if (err){
                 res.json({

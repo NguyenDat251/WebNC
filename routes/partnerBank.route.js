@@ -294,6 +294,38 @@ router.get('/transaction/:time', async (req, res) => {
     }
 })
 
+// router.get('/transaction/:time', async (req, res) => {
+//     const time = req.params.time;
+
+//     const month = parseInt(time.substr(0, 2));
+    
+//     const year = parseInt(time.substr(2, 6));
+
+//     let nextMonth, nextYear;
+
+//     if(month == 12){
+//         nextMonth = 1
+//         nextYear = year + 1
+//     }else{
+//         nextMonth = month + 1;
+//         nextYear = year;
+//     }
+
+//     const TimeFrom = new Date(year, month, 0).getTime()/1000;
+//     const TimeTo = new Date(nextYear, nextMonth, 0).getTime()/1000;
+
+//     console.log("second: ", TimeFrom, TimeTo)
+
+//     const result = await partnerBankModel.getTransaction(TimeFrom, TimeTo);
+//     console.log(result)
+//     if(!result){
+//         response(res, 'err', 'error getting transaction history')
+//     }
+//     else{
+//         response(res, '', 'Getting transaction history successful', result)
+//     }
+// })
+
 router.get('/info/:id', async (req, res) => {
     const partnerInfo = partnerBankModel.getInfo(req.headers.id)
 
@@ -329,7 +361,7 @@ router.post('/add-money/:id', async (req, res) => {
     //     id: bank code
     //     time:
     //     sig:
-    //      verify:
+    //     verify:
     // }
 
     // body: {
