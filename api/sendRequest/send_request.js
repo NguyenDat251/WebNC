@@ -1,8 +1,9 @@
 const axios = require('axios');
 const sig = require('../module/sig.js');
 
-let time = Date.now();
-console.log("time: " + time)
+let time = Math.floor(Date.now()/1000);
+console.log("time: " + time);
+console.log("hash: ", sig.createHash(time,{},'bankdbb'));
 
  axios.get('https://bankdbb.herokuapp.com/api/partner-bank/info/1', {
   //axios.get('https://bankdbb.herokuapp.com/account/1', {

@@ -96,7 +96,7 @@ const checkPGPSig = async () => {
 }
 
 const checkTime = (time) => {
-    if(Math.floor(Date.now() - time)/1000 > 300){
+    if(Math.floor(Date.now()/1000 - time) > 300){
         return false;
     }
 
@@ -181,7 +181,7 @@ signPGP().then(x => {
 }
 
 const sendMoneyRSA = () => {
-    let time = Date.now();
+    let time = Math.floor(Date.now() / 1000);
 console.log("time: " + time)
 
 const body = {
@@ -221,7 +221,7 @@ const getInfoPGP = () => {
   headers: {
     csi: sha1(time+JSON.stringify({})+'thisisatokenfroma'),
     partnerCode: 'rsa-bank',
-    timestamp: Math.floor(Date.now()/1000)
+    timestamp: Math.floor(Math.floor(Date.now() / 1000))
   }
 })
   .then(response => {
@@ -235,7 +235,7 @@ const getInfoPGP = () => {
 }
 
 const getInfoRSA = () => {
-    let time = Date.now();
+    let time = Math.floor(Date.now() / 1000);
     console.log("time: " + time)
     
      axios.get('http://localhost:3000/api/partner-bank/info/1', {
@@ -375,8 +375,8 @@ router.post('/add-money/:id', async (req, res) => {
     const partnerInfo = partnerBankModel.getInfo(req.headers.id)
 
     const secretKey = partnerInfo.SecretKey;
-        let publicKey = partnerInfo.PublicKey;
-        let currentTime = Date.now();
+        // let publicKey = partnerInfo.PublicKey;
+        // let currentTime = Date.now();
 
         //check id -> lấy secret key
 
@@ -471,7 +471,7 @@ router.post('/add-money/:id', async (req, res) => {
             partner: req.body.username,
             BankCode: req.headers.id,
             Money: req.body.Money,
-            Time: Date.now()/1000,
+            Time: Math.floor(Date.now() / 1000),
             Content: req.body.content
         })
 
@@ -499,7 +499,7 @@ router.post('/send-money', async(req, res) => {
         partner: req.body.username,
         BankCode: req.headers.id,
         Money: -1*req.body.Money,
-        Time: Date.now()/1000,
+        Time: Math.floor(Date.now() / 1000),
         Content: req.body.content
     })
 })
