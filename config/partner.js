@@ -2,8 +2,14 @@ module.exports = {
 
         getInfo: () => {
                 return {
-                        thisisatokenfroma: {
+                        "rsa-bank": {
                             SecretKey: "thisisatokenfroma",
+                            PublicRSAKey: `-----BEGIN PUBLIC KEY-----
+                            MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEUZJwvTYorustQY+F3iqhJe+M
+                            +vk10V1gd+tXAT5eQ6Bfx/EOEEoFiwnH/I5KmRx3D3a2GHgWYILDnCVo5Kn6HH/R
+                            Iuvi11rlvK5C798WYRjvNkOlcfI3M6ixQf+fAJSnflOqCcoPp/RM0HgcywoTkNWK
+                            PQYpPpk9tno/qlOcwwIDAQAB
+                            -----END PUBLIC KEY-----`,
                             PublicKey: `-----BEGIN PGP PUBLIC KEY BLOCK-----
                             Version: Keybase OpenPGP v1.0.0
                             Comment: https://keybase.io/crypto
