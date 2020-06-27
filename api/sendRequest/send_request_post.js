@@ -5,17 +5,26 @@ let time = Date.now();
 console.log("time: " + time)
 
 const body = {
-  Money: 10000,
-  username: `Dat`,
+  number: `6`,
+  money: `1000`,
+  username: `test`,
   content: `abc`
 }
 
- axios.post('http://localhost:3000/api/partner-bank/add-money/1',body ,{
+const host= `http://localhost:8080`;
+
+ axios.post(`${host}/api/partner-bank/add-money`,body ,{
   //axios.get('https://bankdbb.herokuapp.com/account/1', {
+  // headers: {
+  //   sig: sig.createHash(time,body,"bankdbb"),
+  //   id: 'bankdbb',
+  //   ts: time,
+  //   verify: sig.generateRSASig()
+  // }
   headers: {
-    sig: sig.createHash(time,body,"bankdbb"),
+    sig: '7ae591986f04ec5afca9d66c2d051138a0ce9ab4',
     id: 'bankdbb',
-    ts: time,
+    ts: '1593249076',
     verify: sig.generateRSASig()
   }
 })
@@ -32,5 +41,6 @@ const body = {
   })
   .catch(error => {
     console.log("error")
+    console.log(error.response.data)
     //console.log(error);
   });

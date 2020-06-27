@@ -100,9 +100,7 @@ CREATE TABLE IF NOT EXISTS `debt_reminder` (
   `status` int(11) NOT NULL,
   `description` varchar(150) DEFAULT NULL,
   `dateCreate` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_debt`),
-  KEY `FK_DEBT_USER_idx` (`id_debtor`),
-  KEY `FK_OWER_USER_idx` (`id_owner`)
+  PRIMARY KEY (`id_debt`)
 ) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
