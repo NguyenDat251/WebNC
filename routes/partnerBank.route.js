@@ -294,7 +294,7 @@ router.get('/transaction/:time', async (req, res) => {
   }
 })
 
-router.get('/info/:id', async (req, res) => {
+router.get('/info/:number', async (req, res) => {
   const partnerInfo = partnerBankModel.getInfo(req.headers.id)
   console.log("header: ", req.headers)
   //check hash
@@ -312,7 +312,7 @@ router.get('/info/:id', async (req, res) => {
     return;
   }
 
-  const resultInfo = await userModel.getUserById(req.params.id)
+  const resultInfo = await userModel.getUserInfoByWalletId(req.params.number)
 
   if (!resultInfo) {
     response(res, 'err', 'Error when get infomation user')

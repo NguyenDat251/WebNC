@@ -79,37 +79,37 @@ const MyprivateKeyArmored = "-----BEGIN PGP PRIVATE KEY BLOCK-----\r\nVersion: O
 const passphrase = `yourPassphrase`;
 
 async function createEncrypt(data) {
-    // privateKey = await openpgp.key.readArmored(privateKeyArmored);
-    // await privateKey.decrypt(passphrase);
+  // privateKey = await openpgp.key.readArmored(privateKeyArmored);
+  // await privateKey.decrypt(passphrase);
 
-    const {
-        data: encrypted
-    } = await openpgp.encrypt({
-        message: openpgp.message.fromText(data), // input as Message object
-        publicKeys: (await openpgp.key.readArmored(publicKeyArmored)).keys, // for encryption
-        // privateKeys: [privateKey]                                           // for signing (optional)
-    });
-    console.log(encrypted); // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
+  const {
+    data: encrypted
+  } = await openpgp.encrypt({
+    message: openpgp.message.fromText(data), // input as Message object
+    publicKeys: (await openpgp.key.readArmored(publicKeyArmored)).keys, // for encryption
+    // privateKeys: [privateKey]                                           // for signing (optional)
+  });
+  console.log(encrypted); // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
 
-    return encrypted
+  return encrypted
 }
 
 
 async function signPGP() {
 
-    const {
-        keys: [privateKey]
-    } = await openpgp.key.readArmored(MyprivateKeyArmored);
-    await privateKey.decrypt(passphrase);
+  const {
+    keys: [privateKey]
+  } = await openpgp.key.readArmored(MyprivateKeyArmored);
+  await privateKey.decrypt(passphrase);
 
-    const {
-        signature: cleartext
-    } = await openpgp.sign({
-        message: openpgp.cleartext.fromText('thisisatokenfroma'), // CleartextMessage or Message object
-        privateKeys: [privateKey], // for signing,
-        detached: true
-    });
-    return Promise.resolve(cleartext)
+  const {
+    signature: cleartext
+  } = await openpgp.sign({
+    message: openpgp.cleartext.fromText('thisisatokenfroma'), // CleartextMessage or Message object
+    privateKeys: [privateKey], // for signing,
+    detached: true
+  });
+  return Promise.resolve(cleartext)
 }
 
 //createEncrypt('thisisatokenfroma')
@@ -124,24 +124,24 @@ let sign = "";
 //     console.log("sign" ,sign)
 // })();
 signPGP().then(x => {
-    console.log("buffer: ", new Buffer.from(x).toString('base64'))
+  console.log("buffer: ", new Buffer.from(x).toString('base64'))
 
-    return axios.post('http://16754b80.ngrok.io/api/account/money', {}, {
-            headers: {
-                csi: sha1(time + JSON.stringify({}) + 'thisisatokenfroma'),
-                partnerCode: 'rsa-bank',
-                timestamp: time,
-                detachedSignature: new Buffer.from(x).toString('base64')
-            }
-        })
-        .then(response => {
+  return axios.post('http://16754b80.ngrok.io/api/account/money', {}, {
+      headers: {
+        csi: sha1(time + JSON.stringify({}) + 'thisisatokenfroma'),
+        partnerCode: 'rsa-bank',
+        timestamp: time,
+        detachedSignature: new Buffer.from(x).toString('base64')
+      }
+    })
+    .then(response => {
 
-            console.log("response: ");
-            console.log(response)
-        })
-        .catch(error => {
-            console.log(error);
-        });
+      console.log("response: ");
+      console.log(response)
+    })
+    .catch(error => {
+      console.log(error);
+    });
 })
 console.log("time: " + time)
 console.log("before hash: " + time + JSON.stringify({}) + 'thisisatokenfroma')
