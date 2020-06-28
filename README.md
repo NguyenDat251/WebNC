@@ -24,7 +24,7 @@ HEADER
 
 ```
 
-- timestamp là thời điểm gởi request, format sử dụng unix utc second, có thể  xem ở <https://www.epochconverter.com/,> lưu ý timestamp không được **lớn hơn** hoặc nhỏ hơn quá **300**s so với thời gian thực
+- timestamp là thời điểm gởi request, format sử dụng unix utc second, có thể  xem ở [https://www.epochconverter.com/,](https://www.epochconverter.com/,) lưu ý timestamp không được **lớn hơn** hoặc nhỏ hơn quá **300**s so với thời gian thực
 - partner-code là chuỗi code để xác định partner nào đã đăng kí api
 - authen-hash là chuỗi hash sha1 của **(timestamp+":"+secret+":"+JSON.stringify(body))**, nếu body empty thì là **{}**,sau đó được encode hex lại và gửi đi, ví dụ ở trên
 - Không yêu cầu **verify**
@@ -32,7 +32,7 @@ HEADER
 #### Chuyển tiền vào tài khoản
 
 ```json
-POST /api/partner/deposit
+POST /api/partner-bank/add-money
 
 HEADER
 "id": "bankdbb"
@@ -45,11 +45,13 @@ BODY
 ```
 
 - sig là chuỗi signature được tạo bởi thuật toán **RSA** của chuỗi **secret**, xem ví dụ sau:
+
 ```javascript
 sig = privateKey.sign(secretKey, 'base64', 'base64');
 ```
+
 -number: số tài khoản.
+
 -username: username của người gửi.
+
 -content: nội dung gửi.
-
-

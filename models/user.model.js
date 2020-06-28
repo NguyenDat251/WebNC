@@ -49,12 +49,12 @@ module.exports = {
     where a.id = ma.id and ma.Number =${id_wallet}`)
   },
   getUserInfoByUsername: async username => {
-    return db.load(`select a.username,a.name,a.email,a.phone,a.indentity_number as idenityNumber,a.dob,m.Money as balance,m.Number as walletNumber
+    return db.load(`select a.username,a.name,a.email,a.phone,a.identity_number as idenityNumber,a.dob,m.Money as balance,m.Number as walletNumber
     from account as a,moneyaccount as m 
     where a.id = m.idParent and a.username = '${username}';`)
   },
   getUserInfoByWalletId: async walletId => {
-    return db.load(`select a.name,a.username,a.indentity_number as identityNumber,m.Money as balance,m.Number as walletNumber
+    return db.load(`select a.name,a.username,a.identity_number as identityNumber,m.Money as balance,m.Number as walletNumber
   from account as a,moneyaccount as m 
   where a.id = m.idParent and m.Number = '${walletId}';`)
   },
