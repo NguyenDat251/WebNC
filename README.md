@@ -15,8 +15,8 @@
 #### Lấy thông tin tài khoản khách hàng bằng số tài khoản
 
 ```json
-GET /api/partner-bank/info/6
-
+GET /api/partner-bank/info/:number
+//test với number = 1
 HEADER
 "id": "bankdbb"
 "ts": 1593249076
