@@ -26,7 +26,7 @@ HEADER
 
 - timestamp là thời điểm gởi request, format sử dụng unix utc second, có thể  xem ở [https://www.epochconverter.com/,](https://www.epochconverter.com/,) lưu ý timestamp không được **lớn hơn** hoặc nhỏ hơn quá **300**s so với thời gian thực
 - partner-code là chuỗi code để xác định partner nào đã đăng kí api
-- authen-hash là chuỗi hash sha1 của **(timestamp+":"+secret+":"+JSON.stringify(body))**, nếu body empty thì là **{}**,sau đó được encode hex lại và gửi đi, ví dụ ở trên
+- authen-hash là chuỗi hash sha1 của **(timestamp+":"+JSON.stringify(body))+":"+secret**, nếu body empty thì là **{}**,sau đó được encode hex lại và gửi đi, ví dụ ở trên
 - Không yêu cầu **verify**
 
 #### Chuyển tiền vào tài khoản
