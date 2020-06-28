@@ -20,7 +20,7 @@ GET /api/partner-bank/info/:number
 HEADER
 "id": "bankdbb"
 "ts": 1593249076
-"hash": "2d082e16d712c8f9619e0ca3a5895ea33f02bd4b"
+"sig": "2d082e16d712c8f9619e0ca3a5895ea33f02bd4b"
 
 ```
 
@@ -37,8 +37,8 @@ POST /api/partner-bank/add-money
 HEADER
 "id": "bankdbb"
 "ts": 1593249076
-"hash": "7ae591986f04ec5afca9d66c2d051138a0ce9ab4"
-"sig": "XEszjLIzEE9j9LOfEJ9NDvGchmHVyQxtOus2JMm4rsz3ycMmqyGKCB4AlohaChJoh8G5zTpvjsgmhuoGheXqwc4sdqrR3JUzvZPSHxXIVSSIzcCrzrpeFjpYR8sq6QyX2CY9MsQQIOT5IM5EsaxvQa+hbaGXYD5rLA524F7mbA4="
+"sig": "7ae591986f04ec5afca9d66c2d051138a0ce9ab4"
+"verify": "XEszjLIzEE9j9LOfEJ9NDvGchmHVyQxtOus2JMm4rsz3ycMmqyGKCB4AlohaChJoh8G5zTpvjsgmhuoGheXqwc4sdqrR3JUzvZPSHxXIVSSIzcCrzrpeFjpYR8sq6QyX2CY9MsQQIOT5IM5EsaxvQa+hbaGXYD5rLA524F7mbA4="
 
 BODY
 {"number": 6, "money":1000,"username":"abc","content":"abc"}
