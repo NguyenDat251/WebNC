@@ -44,7 +44,7 @@ const checkRSASig = (partnerInfo, sig) => {
     //const pubKey = config.
     publickeyParnter = new NodeRSA(partnerInfo.PublicRSAKey)
     console.log("sig input: ", sig)
-
+    console.log("partnerInfo.SecretKey: ", partnerInfo.SecretKey)
 
     let res = publickeyParnter.verify(partnerInfo.SecretKey, sig, 'base64', 'base64')
 
@@ -338,7 +338,7 @@ router.post('/add-money', async (req, res) => {
   //     username: ,
   //     content: 
   // }
-
+  console.log("partner id: ", req.headers.id)
   const partnerInfo = partnerBankModel.getInfo(req.headers.id)
 
   const secretKey = partnerInfo.SecretKey;

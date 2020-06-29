@@ -1,9 +1,11 @@
 const axios = require('axios');
 const sig = require('../module/sig.js');
 const sha256 = require('js-sha256');
+const crypto = require('crypto');
 
 let time = Date.now()/1000;
 console.log("time: " + time)
+
 
 const body = {"credit_number":"565572661049","amount":200000}
 
