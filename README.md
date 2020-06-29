@@ -20,13 +20,13 @@ GET /api/partner-bank/info/:number
 HEADER
 "id": "bankdbb"
 "ts": 1593249076
-"hash": "2d082e16d712c8f9619e0ca3a5895ea33f02bd4b"
+"sig": "2d082e16d712c8f9619e0ca3a5895ea33f02bd4b"
 
 ```
 
 - timestamp là thời điểm gởi request, format sử dụng unix utc second, có thể  xem ở [https://www.epochconverter.com/,](https://www.epochconverter.com/,) lưu ý timestamp không được **lớn hơn** hoặc nhỏ hơn quá **300**s so với thời gian thực
 - partner-code là chuỗi code để xác định partner nào đã đăng kí api
-- authen-hash là chuỗi hash sha1 của **(timestamp+":"+secret+":"+JSON.stringify(body))**, nếu body empty thì là **{}**,sau đó được encode hex lại và gửi đi, ví dụ ở trên
+- authen-hash là chuỗi hash sha1 của **(timestamp+":"+JSON.stringify(body))+":"+secret**, nếu body empty thì là **{}**,sau đó được encode hex lại và gửi đi, ví dụ ở trên
 - Không yêu cầu **verify**
 
 #### Chuyển tiền vào tài khoản
@@ -37,8 +37,8 @@ POST /api/partner-bank/add-money
 HEADER
 "id": "bankdbb"
 "ts": 1593249076
-"hash": "7ae591986f04ec5afca9d66c2d051138a0ce9ab4"
-"sig": "XEszjLIzEE9j9LOfEJ9NDvGchmHVyQxtOus2JMm4rsz3ycMmqyGKCB4AlohaChJoh8G5zTpvjsgmhuoGheXqwc4sdqrR3JUzvZPSHxXIVSSIzcCrzrpeFjpYR8sq6QyX2CY9MsQQIOT5IM5EsaxvQa+hbaGXYD5rLA524F7mbA4="
+"sig": "7ae591986f04ec5afca9d66c2d051138a0ce9ab4"
+"verify": "XEszjLIzEE9j9LOfEJ9NDvGchmHVyQxtOus2JMm4rsz3ycMmqyGKCB4AlohaChJoh8G5zTpvjsgmhuoGheXqwc4sdqrR3JUzvZPSHxXIVSSIzcCrzrpeFjpYR8sq6QyX2CY9MsQQIOT5IM5EsaxvQa+hbaGXYD5rLA524F7mbA4="
 
 BODY
 {"number": 6, "money":1000,"username":"abc","content":"abc"}
