@@ -67,14 +67,14 @@ const doTheMoney = async (id, money, isSaving, res) => {
 
 }
 
-const addToHistory = async (user, partner, type, money, description, time, isSaving) => {
+const addToHistory = async (user, partner, type, money, content, time, isSaving) => {
 
     await moneyModel.addToHistory({
         user: user,
         partner: partner,
         type: type,
         isSaving,
-        description,
+        content,
         money_transfer: money,
         time: time / 1000
     })

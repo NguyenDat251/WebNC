@@ -13,7 +13,9 @@ module.exports = function (req, res, next) {
         returnCode: 0,
         message: err.message,
         data: {}
-      })
+      });
+
+      return;
       // throw createError(401, err);
 
       // res.status(401).send({
@@ -40,6 +42,11 @@ module.exports = function (req, res, next) {
     throw createError(401, err);
   }
   } else {
-    throw createError(401, 'No accessToken found.');
+    //throw createError(401, 'No accessToken found.');
+    res.json({
+      returnCode: 0,
+      message: 'No accessToken found',
+      data: {}
+    });
   }
 }

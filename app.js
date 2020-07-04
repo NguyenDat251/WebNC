@@ -63,7 +63,7 @@ app.use(express.json());
 
 
 app.use('/api/auth', require('./routes/auth.route'));
-app.use('/api/users', require('./routes/user.route'));
+app.use('/api/users', verify, require('./routes/user.route'));
 app.use('/api/staff', require('./routes/staff.route'));
 app.use('/api/money', require('./routes/money.route'));
 
@@ -93,7 +93,7 @@ app.use(function (err, req, res, next) {
 
 //module.exports = app;
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, _ => {
   console.log(`API is running at http://localhost:${PORT}`);
 })

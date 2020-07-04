@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jun 11, 2020 at 04:01 PM
+-- Generation Time: Jul 04, 2020 at 04:25 AM
 -- Server version: 8.0.16
 -- PHP Version: 7.3.12
 
@@ -100,7 +100,9 @@ CREATE TABLE IF NOT EXISTS `debt_reminder` (
   `status` int(11) NOT NULL,
   `description` varchar(150) DEFAULT NULL,
   `dateCreate` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_debt`)
+  PRIMARY KEY (`id_debt`),
+  KEY `FK_DEBT_USER_idx` (`id_debtor`),
+  KEY `FK_OWER_USER_idx` (`id_owner`)
 ) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -189,14 +191,16 @@ CREATE TABLE IF NOT EXISTS `history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,
   `partner` int(11) NOT NULL,
-  `type` int NOT NULL,
   `money_transfer` int(11) NOT NULL,
-  `time` int NOT NULL,
-  `content` text,
-  PRIMARY KEY (`id`),
-  KEY `FK_HISTORY_RECIPIENT_idx` (`user`),
-  KEY `FK_HISTORY_USER_idx` (`partner`)
+  `time` int(11) NOT NULL,
+  `description` text,
+  `type` int(11) NOT NULL,
+  `isSaving` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `history` VALUES (29,7,2,147000,1592047823,'12345566',1,_binary ''),(30,2,7,-150000,1592047823,'12345566',2,_binary ''),(31,6,4,377000,1592047850,'12345566',1,_binary '\0'),(32,4,6,-380000,1592047850,'12345566',2,_binary '\0'),(33,4,5,350000,1592056482,'Chuyen tien',1,_binary '\0'),(34,5,4,-353000,1592056482,'Chuyen tien',2,_binary '\0'),(35,4,5,350000,1592056599,'Chuyen tien',1,_binary '\0'),(36,5,4,-353000,1592056599,'Chuyen tien',2,_binary '\0'),(37,4,6,1000000,1592056645,'Chuyển tiền 1 củ',1,_binary ''),(38,6,4,-1003000,1592056645,'Chuyển tiền 1 củ',2,_binary ''),(39,4,5,10000000,1592072867,'chuyển 10 củ',1,_binary '\0'),(40,5,4,-10003000,1592072867,'chuyển 10 củ',2,_binary '\0'),(41,6,4,550000,1592125295,'Chuyen tien 550k',1,_binary '\0'),(42,4,6,-553000,1592125295,'Chuyen tien 550k',2,_binary '\0'),(43,5,4,100000,1592134874,'firebase test transfer',1,_binary '\0'),(44,4,5,-103000,1592134874,'firebase test transfer',2,_binary '\0'),(45,5,4,100000,1592135059,'Transfer money',1,_binary '\0'),(46,4,5,-103000,1592135059,'Transfer money',2,_binary '\0'),(47,5,4,300000,1592135195,'31231231',1,_binary '\0'),(48,4,5,-303000,1592135195,'31231231',2,_binary '\0'),(49,8,4,900000,1592135703,'test firebase transfer',1,_binary '\0'),(50,4,8,-903000,1592135703,'test firebase transfer',2,_binary '\0'),(51,5,4,100000,1592135893,'transfer local',1,_binary '\0'),(52,4,5,-103000,1592135893,'transfer local',2,_binary '\0'),(53,5,4,97000,1592136019,'test transfer local',1,_binary '\0'),(54,4,5,-100000,1592136019,'test transfer local',2,_binary '\0'),(55,5,4,100000,1592136137,'312312',1,_binary '\0'),(56,4,5,-103000,1592136137,'312312',2,_binary '\0'),(57,5,4,100000,1592136180,'312',1,_binary '\0'),(58,4,5,-103000,1592136180,'312',2,_binary '\0'),(59,5,4,100000,1592136530,'12321312',1,_binary '\0'),(60,4,5,-103000,1592136531,'12321312',2,_binary '\0'),(61,6,4,123312,1592136549,'312312',1,_binary '\0'),(62,4,6,-126312,1592136549,'312312',2,_binary '\0'),(63,5,4,100000,1592136790,'1312312',1,_binary '\0'),(64,4,5,-103000,1592136790,'1312312',2,_binary '\0'),(65,5,4,100000,1592139582,'1234567',1,_binary '\0'),(66,4,5,-103000,1592139582,'1234567',2,_binary '\0'),(67,5,4,100000,1592139654,'1234567',1,_binary '\0'),(68,4,5,-103000,1592139654,'1234567',2,_binary '\0'),(69,5,4,100000,1592139743,'1234567',1,_binary '\0'),(70,4,5,-103000,1592139743,'1234567',2,_binary '\0'),(71,5,4,100000,1592140141,'213214',1,_binary '\0'),(72,4,5,-103000,1592140141,'213214',2,_binary '\0'),(73,5,4,312312,1592141173,'312312',1,_binary '\0'),(74,4,5,-315312,1592141173,'312312',2,_binary '\0'),(75,5,4,100000,1592210162,'31231241',1,_binary '\0'),(76,4,5,-103000,1592210162,'31231241',2,_binary '\0'),(77,5,4,100000,1592210790,'12dasdas',1,_binary '\0'),(78,4,5,-103000,1592210791,'12dasdas',2,_binary '\0'),(79,5,4,100000,1592210821,'dasas',1,_binary '\0'),(80,4,5,-103000,1592210821,'dasas',2,_binary '\0'),(81,5,4,150000,1592210919,'312312',1,_binary '\0'),(82,4,5,-153000,1592210919,'312312',2,_binary '\0'),(83,5,4,250000,1592211002,'1321',1,_binary '\0'),(84,4,5,-253000,1592211002,'1321',2,_binary '\0'),(85,5,4,100000,1592211066,'12312',1,_binary '\0'),(86,4,5,-103000,1592211066,'12312',2,_binary '\0'),(87,5,4,250000,1592211127,'312312',1,_binary '\0'),(88,4,5,-253000,1592211127,'312312',2,_binary '\0'),(89,5,4,128000,1592211386,'1236',1,_binary '\0'),(90,4,5,-131000,1592211386,'1236',2,_binary '\0'),(91,5,4,238000,1592211476,'238 description',1,_binary '\0'),(92,4,5,-241000,1592211476,'238 description',2,_binary '\0');
+
 
 -- --------------------------------------------------------
 
@@ -256,7 +260,6 @@ INSERT INTO `moneyaccount` (`Number`, `Money`, `idParent`) VALUES
 (11, '4260000', '19'),
 (12, '66000000', '20');
 
-
 -- --------------------------------------------------------
 
 --
@@ -287,15 +290,26 @@ INSERT INTO `otherbank` (`BankCode`, `Name`) VALUES
 DROP TABLE IF EXISTS `otherbanktransaction`;
 CREATE TABLE IF NOT EXISTS `otherbanktransaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user` int NOT NULL,
+  `user` int(11) NOT NULL,
   `partner` varchar(255) NOT NULL,
-  `BankCode` varchar(255) NOT NULL,
-  `Time` int(11) NOT NULL,
-  `Money` int(11) NOT NULL,
-  `Content` text,
-  PRIMARY KEY (`id`),
-  KEY `BankCode` (`BankCode`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `bankName` varchar(255) NOT NULL,
+  `time` int(11) NOT NULL,
+  `money` int(11) NOT NULL,
+  `type` int NOT NULL,
+  `content` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `otherbanktransaction`
+--
+
+INSERT INTO `otherbanktransaction` (`id`, `user`, `partner`, `bankName`, `time`, `money`, `type`,`content`) VALUES
+(14, 1, 'Dat', 'bankdbb', 1592989474, 10000, 1,'abc'),
+(15, 1, 'Dat', 'bankdbb', 1592989656, 10000, 1, 'abc'),
+(16, 1, 'Dat', 'bankdbb', 1592989664, 10000, 1, 'abc'),
+(17, 1, 'Dat', 'bankdbb', 1592989680, 10000, 1, 'abc'),
+(18, 1, 'Dat', 'bankdbb', 1592989686, 10000, 1, 'abc');
 
 -- --------------------------------------------------------
 
@@ -319,8 +333,6 @@ CREATE TABLE IF NOT EXISTS `otp` (
 
 DROP TABLE IF EXISTS `recipients`;
 CREATE TABLE IF NOT EXISTS `recipients` (
-  -- `username_recipient` varchar(255) DEFAULT NULL,
-  -- `username` varchar(255) NOT NULL,
   `id_recipient` varchar(255) DEFAULT NULL,
   `id` varchar(255) NOT NULL,
   `bank_LinkId` int(11) DEFAULT NULL,
@@ -336,7 +348,6 @@ CREATE TABLE IF NOT EXISTS `recipients` (
 -- Dumping data for table `recipients`
 --
 
--- ---
 INSERT INTO `recipients` (`id_recipient`, `id`, `bank_LinkId`, `name_recipient`, `isLocal`, `walletId`) VALUES
 ('phanhaibinh2', 'phanhaibinh', NULL, 'Nguyễn Hoàng Chương', b'1', 5),
 ('phanhaibinh3', 'phanhaibinh', NULL, 'Nguyễn Đức Bảo Sơn', b'1', 6),
@@ -426,22 +437,7 @@ CREATE TABLE IF NOT EXISTS `userrefreshtokenext` (
   `refreshToken` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `userrefreshtokenext`
---
-
-INSERT INTO `userrefreshtokenext` (`id`, `refreshToken`) VALUES
-(2, 'Z8VYfY9VtT9xv0odioRkvyC80nugyB726TrQujzz4u7GYJfFOKwAArzmPR8fuxZUm1sPuveqeanUeCyd'),
-(8, 'KlqlPRE7K8iW63JNA1ZLLx06OJuqNty5RpPNDDaAC0FodoKveWGSmvm0gjuhLu7XlJ8LQsgWxEPQTnoM'),
-(12, 'MSGQg3LD7t2fpbDirFi26yWr50zQN7WOzI2WR0u65Al0YmcdQj8Di9g8xGiren6C6RejCqB4Wrh02fVM'),
-(13, 'y1TtwJp9aQGgKKg3DPMgXlLimikQmY2HJoeCCjqDwODQCoR2HhDgwwrvfdbQ1wtltM9VWfp8aMekcthI');
-
---
--- Constraints for dumped tables
---
-
-
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

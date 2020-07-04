@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 
 //const time = Math.floor(Date.now()/1000);
-const time = 1593355354;
+const time = Math.floor(Date.now() / 1000);
 const dataToHash = time + 'Tj0xYDEDiQF9f2GYCxSv' + `{}`;
 const hash = crypto.createHash('sha256').update(dataToHash).digest('base64');
 console.log("time: " + time)
