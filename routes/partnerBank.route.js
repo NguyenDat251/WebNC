@@ -318,8 +318,56 @@ router.get('/transaction/:time', async (req, res) => {
   }
 })
 
+router.get('/banks', async(req, res) => {
+  const result = await partnerBankModel.getBanks();
+
+  if (!result) {
+    response(res, 'err', 'error getting banks');
+    return;
+  } else {
+    response(res, '', 'Getting banks successful', result)
+  }
+})
+
 router.get('/transaction', async(req, res) => {
-  
+  //?time=&from=&to=&name=
+  const time = req.query.time;
+  const fromDate =  req.query.from || 0;
+  const toDate = req.query.to || 0;
+  const nameBank = req.query.name || '';
+
+  const month = parseInt(time.substr(0, 2));
+  const year = parseInt(time.substr(2, 6));
+
+  let nextMonth, nextYear;
+
+  if(toDate) {
+    nextMonth = month;
+    nextYear = year;
+  } else {
+    if (month == 12) {
+      nextMonth = 1
+      nextYear = year + 1
+    } else {
+      nextMonth = month + 1;
+      nextYear = year;
+    }
+}
+
+  const TimeFrom = new Date(year, month, fromDate).getTime() / 1000;
+  const TimeTo = new Date(nextYear, nextMonth, toDate).getTime() / 1000;
+
+  console.log("TimeFrom: ", TimeFrom);
+  console.log("TimeTo:", TimeTo);
+
+  const result = await partnerBankModel.getTransaction(TimeFrom, TimeTo, nameBank);
+
+  if (!result) {
+    response(res, 'err', 'error getting transaction history');
+    return;
+  } else {
+    response(res, '', 'Getting transaction history successful', result)
+  }
 })
 
 router.get('/info/:number', async (req, res) => {

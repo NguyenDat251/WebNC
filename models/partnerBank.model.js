@@ -2,8 +2,13 @@ const db = require('../utils/db');
 const Info = require('../config/partner.js')
 
 module.exports = {
-    getTransaction: (TimeFrom, TimeTo) => {
-        return db.load(`select Name, Time, Money from OtherBankTransaction t, OtherBank b where t.BankCode = b.BankCode and Time >= ${TimeFrom} and Time < ${TimeTo} `)
+    getTransaction: (TimeFrom, TimeTo, nameBank) => {
+        return db.load(`select name, time, money from otherbanktransaction t, 
+        otherbank b where 
+        t.bankcode = b.bankcode 
+        and Time >= ${TimeFrom} 
+        and Time < ${TimeTo} 
+        and b.name LIKE '%${nameBank}%'`)
     },
 
     getInfo: id => {
@@ -198,5 +203,8 @@ module.exports = {
     },
     addToHistory: entity => {
         db.add(entity, `otherbanktransaction`)
+    },
+    getBanks: () => {
+        return db.load(`select * from otherbank`);
     }
 }

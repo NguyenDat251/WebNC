@@ -279,7 +279,8 @@ CREATE TABLE IF NOT EXISTS `otherbank` (
 
 INSERT INTO `otherbank` (`BankCode`, `Name`) VALUES
 ('kianto', 'Lam Bank'),
-('thisisatokenfroma', 'Nguyen Bank');
+('thisisatokenfroma', 'Nguyen Bank'),
+('bankdbb', 'Bankdbb');
 
 -- --------------------------------------------------------
 
@@ -292,7 +293,7 @@ CREATE TABLE IF NOT EXISTS `otherbanktransaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,
   `partner` varchar(255) NOT NULL,
-  `bankName` varchar(255) NOT NULL,
+  `bankCode` varchar(255) NOT NULL,
   `time` int(11) NOT NULL,
   `money` int(11) NOT NULL,
   `type` int NOT NULL,
