@@ -55,3 +55,24 @@ sig = privateKey.sign(secretKey, 'base64', 'base64');
 -username: username của người gửi.
 
 -content: nội dung gửi.
+
+### API dành cho admin
+
+#### Xem lịch sử giao dịch với ngân hàng khác
+
+```json
+GET /api/partner-bank/transaction
+//?time=062020&from=1&to=15&name=bankdbb
+
+```
+
+- time: tháng muốn coi lịch sử, định dạng MMYYYY.
+- from, to: ngày
+- name: tên ngân hàng
+
+#### Xem danh sách ngân hàng
+
+```json
+GET /api/partner-bank/banks
+~~~~
+```
