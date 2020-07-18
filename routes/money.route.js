@@ -62,9 +62,6 @@ const doTheMoney = async (id, money, isSaving, res) => {
     // }
 
     return true
-
-
-
 }
 
 const addToHistory = async (user, partner, type, money, content, time, isSaving) => {
@@ -224,9 +221,15 @@ router.post('/transferLocal', async (req, res) => {
 router.get('/historyLocal/:id', async (req, res) => {
     const id = req.params.id
 
+    const historyFromOtherBank = await moneyModel.getHistoryFromOtherBank(id);
+    historyFromOtherBank.forEach(element => {
+        element.user = encodeWalletId(element.user);
+        element.isSaving = false;
+    })
+
     const historyFromWallet = await moneyModel.getHistoryFromWallet(id);
     const historyFromSaving = await moneyModel.getHistoryFromSaving(id);
-    if (historyFromWallet.length == 0 && historyFromSaving.length == 0) {
+    if (historyFromWallet.length == 0 && historyFromSaving.length == 0 && historyFromOtherBank.length == 0) {
         response(res, '', 'There is no exchange history')
     } else {
         let result = [];
@@ -255,7 +258,7 @@ router.get('/historyLocal/:id', async (req, res) => {
             element.type = (element.type == 1 ? 'Credited' : (element.type == 2 ? 'Transfer' : 'Debted'));
 
         });
-        console.log('result:', result)
+        result = _.concat(result, historyFromOtherBank);
         response(res, '', 'Get history successfull', result)
     }
 })

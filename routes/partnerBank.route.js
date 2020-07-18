@@ -186,22 +186,33 @@ function createSignRSA(dataToSign) {
 
 function RSASign(data) {
   const privateKey = Info["bankdbb"].privateKey;
+  
   const sign = crypto.createSign('RSA-sha256')
   const signature = sign.update(data).sign(privateKey, 'base64');
-  console.log(signature);
+  console.log("signature inside: ", signature);
   return signature;
 }
 
 const sendMoneyRSA = async (res, data) => {
   const secretKey = "Tj0xYDEDiQF9f2GYCxSv";
-  const time = Math.floor(Date.now() / 1000);
-  const dataToHash = time + secretKey + data;
-  const hash = crypto.createHash('sha256').update(dataToHash).digest('base64');
-
+  // const secretKey = "kQYtFpj7pJfi5VVfoeGD";
+  //const time = Math.floor(Date.now() / 1000);
+  const time = 1594742802;
   const body = {
     "credit_number": data.credit_number,
     "amount": data.money
   };
+  const dataToHash = time + secretKey + body;
+  //const dataToHash = "1589520986" + "kQYtFpj7pJfi5VVfoeGD" + `{"credit_number":"565572661049","amount":200000}`
+  const hash = crypto.createHash('sha256').update(dataToHash).digest('base64');
+
+  
+
+  console.log("data to hash: ", dataToHash);
+  console.log("hash: ", hash);
+  console.log("time: ", time);
+  console.log("body: ", JSON.stringify(body));
+  console.log("authen-sig: ", RSASign(time + secretKey + body));
 
   await axios.post('http://bank-backend.khuedoan.com/api/partner/deposit', body, {
       //axios.get('https://bankdbb.herokuapp.com/account/1', {
@@ -209,20 +220,22 @@ const sendMoneyRSA = async (res, data) => {
         "authen-hash": hash,
         "partner-code": 'bankdbb',
         "timestamp": time,
-        "authen-sig": RSASign(time + secretKey + data)
+        "authen-sig": RSASign(time + secretKey + body)
       }
     })
-    .then(response => {
+    .then(responseR => {
      
         console.log("data")
+        console.log(responseR.data);
         //console.log(response.data.data);
-      response(res, '', 'send money', response.data);
+      response(res, '', 'send money', responseR.data);
 
       return true;
     })
     .catch(error => {
-      console.log("error")
-      response(res, 'err', 'send money false', error.response.data);
+      console.log("error: ");
+      //console.log("error: ", error.response);
+      response(res, 'err', 'send money false', error);
       //console.log(error);
 
       return false;
@@ -332,8 +345,8 @@ router.get('/banks', async(req, res) => {
 router.get('/transaction', async(req, res) => {
   //?time=&from=&to=&name=
   const time = req.query.time;
-  const fromDate =  req.query.from || 0;
-  const toDate = req.query.to || 0;
+  const fromDate = parseInt(req.query.from || 0);
+  const toDate =  parseInt(req.query.to || 0);
   const nameBank = req.query.name || '';
 
   const month = parseInt(time.substr(0, 2));

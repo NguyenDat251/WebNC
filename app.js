@@ -64,13 +64,13 @@ app.use(express.json());
 
 app.use('/api/auth', require('./routes/auth.route'));
 app.use('/api/users', verify, require('./routes/user.route'));
-app.use('/api/staff', require('./routes/staff.route'));
-app.use('/api/money', require('./routes/money.route'));
+app.use('/api/staff', verify, require('./routes/staff.route'));
+app.use('/api/money', verify, require('./routes/money.route'));
 
-app.use('/api/moneyAccount', require('./routes/moneyAccount.route'));
+app.use('/api/moneyAccount', verify, require('./routes/moneyAccount.route'));
 
-app.use('/api/debt-reminder/', require('./routes/debt-reminder.route'));
-app.use('/api/recipient/', require('./routes/recipient.route'));
+app.use('/api/debt-reminder/', verify, require('./routes/debt-reminder.route'));
+app.use('/api/recipient/', verify, require('./routes/recipient.route'));
 app.use('/api/partner-bank/', require('./routes/partnerBank.route'));
 
 setInterval(function(){ userModel.deleteOTP() }, 3000);

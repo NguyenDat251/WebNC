@@ -8,6 +8,11 @@
       - [Lấy thông tin tài khoản khách hàng bằng số tài khoản](#lấy-thông-tin-tài-khoản-khách-hàng-bằng-số-tài-khoản)
       - [Chuyển tiền vào tài khoản](#nạp-tiền-vào-tài-khoản)
 
+    - [API dành cho admin](#api-dành-cho-admin)
+      - [Xem lịch sử giao dịch với ngân hàng khác](#Xem-lịch-sử-giao-dịch-với-ngân-hàng-khác)
+      - [Xem danh sách ngân hàng](#Xem-danh-sách-ngân-hàng)- [Internet Banking](#internet-banking)
+  
+
 ## Hướng dẫn sử dụng api
 
 ### API dành cho partner
@@ -74,5 +79,33 @@ GET /api/partner-bank/transaction
 
 ```json
 GET /api/partner-bank/banks
-~~~~
+```
+
+### API giao dịch với ngân hàng khác
+
+#### Xem thông tin
+
+```json
+GET /api/partner-bank/info-partner/:idBank/:credit_number
+
+```
+
+- idBank: id ngân hàng đối tác.
+  Hiện có 2 id: kianto và rsa-bank
+- credit_number: số tài khoản.
+    kianto: 565572661049
+    rsa-bank: không cần truyền (tạm thời)
+
+#### Chuyển tiền tới ngân hàng khác
+
+```json
+GET /api/partner-bank/send-money
+
+body {
+    idBank:(như trên)
+    idUser:(id người gửi tiền)
+    credit_number: (như trên)
+    money: (số tiền gửi)
+    content: (nội dung)
+}
 ```

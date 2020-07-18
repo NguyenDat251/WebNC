@@ -268,16 +268,16 @@ INSERT INTO `moneyaccount` (`Number`, `Money`, `idParent`) VALUES
 
 DROP TABLE IF EXISTS `otherbank`;
 CREATE TABLE IF NOT EXISTS `otherbank` (
-  `BankCode` varchar(255) NOT NULL,
-  `Name` varchar(255) NOT NULL,
-  PRIMARY KEY (`BankCode`)
+  `bankcode` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`bankcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `otherbank`
 --
 
-INSERT INTO `otherbank` (`BankCode`, `Name`) VALUES
+INSERT INTO `otherbank` (`bankcode`, `name`) VALUES
 ('kianto', 'Lam Bank'),
 ('thisisatokenfroma', 'Nguyen Bank'),
 ('bankdbb', 'Bankdbb');
@@ -293,7 +293,7 @@ CREATE TABLE IF NOT EXISTS `otherbanktransaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user` int(11) NOT NULL,
   `partner` varchar(255) NOT NULL,
-  `bankCode` varchar(255) NOT NULL,
+  `bankcode` varchar(255) NOT NULL,
   `time` int(11) NOT NULL,
   `money` int(11) NOT NULL,
   `type` int NOT NULL,
@@ -305,7 +305,7 @@ CREATE TABLE IF NOT EXISTS `otherbanktransaction` (
 -- Dumping data for table `otherbanktransaction`
 --
 
-INSERT INTO `otherbanktransaction` (`id`, `user`, `partner`, `bankName`, `time`, `money`, `type`,`content`) VALUES
+INSERT INTO `otherbanktransaction` (`id`, `user`, `partner`, `bankcode`, `time`, `money`, `type`,`content`) VALUES
 (14, 1, 'Dat', 'bankdbb', 1592989474, 10000, 1,'abc'),
 (15, 1, 'Dat', 'bankdbb', 1592989656, 10000, 1, 'abc'),
 (16, 1, 'Dat', 'bankdbb', 1592989664, 10000, 1, 'abc'),
