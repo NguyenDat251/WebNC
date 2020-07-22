@@ -73,9 +73,7 @@ router.get('/getAllRecipient/:id', async (req, res) => {
         const result = await RecipientModel.getAllRecipients(id)
         
         result.forEach(element => {
-            if (element.isLocal) {
-                element.Name = "VietNam BBD Bank"
-            }
+      
             element.walletId= encodeWalletId(element.walletId);
 
         })
@@ -143,7 +141,7 @@ router.get('/getRecipientForeign/:id', async (req, res) => {
 })
 router.get('/trackRecipientForeign/:walletId', async (req, res) => {
 
-    let walletId = req.params.walletId;
+    let walletId = decodeWalletId(req.params.walletId);
     const result = await RecipientModel.trackRecipientForeign(walletId)
 
     res.status(200).json({

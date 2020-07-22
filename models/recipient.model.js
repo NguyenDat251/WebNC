@@ -21,7 +21,7 @@ module.exports = {
         return db.load(`DELETE FROM recipients WHERE walletId='${data.walletId}' and isLocal=${data.isLocal} and id='${data.id}'`)
 
     },
-    getInfoUserRecipientByWalletId: async (walletId)=>{
+    getInfoUserRecipientByWalletId: async (walletId) => {
         return db.load(`select a.name
         from moneyaccount as ma, account as a
         where ma.username = a.username and ma.Number = ${walletId};`);
@@ -29,30 +29,31 @@ module.exports = {
     getAllRecipients: async (id) => {
         let query = `
         
-        select  distinct r.*,ob.* from recipients as r left join otherbank as ob on r.bankCode= ob.BankCode
-        where r.id = ${id};`
-
+        select  distinct r.*,ob.name as Name from recipients as r left join otherbank as ob on r.bank_LinkId= ob.BankCode
+        where r.id = '${id}';`
+        console.log('query:', query)
         return db.load(query);
     },
     getRecipientLocal: async (id) => {
         let query = `
         
         select * from recipients where id ='${id}'and isLocal =1;`
-
+        console.log('query Local Recipient:', query)
         return db.load(query);
     },
     trackRecipientLocal: async (walletId) => {
         let query = `
         
-        select distinct a.name as fullname,a.email,r.bankCode,ob.Name from account as a, recipients as r left join otherbank as ob on r.bankCode = ob.BankCode,moneyaccount as ma
-            where ma.Number = ${walletId} and ma.id = a.id and a.id = r.id_recipient and isLocal =1`
-
+        select distinct a.name as fullname,a.email,r.bank_LinkId,ob.Name from account as a, recipients as r left join otherbank as ob on r.bank_LinkId = ob.BankCode,moneyaccount as ma
+            where ma.Number = ${walletId} and ma.idParent = a.id and a.username = r.id_recipient and isLocal =1`
+            console.log('Track recipient Local:', query)
         return db.load(query);
     },
     getRecipientForeign: async (id) => {
         let query = `
         
         select * from recipients where id ='${id}'and isLocal =0;`
+        console.log('query Foreign Recipient:', query)
 
         return db.load(query);
     },
@@ -60,8 +61,9 @@ module.exports = {
         let query = `
         
        
- select distinct r.name_recipient as fullname,r.bank_LinkId,lb.name from recipients as r left join linkbanks as lb on r.bank_LinkId = lb.id_link_bank
- where walletId = '${walletId}' and isLocal =0`
+        select distinct r.name_recipient as fullname,r.bank_LinkId,ob.Name from recipients as r left join otherbank as ob on r.bank_LinkId = ob.BankCode
+        where r.walletId = '${walletId}' and isLocal =0;`
+ console.log('Track recipient Foreign:', query)
 
         return db.load(query);
     },

@@ -4,7 +4,7 @@ const db = require('../utils/db');
 
 module.exports = {
   getMoneyAccount: id => {
-      return db.load(`select * from moneyaccount where id = '${id}'`)
+      return db.load(`select * from moneyaccount where idParent = '${id}'`)
   },
   getSaving: id => {
       return db.load(`select * from savinglist where id = '${id}'`)

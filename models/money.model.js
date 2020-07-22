@@ -51,7 +51,7 @@ module.exports = {
     console.log("id: ", id)
     return db.load(`select  a.id,a.name,h.*,ma.Number,'Main Account' as name
         from history as h,account as a,moneyaccount as ma  
-        where ma.idParent= a.id and ma.idParent = h.user  and a.id= ${id} and h.isSaving = 0;`)
+        where ma.idParent= a.id and ma.Number = h.user  and a.id= ${id} and h.isSaving = 0;`)
   },
   getHistoryFromSaving: id => {
     console.log("id: ", id)

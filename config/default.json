@@ -6,6 +6,13 @@
     "password": "6h5K8dapxfFdVKAS",
     "database": "bank_manager"
   },
+  "mysqlLocal": {
+    "connectionLimit": 100,
+    "host": "167.179.80.90",
+    "user": "datnq",
+    "password": "6h5K8dapxfFdVKAS",
+    "database": "bank_manager"
+  },
   "auth": {
     "secret": "secretKey",
     "expiresIn": "100m",

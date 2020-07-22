@@ -33,6 +33,7 @@ const doTheMoney = async (id, money, isSaving, res) => {
 
 
     let CurrentMoney = parseInt(rsGetCurrentMoney[0].money) + parseInt(money)
+    console.log('CurrentMoney:', CurrentMoney)
 
     if (CurrentMoney < 0) {
         response(res, 'err', 'Your account is not enough money')
@@ -41,7 +42,7 @@ const doTheMoney = async (id, money, isSaving, res) => {
     var result = null;
     if (isSaving === null || !isSaving) {
         result = await moneyModel.setMoney({
-            id: rsGetCurrentMoney[0].id,
+            idParent: rsGetCurrentMoney[0].idParent,
             CurrentMoney,
         })
     }
@@ -64,14 +65,14 @@ const doTheMoney = async (id, money, isSaving, res) => {
     return true
 }
 
-const addToHistory = async (user, partner, type, money, content, time, isSaving) => {
+const addToHistory = async (user, partner, type, money, description, time, isSaving) => {
 
     await moneyModel.addToHistory({
         user: user,
         partner: partner,
         type: type,
         isSaving,
-        content,
+        description,
         money_transfer: money,
         time: time / 1000
     })
@@ -168,6 +169,7 @@ router.post('/transferLocal', async (req, res) => {
         const paidBy = req.body.paidBy
         console.log('isSaving:', isSaving)
         let moneySenderPaid, moneyReceiverPaid;
+        console.log('Money:', Money)
         if (paidBy == 1) {
             moneySenderPaid = -1 * (Money + fee)
             moneyReceiverPaid = Money
@@ -175,7 +177,8 @@ router.post('/transferLocal', async (req, res) => {
             moneySenderPaid = -1 * Money
             moneyReceiverPaid = Money - fee
         }
-
+        console.log('moneySenderPaid:', moneySenderPaid)
+        console.log('moneyReceiverPaid:', moneyReceiverPaid)
         console.log("minus money")
 
         let rs;
@@ -228,6 +231,7 @@ router.get('/historyLocal/:id', async (req, res) => {
     })
 
     const historyFromWallet = await moneyModel.getHistoryFromWallet(id);
+    console.log('historyFromWallet:', historyFromWallet)
     const historyFromSaving = await moneyModel.getHistoryFromSaving(id);
     if (historyFromWallet.length == 0 && historyFromSaving.length == 0 && historyFromOtherBank.length == 0) {
         response(res, '', 'There is no exchange history')
@@ -235,6 +239,7 @@ router.get('/historyLocal/:id', async (req, res) => {
         let result = [];
         //Concat 2 arrays by using lodash
         result = _.concat(historyFromWallet, historyFromSaving);
+        console.log('result:', result)
         //Encode id_saving and Number to walletId;
         result.forEach(element => {
             if (element.isSaving) {

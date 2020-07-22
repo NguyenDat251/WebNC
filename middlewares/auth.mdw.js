@@ -4,7 +4,7 @@ const createError = require('http-errors');
 const config = require('../config/default.json');
 
 module.exports = function (req, res, next) {
-  const token = req.headers['x-access-token'];
+  const token = req.headers['x_accesstoken'];
   if (token) {
     try{
     jwt.verify(token, config.auth.secret, function (err, payload) {

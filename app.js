@@ -41,7 +41,7 @@ const verify = require('./middlewares/auth.mdw');
 
 const app = express();
 // CORS fixed
-//app.use(cors());
+app.use(cors());
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
@@ -93,7 +93,7 @@ app.use(function (err, req, res, next) {
 
 //module.exports = app;
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, _ => {
   console.log(`API is running at http://localhost:${PORT}`);
 })

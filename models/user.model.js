@@ -46,7 +46,7 @@ module.exports = {
   },
   getNameByWalletId: async id_wallet=>{
     return db.load(`select a.name,a.id from account as a, moneyaccount as ma
-    where a.id = ma.id and ma.Number =${id_wallet}`)
+    where a.id = ma.idParent and ma.Number =${id_wallet}`)
   },
   getUserInfoByUsername: async username => {
     return db.load(`select a.username,a.name,a.email,a.phone,a.identity_number as idenityNumber,a.dob,m.Money as balance,m.Number as walletNumber
@@ -69,7 +69,7 @@ module.exports = {
     return false
   },
 
-  singleByUserName: userName => db.load(`select a.* from account a where a.username = '${userName}'`),
+  singleByUserName: userName => db.load(`select account.*,moneyaccount.Number,moneyaccount.Money from account,moneyaccount where account.username = '${userName}' and account.id=moneyaccount.idParent`),
 
   updateRefreshToken: async (userId, token) => {
 

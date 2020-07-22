@@ -9,12 +9,12 @@ var {
     response,
     DEFINED_CODE
 } = require('../config/response');
-const { encodeWalletId } = require('../middlewares/convertWalletId.mdw');
+const { encodeWalletId,decodeWalletId } = require('../middlewares/convertWalletId.mdw');
 
 const router = express.Router();
 
 router.get('/:id', async (req, res) => {
-    const id = req.params.id
+    let id = req.params.id;
     let listMoneyAccount = await moneyAccountModel.getMoneyAccount(id)
     let listSaving = await moneyAccountModel.getSaving(id)
 

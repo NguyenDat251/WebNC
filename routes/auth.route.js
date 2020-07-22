@@ -8,7 +8,7 @@ const authModel = require('../models/auth.model');
 const userModel = require('../models/user.model');
 
 const config = require('../config/default.json');
-
+const {encodeWalletId,decodeWalletId} = require('../middlewares/convertWalletId.mdw')
 const router = express.Router();
 
 /**
@@ -34,6 +34,7 @@ router.post('/login', async (req, res) => {
 
   const userId = ret.data.id;
   console.log("userId: ", userId)
+  
   const accessToken = generateAccessToken(ret.data);
 
   const refreshToken = randToken.generate(config.auth.refreshTokenSz);
@@ -75,7 +76,8 @@ router.post('/refresh', async (req, res) => {
 
 const generateAccessToken = params => {
   console.log('params:', params)
-  const payload = { userId: params.id, role: params.role,username:params.username,Number:params.Number,balance:params.Money, email: params.email,name:params.name,dob:params.dob,phone:params.phone };
+  params.walletId = encodeWalletId(params.Number);
+  const payload = { userId: params.id, role: params.role,username:params.username,walletId:params.walletId,Number:params.Number,balance:params.Money, email: params.email,name:params.name,dob:params.dob,phone:params.phone };
   const accessToken = jwt.sign(payload, config.auth.secret, {
     expiresIn: config.auth.expiresIn
   });
