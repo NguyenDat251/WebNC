@@ -231,8 +231,8 @@ router.get('/historyLocal/:id', async (req, res) => {
     })
 
     const historyFromWallet = await moneyModel.getHistoryFromWallet(id);
-    console.log('historyFromWallet:', historyFromWallet)
     const historyFromSaving = await moneyModel.getHistoryFromSaving(id);
+    console.log('historyFromSaving:', historyFromSaving)
     if (historyFromWallet.length == 0 && historyFromSaving.length == 0 && historyFromOtherBank.length == 0) {
         response(res, '', 'There is no exchange history')
     } else {
@@ -261,7 +261,7 @@ router.get('/historyLocal/:id', async (req, res) => {
             element.partner = element.type == 1 ? element.name  + ` (${element.partner})`: element.partner;
             element.time = moment(element.time * 1000).format("DD-MM-YYYY hh:mm a")
             element.type = (element.type == 1 ? 'Credited' : (element.type == 2 ? 'Transfer' : 'Debted'));
-
+            
         });
         result = _.concat(result, historyFromOtherBank);
         response(res, '', 'Get history successfull', result)

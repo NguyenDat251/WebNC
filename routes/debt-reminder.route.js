@@ -76,9 +76,9 @@ router.get('/getDebtReminder/:id_debtor', async (req, res) => {
     console.log('id_debtor:', id_debtor)
     if (id_debtor) {
         const result = await debtReminderModel.getDebtReminder(id_debtor)
-
         result.forEach(element => {
             element.dateCreate = moment(element.dateCreate).format("DD-MM-YYYY HH:mm");
+             element.walletID = encodeWalletId(element.walletID);
         })
         res.status(200).json({
             returnCode: 1,
@@ -93,8 +93,11 @@ router.get('/getDebtOwner/:id_owner', async (req, res) => {
 
     if (id_owner) {
         const result = await debtReminderModel.getDebtOwner(id_owner)
+
         result.forEach(element => {
             element.dateCreate = moment(element.dateCreate).format("DD-MM-YYYY HH:mm");
+            element.walletID = encodeWalletId(element.walletID);
+
         })
         res.status(200).json({
             returnCode: 1,

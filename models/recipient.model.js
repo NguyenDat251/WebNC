@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
 const db = require('../utils/db');
+const dbMysql = require('../api/utils/mysql')
 
 
 module.exports = {
@@ -9,11 +10,14 @@ module.exports = {
 
     addRecipient: async entity => {
         console.log('entity:', entity)
-        entity.status = 0;
         return db.add(entity, 'recipients')
     },
-    editRecipient: async (entity, username) => {
-        return db.edit(entity, { username }, 'recipients')
+    editRecipient: async (data) => {
+        let sqlUpdate = `UPDATE recipients set name_recipient = '${data.name_recipient}' where id='${data.id }' and id_recipient ='${data.id_recipient}'`
+        return db.load(sqlUpdate)
+    },
+    checkExistRecipient: async(id,id_recipient)=>{
+        return db.load(`SELECT * FROM recipients where id = '${id}' and id_recipient ='${id_recipient}'`);
 
     },
     deleteRecipient: async (data) => {
@@ -44,7 +48,7 @@ module.exports = {
     trackRecipientLocal: async (walletId) => {
         let query = `
         
-        select distinct a.name as fullname,a.email,r.bank_LinkId,ob.Name from account as a, recipients as r left join otherbank as ob on r.bank_LinkId = ob.BankCode,moneyaccount as ma
+        select distinct a.name as fullname,a.username,r.isLocal,a.email,r.bank_LinkId,ob.Name from account as a, recipients as r left join otherbank as ob on r.bank_LinkId = ob.BankCode,moneyaccount as ma
             where ma.Number = ${walletId} and ma.idParent = a.id and a.username = r.id_recipient and isLocal =1`
             console.log('Track recipient Local:', query)
         return db.load(query);
