@@ -209,7 +209,7 @@ router.post('/getOTP', async (req, res) => {
   //   time: Date.now()/1000
   // })
 
-  response(res, '', 'send otp successful', {})
+  response(res, '', `Send OTP successful. Check your email: ${req.body.email}`, {})
 
   console.log("otp: ", otpCode)
 })

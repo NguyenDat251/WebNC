@@ -17,6 +17,7 @@ const debtReminderModel = require('../models/debt-reminder.model.js');
 const FEE = 3000
 
 router.post('/addDebtReminder', async (req, res) => {
+    console.log('body:', req.body)
     debtReminderModel.addDebtReminder(req.body).then(data => {
         console.log('data:', data)
         res.status(201).json({
@@ -78,7 +79,7 @@ router.get('/getDebtReminder/:id_debtor', async (req, res) => {
         const result = await debtReminderModel.getDebtReminder(id_debtor)
         result.forEach(element => {
             element.dateCreate = moment(element.dateCreate).format("DD-MM-YYYY HH:mm");
-             element.walletID = encodeWalletId(element.walletID);
+            element.walletID = encodeWalletId(element.walletID);
         })
         res.status(200).json({
             returnCode: 1,
@@ -107,8 +108,7 @@ router.get('/getDebtOwner/:id_owner', async (req, res) => {
     }
 })
 router.get('/getNameByWalletId/:id_wallet', async (req, res) => {
-    let id_wallet = req.params.id_wallet;
-    id_wallet= decodeWalletId(id_wallet);
+    let id_wallet = decodeWalletId(req.params.id_wallet);
     userModel.getNameByWalletId(id_wallet).then(data => {
         res.status(200).json({
             returnCode: 1,
@@ -124,93 +124,103 @@ router.post('/payDebt', async (req, res) => {
     //     id_debt:
     //     otp: 
     // }
-
+    const otp = req.body.otp
+    console.log('req.body:', req.body);
     const checkOTP = await userModel.checkOTPExisted(req.body.otp);
-
-    if(checkOTP.length <= 0){
-        response(res, 'err', 'Otp is not exist', {})
+    console.log('checkOTP:', checkOTP)
+    if (checkOTP.length <= 0) {
+        res.json({
+            returnCode: 0,
+            message: 'Wrong OTP Please Send an OTP and Check your email to get an OTP'
+        })
         return
     }
-    
-        if (checkOTP[0].email !== req.body.email) {
-            response(res, 'err', 'wrong otp', {})
-            console.log("abc after wrong otp")
-            return
-        }
 
-        const fee = FEE;
-        const id_debt = req.body.id_debt;
+    if (checkOTP[0].email !== req.body.email) {
+        res.json({
+            returnCode: 0,
+            message: 'Wrong OTP Please Check your email you have register to get an OTP!!'
+        })
+        // response(res, 'err', 'wrong otp', {})
+        console.log("wrong after wrong otp")
+        return
+    }
 
-        const debt = await debtReminderModel.getDebt(id_debt);
+    const fee = FEE;
+    const id_debt = req.body.id_debt;
+    const decodeWalletIdOwner = decodeWalletId(req.body.walletID);
+    const decodeWalletIdDebtor = req.body.decodeWalletIdDebtor;
 
-       
-
-        if(!debt){
-            response(res, 'err', 'debt is not exist', {})
-            return
-        }
-
-        //debt = debt[0];
-
-        console.log("debt: ", debt)
-
-        const Money = debt[0].money_debt;
-        const sender = debt[0].id_debtor;
+    const debt = await debtReminderModel.getDebt(id_debt);
 
 
 
-        const receiver = debt[0].id_owner;
+    if (!debt) {
+        response(res, 'err', 'debt is not exist', {})
+        return
+    }
 
-        console.log("sender: ", sender);
-        console.log("receiver: ", receiver);
-        
-            moneySenderPaid = -1 * (Money + fee)
-            moneyReceiverPaid = Money
+    //debt = debt[0];
 
-        console.log("minus money")
+    console.log("debt: ", debt)
 
-        let rs;
+    const Money = debt[0].money_debt;
+    const sender = debt[0].id_debtor;
 
-        rs = await money.doTheMoney(sender, moneySenderPaid, false, res);
 
-        if (!rs){
-            //response(res, 'err', 'set money false for sender')
-            return
-        }
 
-        console.log("add money")
+    const receiver = debt[0].id_owner;
 
-        //rs =  await money.doTheMoney(receiver, moneyReceiverPaid, res)
+    console.log("sender: ", sender);
+    console.log("receiver: ", receiver);
 
-        rs = await money.doTheMoney(receiver, moneyReceiverPaid, false, res)
+    moneySenderPaid = -1 * (Money + fee)
+    moneyReceiverPaid = Money
 
-        if (!rs){
-            //response(res, 'err', 'set money false for receiver')
-            return
-        }
+    console.log("minus money")
 
-        //const idReceiver = await userModel.getIdByUsername(receiver)
-        //const idSender = await userModel.getIdByUsername(sender)
+    let rs;
 
-        //Promise.all(idReceiver, idSender)
-        //this.subscribe
-        await money.addToHistory(receiver, sender, `1`, moneyReceiverPaid, `receive payment`, Date.now(), false)
-        await money.addToHistory(sender, receiver, `3`, moneySenderPaid, `pay dept`, Date.now(), false)
+    rs = await money.doTheMoney(sender, moneySenderPaid, false, res);
 
-        console.log("rs: " + rs)
-        if (!rs)
-            return
+    if (!rs) {
+        //response(res, 'err', 'set money false for sender')
+        return
+    }
 
-        //response(res, '', 'Transfer money successfull')
+    console.log("add money")
 
-    
-        //change status debt
-        const resultChangeStatus = await debtReminderModel.changeStatus(id_debt);
-        if(!resultChangeStatus){
-            response(res, 'err', 'error when change status debt', {})
-            return
-        }
+    //rs =  await money.doTheMoney(receiver, moneyReceiverPaid, res)
 
-        response(res, '', 'pay debt successful')
+    rs = await money.doTheMoney(receiver, moneyReceiverPaid, false, res)
+
+    if (!rs) {
+        //response(res, 'err', 'set money false for receiver')
+        return
+    }
+
+    //const idReceiver = await userModel.getIdByUsername(receiver)
+    //const idSender = await userModel.getIdByUsername(sender)
+
+    //Promise.all(idReceiver, idSender)
+    //this.subscribe
+    await money.addToHistory(decodeWalletIdOwner, decodeWalletIdDebtor, `1`, moneyReceiverPaid, `Receive ${Money}  VND from ${req.body.name} pay a Debt from you`, Date.now(), false)
+    await money.addToHistory(decodeWalletIdDebtor, decodeWalletIdOwner, `3`, moneySenderPaid, `Pay A Debt ${Money} VND to ${req.body.creditor}`, Date.now(), false)
+
+    console.log("rs: " + rs)
+    if (!rs)
+        return
+
+    //response(res, '', 'Transfer money successfull')
+
+
+    //change status debt
+    const resultChangeStatus = await debtReminderModel.changeStatus(id_debt);
+    if (!resultChangeStatus) {
+        response(res, 'err', 'error when change status debt', {})
+        return
+    }
+    response(res, '', `You Pay ${Money} Debt Successful!`)
+
 })
 module.exports = router;

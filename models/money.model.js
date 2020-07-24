@@ -3,7 +3,8 @@ const db = require('../utils/db');
 
 module.exports = {
   getCurrentMoneyFromIdUser: id => {
-    return db.load(`select money, id from moneyaccount where id = ${id}`)
+    console.log(`select money, idParent as id from moneyaccount where idParent = ${id}`);
+    return db.load(`select money, idParent as id from moneyaccount where idParent = ${id}`)
   },
   getCurrentMoney: id => {
     return db.load(`select m.money, m.idParent from moneyaccount m, account a where m.idParent = a.id and m.Number=${id}`)

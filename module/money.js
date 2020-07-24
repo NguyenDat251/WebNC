@@ -1,12 +1,13 @@
 const moneyModel = require('../models/money.model');
 var {
     response,
-    DEFINED_CODEgetCurrentMoneyFromIdUser} = require('../config/response');
+    DEFINED_CODEgetCurrentMoneyFromIdUser } = require('../config/response');
 
 const doTheMoney = async (id, money, isSaving, res) => {
     var rsgetCurrentMoneyFromIdUser = null;
     if (isSaving === null || !isSaving) {
         rsgetCurrentMoneyFromIdUser = await moneyModel.getCurrentMoneyFromIdUser(id)
+        console.log('rsgetCurrentMoneyFromIdUser:', rsgetCurrentMoneyFromIdUser)
     }
     else if (isSaving) {
         rsgetCurrentMoneyFromIdUser = await moneyModel.getCurrentMoneySaving(id)
@@ -19,15 +20,17 @@ const doTheMoney = async (id, money, isSaving, res) => {
     }
 
     let CurrentMoney = parseInt(rsgetCurrentMoneyFromIdUser[0].money) + parseInt(money)
-
     if (CurrentMoney < 0) {
-        response(res, 'err', 'Your account is not enough money')
+        res.json({
+            message: "Your account is not enough money to pay this Debt",
+            returnCode: -1
+        })
         return false
     }
     var result = null;
     if (isSaving === null || !isSaving) {
         result = await moneyModel.setMoney({
-            id: rsgetCurrentMoneyFromIdUser[0].id,
+            idParent: rsgetCurrentMoneyFromIdUser[0].id,
             CurrentMoney,
         })
     }

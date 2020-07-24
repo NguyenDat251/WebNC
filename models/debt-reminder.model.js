@@ -16,10 +16,10 @@ module.exports = {
         return db.edit(entity, { id_debt }, 'debt_reminder')
 
     },
-    deleteDebtReminder: async (id_debt) => {
+    deleteDebtReminder: async (id_debt,id_owner) => {
         console.log('id_debt:', id_debt)
         // return db.load(`DELETE FROM debt_reminder WHERE id_debtor=${data.id_debtor} and id_owner=${data.id_owner}`)
-        return db.load(`DELETE FROM debt_reminder WHERE id_debt=${id_debt}`)
+        return db.load(`DELETE FROM debt_reminder WHERE id_debt=${id_debt} and id_owner=${id_owner}`)
 
     },
     getDebtReminder: async (id_debtor) => {

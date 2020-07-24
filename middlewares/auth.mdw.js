@@ -25,7 +25,6 @@ module.exports = function (req, res, next) {
       // })
     }
 
-       console.log(payload);
       req.tokenPayload = payload;
       next();
     })
