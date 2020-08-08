@@ -3,12 +3,13 @@ const Info = require('../config/partner.js')
 
 module.exports = {
     getTransaction: (TimeFrom, TimeTo, nameBank) => {
-        return db.load(`select name, time, money from otherbanktransaction t, 
-        otherbank b where 
+        return db.load(`select a.username as sender, t.partner as receiver, b.name, time, money from otherbanktransaction t, 
+        otherbank b, account a where 
+        t.user = a.id and
         t.bankcode = b.bankcode 
         and Time >= ${TimeFrom} 
         and Time < ${TimeTo} 
-        and b.name LIKE '%${nameBank}%'`)
+        and b.bankcode LIKE '%${nameBank}%'`)
     },
 
     getInfo: id => {
