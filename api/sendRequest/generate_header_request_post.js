@@ -4,24 +4,24 @@ const crypto = require('crypto');
 const sha1 = require('sha1');
 
 const privateKeyRSA = `-----BEGIN RSA PRIVATE KEY-----
-MIICWwIBAAKBgQCJlQZ/m1+iLfK/lpYDmicle6v0llLWtdYhSkH6buiOrNbaXVH/
-/ZcG9TpOLU1vL+PkvprCZ/N1Stqz0xNrzcdT0zFIxQSr31fB1qzD2+T4njBcGROS
-tv0uxhaarmWVJwjLia0rlL7grRL0axw4rESM9nsNbe8XnJGVKtFy9MXHBwIDAQAB
-AoGAFxRq3KlB58DxgfZPABeyDXWrqQI2r1Ids8PzQYGtfZG9ETCqetkdpssolsi+
-vrI39r2K1KX/j2OZQKVeEq2YjFR+etusQzCRF6jqbk5O+/ajLL4veyxKQmTQXDVx
-DwjsRDc1MvMsfqmnk5b0uYs9ntnT/iaqkLVtEwKMpnjFW/ECQQDvfz1wpjRKCduV
-sdaH1JxqKw2mYu79Cyp7LkHKz0fvfg6SP7EAPt4j7dlBuA0n99OAklcvtfVpiXF3
-rQOauC99AkEAkw/+JX4dfvGXOQ+fZerFamOUjVLEhH7I19wrHU4y56SDC2uQ1Q9n
-xvxH81CxFTN7HXOKQ8uFNY06kyfzWNif0wJAd+dhMEPVy/eReymU+V4ljTXO2K2R
-bxinBRLMl6gdILcgvnGqwS+4cY6EBdYKqCb4OdeKVPWpT1QjfcIeGtj51QJAMZgC
-F/i4z7d/TOHk2kTbAG7GiQYxeZEcABeifoaBijajbrV+qStBzwwC454BqemrihoN
-taErsgyHhVrCqOKcuwJAWyuluw+LXjvwY/sFgPXLqCPMfEP4kBXhqM/+hHK7ZerR
-aLvYFAwzssSuUGlksRon0xjQ7M9P2+Bld3gcV6hUyg==
+MIICWwIBAAKBgHvGfCrOsLPolKTOprqzguNp85gkGdh/wbCBtXBtX7ObMSPqBN0a
+FgijRfn0NKolIn0ievEiab82ttBO57FGgNWG+fm/CqX72dOpit9A5WqdwKY5iI/0
+yO+WNMtJqLwJ5qs/Cp0EwFAbqMh/4Uxsyaiw029hX2IJEdW8oYb+0mwPAgMBAAEC
+gYAmwTcPkDfznNct4yaBPsO0wO/sqyEMkLPsuDA/S3+zlNwGCrgLIqfTfIvkf3od
+7BKoa6ti5QuHO3JyNsKE1zZvMG06pqiO56B793T2AvsVwfJvPIzWnAyHAQDo0C3H
+sM5z6WPlYU3S+P6RKrma4cmVYiizQcB1Y9L15N3/Nib9QQJBAPFj+yJWmycMZ2Kb
+RJoTR2IGIFKnhhVM2uBdHsJmXCl9wVr8dkKd9M2RONeCXk1Plw9afFlu10xxLRH8
+SNgiSEUCQQCDRDdAvicscFwcAhmBLj+db3Ry2s+s8baGb6eGR13MX0YDS/IyLOH0
+8mgeZ9e5a5uDwSQBNNG+noqgnc5q4JpDAkAfMZFhdZmlKSgvCOuLkZQ26Z3BsJ5W
+IFFkjwQLkRi1z+dtr5REtY7OBcc3qkQvb2qQ9Ft/XyB5Y2K0oUp0i7GVAkAhVbp+
+W4vRMjuB9VqKvrbzATHeVQj2T2/d1g8B/6+nTe6Wubuo2FMNhF3CkvZqpRQaMns1
+Pzego9xqi4i3BZDHAkEAjGkNaEYa9PiQiBUUY9po/7CzWsIdASxR+w4B4D2cHPhE
+Fv0qItIcqtVZynrY/Co62t5sF0fLBjBZb7X+h0F9jw==
 -----END RSA PRIVATE KEY-----`
 
 const privateKey = new NodeRSA(privateKeyRSA);
 
-const time = Date.now()/1000;
+const time = Math.floor(Date.now()/1000);
 const secretKey = `Tj0xYDEDiQF9f2GYCxSv`;
 const body = {
   number: `6`,
@@ -57,6 +57,8 @@ const host= `http://localhost:8080`;
   }
 })
   .then(response => {
+    console.log('response: ', response);
+
     if(response.data.returnCode == ''){
       console.log("message")
       //console.log(response.data.returnMessage)

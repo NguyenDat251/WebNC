@@ -1,5 +1,5 @@
 const axios = require('axios');
-const sig = require('../module/sig.js');
+//const sig = require('../module/sig.js');
 const sha256 = require('js-sha256');
 const crypto = require('crypto');
 

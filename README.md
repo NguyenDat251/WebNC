@@ -104,11 +104,11 @@ GET /api/partner-bank/info-partner/:idBank/:credit_number
 GET /api/partner-bank/send-money
 
 body {
-    idBank:(như trên)
-    idUser:(id người gửi tiền)
-    credit_number: (như trên)
-    money: (số tiền gửi)
-    content: (nội dung)
+    "idBank": "(như trên)",
+    "idUser": "(id người gửi tiền)",
+    "credit_number": "(như trên)",
+    "money": "(số tiền gửi)",
+    "content": "(nội dung)"
 }
 ```
 ### API dành cho user
