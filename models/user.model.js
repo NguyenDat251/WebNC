@@ -54,7 +54,7 @@ module.exports = {
     where a.id = m.idParent and a.username = '${username}';`)
   },
   getUserInfoByWalletId: async walletId => {
-    return db.load(`select a.name,a.username,a.identity_number as identityNumber,m.Money as balance,m.Number as walletNumber
+    return db.load(`select a.name, a.role,a.username,a.identity_number as identityNumber,m.Money as balance,m.Number as walletNumber
   from account as a,moneyaccount as m 
   where a.id = m.idParent and m.Number = '${walletId}';`)
   },
