@@ -24,13 +24,6 @@ module.exports = function (req, res, next) {
       });
 
       return;
-      // throw createError(401, err);
-
-      // res.status(401).send({
-      //   returnCode: 0,
-      //    message: err.message,
-      //    data: {}
-      // })
     }
 
       req.tokenPayload = payload;

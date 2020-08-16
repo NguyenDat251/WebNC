@@ -6,24 +6,12 @@ const db = require('../utils/db');
 module.exports = {
   add: async entity => {
     console.log('entity:', entity)
-    // entity = {
-    //   "username": "admin",
-    //   "password_hash": "admin",
-    //   "name": "admin",
-    //   "email": "admin@g.c",
-    //   "phone": "0343244644,
-    //   "role": 1
-    // }
     const hash = bcrypt.hashSync(entity.password_hash, 8);
     entity.password_hash = hash;
     delete entity.password;
     const resultAddUser = await db.add(entity, 'account');
 
-    //resultAddUser
-
     return db.add({ money: 0, id: resultAddUser.insertId }, 'MoneyAccount')
-
-    //return db.add(entity, 'account');
   },
 
   getIdByUsername: async username => {

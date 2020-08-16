@@ -221,8 +221,10 @@ router.post('/transferLocal', async (req, res) => {
     }
 })
 
-router.get('/historyLocal/:id', async (req, res) => {
-    const id = req.params.id
+router.get('/historyLocal', async (req, res) => {
+    //?id=&isAll=
+    const id = req.query.id;
+    const isAll = req.query.isAll === 'true';
 
     const historyFromOtherBank = await moneyModel.getHistoryFromOtherBank(id);
     historyFromOtherBank.forEach(element => {
@@ -238,7 +240,15 @@ router.get('/historyLocal/:id', async (req, res) => {
     } else {
         let result = [];
         //Concat 2 arrays by using lodash
+        //const limitTime = Date.now()/1000 - 2592000;
+        const limitTime = 1592047850;
         result = _.concat(historyFromWallet, historyFromSaving);
+        console.log(result);
+
+        if(!isAll) {
+            result = result.filter(el => el.time >= limitTime)
+        }
+
         console.log('result:', result)
         //Encode id_saving and Number to walletId;
         result.forEach(element => {
