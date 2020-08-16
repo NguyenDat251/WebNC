@@ -11,6 +11,8 @@
     - [API dành cho admin](#api-dành-cho-admin)
       - [Xem lịch sử giao dịch với ngân hàng khác](#Xem-lịch-sử-giao-dịch-với-ngân-hàng-khác)
       - [Xem danh sách ngân hàng](#Xem-danh-sách-ngân-hàng)- [Internet Banking](#internet-banking)
+    - [API dành cho USER](#api-dành-cho-user)
+      - [Xem lịch sử giao dịch](#Xem-lịch-sử-giao-dịch)
   
 
 ## Hướng dẫn sử dụng api
@@ -109,3 +111,14 @@ body {
     content: (nội dung)
 }
 ```
+### API dành cho user
+#### Xem lịch sử
+
+```json
+GET api/money/historyLocal
+//?id=&isAll=
+
+```
+
+- id: id người dùng.
+- isAll: mặc định coi 30 ngày thì truyền false, coi hết thì true.
