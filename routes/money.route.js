@@ -16,7 +16,7 @@ const FEE = 3000;
 
 const { encodeWalletId, decodeWalletId } = require('../middlewares/convertWalletId.mdw.js');
 
-const doTheMoney = async (id, money, isSaving, res) => {
+const doTheMoney = async (id, money, isSaving=false, res) => {
     var rsGetCurrentMoney = null;
     if (isSaving === null || !isSaving) {
         rsGetCurrentMoney = await moneyModel.getCurrentMoney(id)
@@ -80,6 +80,7 @@ const addToHistory = async (user, partner, type, money, description, time, isSav
 
 router.post('/addMoney', async (req, res) => {
     //const result = await moneyModel.addMoney(req.body)
+    console.log('req:', req.body)
 
     /*{
         id: "01",
@@ -234,7 +235,6 @@ router.get('/historyLocal', async (req, res) => {
 
     const historyFromWallet = await moneyModel.getHistoryFromWallet(id);
     const historyFromSaving = await moneyModel.getHistoryFromSaving(id);
-    console.log('historyFromSaving:', historyFromSaving)
     if (historyFromWallet.length == 0 && historyFromSaving.length == 0 && historyFromOtherBank.length == 0) {
         response(res, '', 'There is no exchange history')
     } else {
@@ -243,13 +243,11 @@ router.get('/historyLocal', async (req, res) => {
         //const limitTime = Date.now()/1000 - 2592000;
         const limitTime = 1592047850;
         result = _.concat(historyFromWallet, historyFromSaving);
-        console.log(result);
-
+        result = _.sortBy(result, [function(o) { return o.time; }]).reverse();
         if(!isAll) {
             result = result.filter(el => el.time >= limitTime)
         }
 
-        console.log('result:', result)
         //Encode id_saving and Number to walletId;
         result.forEach(element => {
             if (element.isSaving) {
@@ -274,6 +272,8 @@ router.get('/historyLocal', async (req, res) => {
             
         });
         result = _.concat(result, historyFromOtherBank);
+        console.log('result:', result)
+        
         response(res, '', 'Get history successfull', result)
     }
 })
