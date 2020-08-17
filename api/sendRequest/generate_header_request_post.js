@@ -21,14 +21,19 @@ Fv0qItIcqtVZynrY/Co62t5sF0fLBjBZb7X+h0F9jw==
 
 const privateKey = new NodeRSA(privateKeyRSA);
 
-const time = Math.floor(Date.now()/1000);
+const time = Math.floor(Date.now() / 1000);
 const secretKey = `Tj0xYDEDiQF9f2GYCxSv`;
+// const body = {
+//   number: `6`,
+//   money: `1000`,
+//   username: `test`,
+//   content: `abc`
+// };
+
 const body = {
-  number: `6`,
-  money: `1000`,
-  username: `test`,
-  content: `abc`
-};
+  "credit_number": "565572661049",
+  "amount": 200000
+}
 
 const dataToHash = time + ":" + JSON.stringify(body) + ":" + secretKey;
 const hash = sha1(dataToHash);
@@ -39,38 +44,38 @@ console.log("body: ", JSON.stringify(body));
 console.log("hash: ", hash);
 console.log("sig: ", sig);
 
-const host= `http://localhost:8080`;
+const host = `http://localhost:8080`;
 
- axios.post(`${host}/api/partner-bank/add-money`,body ,{
-  //axios.get('https://bankdbb.herokuapp.com/account/1', {
-  // headers: {
-  //   sig: sig.createHash(time,body,"bankdbb"),
-  //   id: 'bankdbb',
-  //   ts: time,
-  //   verify: sig.generateRSASig()
-  // }
-  headers: {
-    sig: hash,
-    id: `kianto`,
-    ts: time,
-    verify: sig
-  }
-})
-  .then(response => {
-    console.log('response: ', response);
+//  axios.post(`${host}/api/partner-bank/add-money`,body ,{
+//   //axios.get('https://bankdbb.herokuapp.com/account/1', {
+//   // headers: {
+//   //   sig: sig.createHash(time,body,"bankdbb"),
+//   //   id: 'bankdbb',
+//   //   ts: time,
+//   //   verify: sig.generateRSASig()
+//   // }
+//   headers: {
+//     sig: hash,
+//     id: `kianto`,
+//     ts: time,
+//     verify: sig
+//   }
+// })
+//   .then(response => {
+//     console.log('response: ', response);
 
-    if(response.data.returnCode == ''){
-      console.log("message")
-      //console.log(response.data.returnMessage)
+//     if(response.data.returnCode == ''){
+//       console.log("message")
+//       //console.log(response.data.returnMessage)
 
-    
-  }else {
-    console.log("data")
-    console.log(response.data);
-  }
-  })
-  .catch(error => {
-    console.log("error")
-    console.log(error.response.data)
-    //console.log(error);
-  });
+
+//   }else {
+//     console.log("data")
+//     console.log(response.data);
+//   }
+//   })
+//   .catch(error => {
+//     console.log("error")
+//     console.log(error.response.data)
+//     //console.log(error);
+//   });
