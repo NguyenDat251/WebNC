@@ -32,12 +32,12 @@ module.exports = {
 
     return false
   },
-  getNameByWalletId: async id_wallet=>{
+  getNameByWalletId: async id_wallet => {
     return db.load(`select a.name,a.id from account as a, moneyaccount as ma
     where a.id = ma.idParent and ma.Number =${id_wallet}`)
   },
   getUserInfoByUsername: async username => {
-    return db.load(`select a.username,a.name,a.email,a.phone,a.identity_number as idenityNumber,a.dob,m.Money as balance,m.Number as walletNumber
+    return db.load(`select a.username,a.role,a.name,a.email,a.phone,a.identity_number as idenityNumber,a.dob,m.Money as balance,m.Number as walletNumber
     from account as a,moneyaccount as m 
     where a.id = m.idParent and a.username = '${username}';`)
   },
@@ -112,7 +112,7 @@ module.exports = {
   },
 
   deleteOTP: () => {
-    const timeToCompare = Math.floor(Date.now()/1000) - 300;
+    const timeToCompare = Math.floor(Date.now() / 1000) - 300;
     //console.log("delete otp time: ", timeToCompare)
     return db.load(`delete from otp where time < '${timeToCompare}'`)
   },
@@ -122,7 +122,7 @@ module.exports = {
     return db.load(`update account set password_hash = '${pw}' where email = '${entity.email}'`)
   },
 
-  getList: role =>  {
+  getList: role => {
     return db.load(`select * from account where role = '${role}'`)
   },
 
@@ -132,7 +132,7 @@ module.exports = {
 
   updateUser: (username, entity) => {
     // return db.load(`update from account where username = '${entity.username}' set name = '${entity.name}', email = '${entity.email}', phone = '${entity.phone}', role = '${entity.role}', identity_number = '${entity.identity_number}'`)
-    return db.edit(entity, {username}, 'account')
+    return db.edit(entity, { username }, 'account')
   },
 
   deleteUser: id => {
