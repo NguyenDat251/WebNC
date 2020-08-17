@@ -1,16 +1,16 @@
 module.exports = {
 
-        getInfo: () => {
-                return {
-                        "rsa-bank": {
-                            SecretKey: "thisisatokenfroma",
-                            PublicRSAKey: `-----BEGIN PUBLIC KEY-----
+    getInfo: () => {
+        return {
+            "rsa-bank": {
+                SecretKey: "thisisatokenfroma",
+                PublicRSAKey: `-----BEGIN PUBLIC KEY-----
                             MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEUZJwvTYorustQY+F3iqhJe+M
                             +vk10V1gd+tXAT5eQ6Bfx/EOEEoFiwnH/I5KmRx3D3a2GHgWYILDnCVo5Kn6HH/R
                             Iuvi11rlvK5C798WYRjvNkOlcfI3M6ixQf+fAJSnflOqCcoPp/RM0HgcywoTkNWK
                             PQYpPpk9tno/qlOcwwIDAQAB
                             -----END PUBLIC KEY-----`,
-                            PublicKey: `-----BEGIN PGP PUBLIC KEY BLOCK-----
+                PublicKey: `-----BEGIN PGP PUBLIC KEY BLOCK-----
                             Version: Keybase OpenPGP v1.0.0
                             Comment: https://keybase.io/crypto
                             
@@ -65,28 +65,27 @@ module.exports = {
                             u5RMN8INapOvye5lCw==
                             =JFcr
                             -----END PGP PUBLIC KEY BLOCK-----`,
-                            host: ''
-                        },
-                        kianto: {
-                            SecretKey: "Tj0xYDEDiQF9f2GYCxSv",
-                            PublicKey: `-----BEGIN PUBLIC KEY-----
+                host: ''
+            },
+            kianto: {
+                SecretKey: "Tj0xYDEDiQF9f2GYCxSv",
+                PublicKey: `-----BEGIN PUBLIC KEY-----
             MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJlQZ/m1+iLfK/lpYDmicle6v0
             llLWtdYhSkH6buiOrNbaXVH//ZcG9TpOLU1vL+PkvprCZ/N1Stqz0xNrzcdT0zFI
             xQSr31fB1qzD2+T4njBcGROStv0uxhaarmWVJwjLia0rlL7grRL0axw4rESM9nsN
             be8XnJGVKtFy9MXHBwIDAQAB
             -----END PUBLIC KEY-----`,
-            PublicRSAKey: `-----BEGIN PUBLIC KEY-----
+                PublicRSAKey: `-----BEGIN PUBLIC KEY-----
             MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJlQZ/m1+iLfK/lpYDmicle6v0
             llLWtdYhSkH6buiOrNbaXVH//ZcG9TpOLU1vL+PkvprCZ/N1Stqz0xNrzcdT0zFI
             xQSr31fB1qzD2+T4njBcGROStv0uxhaarmWVJwjLia0rlL7grRL0axw4rESM9nsN
             be8XnJGVKtFy9MXHBwIDAQAB
             -----END PUBLIC KEY-----`,
-            host: 'http://bank-backend.khuedoan.com/'
-                        },
-                        bankdbb: {
-                            SecretKey: "bankdbb",
-                            privateKey: 
-                            `-----BEGIN RSA PRIVATE KEY-----
+                host: 'http://bank-backend.khuedoan.com/'
+            },
+            bankdbb: {
+                SecretKey: "bankdbb",
+                privateKey: `-----BEGIN RSA PRIVATE KEY-----
 MIICWwIBAAKBgHvGfCrOsLPolKTOprqzguNp85gkGdh/wbCBtXBtX7ObMSPqBN0a
 FgijRfn0NKolIn0ievEiab82ttBO57FGgNWG+fm/CqX72dOpit9A5WqdwKY5iI/0
 yO+WNMtJqLwJ5qs/Cp0EwFAbqMh/4Uxsyaiw029hX2IJEdW8oYb+0mwPAgMBAAEC
@@ -101,34 +100,76 @@ W4vRMjuB9VqKvrbzATHeVQj2T2/d1g8B/6+nTe6Wubuo2FMNhF3CkvZqpRQaMns1
 Pzego9xqi4i3BZDHAkEAjGkNaEYa9PiQiBUUY9po/7CzWsIdASxR+w4B4D2cHPhE
 Fv0qItIcqtVZynrY/Co62t5sF0fLBjBZb7X+h0F9jw==
 -----END RSA PRIVATE KEY-----`,
-//                             privateKey:
-//                             `-----BEGIN RSA PRIVATE KEY-----
-// MIICWwIBAAKBgQCJlQZ/m1+iLfK/lpYDmicle6v0llLWtdYhSkH6buiOrNbaXVH/
-// /ZcG9TpOLU1vL+PkvprCZ/N1Stqz0xNrzcdT0zFIxQSr31fB1qzD2+T4njBcGROS
-// tv0uxhaarmWVJwjLia0rlL7grRL0axw4rESM9nsNbe8XnJGVKtFy9MXHBwIDAQAB
-// AoGAFxRq3KlB58DxgfZPABeyDXWrqQI2r1Ids8PzQYGtfZG9ETCqetkdpssolsi+
-// vrI39r2K1KX/j2OZQKVeEq2YjFR+etusQzCRF6jqbk5O+/ajLL4veyxKQmTQXDVx
-// DwjsRDc1MvMsfqmnk5b0uYs9ntnT/iaqkLVtEwKMpnjFW/ECQQDvfz1wpjRKCduV
-// sdaH1JxqKw2mYu79Cyp7LkHKz0fvfg6SP7EAPt4j7dlBuA0n99OAklcvtfVpiXF3
-// rQOauC99AkEAkw/+JX4dfvGXOQ+fZerFamOUjVLEhH7I19wrHU4y56SDC2uQ1Q9n
-// xvxH81CxFTN7HXOKQ8uFNY06kyfzWNif0wJAd+dhMEPVy/eReymU+V4ljTXO2K2R
-// bxinBRLMl6gdILcgvnGqwS+4cY6EBdYKqCb4OdeKVPWpT1QjfcIeGtj51QJAMZgC
-// F/i4z7d/TOHk2kTbAG7GiQYxeZEcABeifoaBijajbrV+qStBzwwC454BqemrihoN
-// taErsgyHhVrCqOKcuwJAWyuluw+LXjvwY/sFgPXLqCPMfEP4kBXhqM/+hHK7ZerR
-// aLvYFAwzssSuUGlksRon0xjQ7M9P2+Bld3gcV6hUyg==
-// -----END RSA PRIVATE KEY-----`,
-                            PublicKey: `-----BEGIN PUBLIC KEY-----
+                privatePGPKey: `-----BEGIN PGP PRIVATE KEY BLOCK-----
+Version: Keybase OpenPGP v1.0.0
+Comment: https://keybase.io/crypto
+
+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
+ciwCLX6LYUgvz7Fi/MxthKboqA7t4rM7LWk=
+=Sghu
+-----END PGP PRIVATE KEY BLOCK-----
+`,
+                PublicKey: `-----BEGIN PUBLIC KEY-----
                             MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSHgxSkQ2wHFcV/lxVOZPOemKd
                             ho4Hpl95JSD0kUQE/3WYeroRUeGLNm86s8EWg5tREzLIi2CzJ1Q6fcHvPHjg8Mr/
                             WLU4YvS8h5i1Jk+Kd7lf5VEaWFuAX+bEuQ7qt0TAx07o3HOJDNfG/d6k1rLg346y
                             scQzONE8Ui++wGJM+wIDAQAB-----END PUBLIC KEY-----`,
-                            PublicRSAKey: `-----BEGIN PUBLIC KEY-----
+                PublicRSAKey: `-----BEGIN PUBLIC KEY-----
                             MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSHgxSkQ2wHFcV/lxVOZPOemKd
                             ho4Hpl95JSD0kUQE/3WYeroRUeGLNm86s8EWg5tREzLIi2CzJ1Q6fcHvPHjg8Mr/
                             WLU4YvS8h5i1Jk+Kd7lf5VEaWFuAX+bEuQ7qt0TAx07o3HOJDNfG/d6k1rLg346y
                             scQzONE8Ui++wGJM+wIDAQAB-----END PUBLIC KEY-----`
-                        }
-                    }
-
-                }
             }
+        }
+
+    }
+}

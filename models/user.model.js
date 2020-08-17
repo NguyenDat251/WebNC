@@ -11,7 +11,10 @@ module.exports = {
     delete entity.password;
     const resultAddUser = await db.add(entity, 'account');
 
-    return db.add({ money: 0, id: resultAddUser.insertId }, 'MoneyAccount')
+    return db.add({
+      money: 0,
+      id: resultAddUser.insertId
+    }, 'MoneyAccount')
   },
 
   getIdByUsername: async username => {
@@ -32,7 +35,7 @@ module.exports = {
 
     return false
   },
-  getNameByWalletId: async id_wallet=>{
+  getNameByWalletId: async id_wallet => {
     return db.load(`select a.name,a.id from account as a, moneyaccount as ma
     where a.id = ma.idParent and ma.Number =${id_wallet}`)
   },
@@ -61,7 +64,11 @@ module.exports = {
 
   updateRefreshToken: async (userId, token) => {
 
-    await db.del({ id: userId }, 'userrefreshtokenext');
+    // await db.del({
+    //   id: userId
+    // }, 'userrefreshtokenext');
+
+    await db.load(`delete from userrefreshtokenext where id = ${userId}`);
 
     const entity = {
       id: userId,
@@ -100,7 +107,11 @@ module.exports = {
     const hash = bcrypt.hashSync(entity.password_hash, 8);
     entity.password_hash = hash;
 
-    return db.edit({ password_hash: entity.password_hash }, { id: entity.userId }, 'account')
+    return db.edit({
+      password_hash: entity.password_hash
+    }, {
+      id: entity.userId
+    }, 'account')
   },
 
   checkOTPExisted: otp => {
@@ -112,7 +123,7 @@ module.exports = {
   },
 
   deleteOTP: () => {
-    const timeToCompare = Math.floor(Date.now()/1000) - 300;
+    const timeToCompare = Math.floor(Date.now() / 1000) - 300;
     //console.log("delete otp time: ", timeToCompare)
     return db.load(`delete from otp where time < '${timeToCompare}'`)
   },
@@ -122,7 +133,7 @@ module.exports = {
     return db.load(`update account set password_hash = '${pw}' where email = '${entity.email}'`)
   },
 
-  getList: role =>  {
+  getList: role => {
     return db.load(`select * from account where role = '${role}'`)
   },
 
@@ -132,10 +143,12 @@ module.exports = {
 
   updateUser: (username, entity) => {
     // return db.load(`update from account where username = '${entity.username}' set name = '${entity.name}', email = '${entity.email}', phone = '${entity.phone}', role = '${entity.role}', identity_number = '${entity.identity_number}'`)
-    return db.edit(entity, {username}, 'account')
+    return db.edit(entity, {
+      username
+    }, 'account')
   },
 
   deleteUser: id => {
-    return db.del(id, `account`)
+    return db.load(`delete from account where id = ${id}`);
   }
 };
