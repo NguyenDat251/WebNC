@@ -5,6 +5,7 @@ const config = require('../config/default.json');
 const bcrypt = require('bcryptjs');
 
 const router = express.Router();
+const { encodeWalletId, decodeWalletId } = require('../middlewares/convertWalletId.mdw.js');
 
 var { response, DEFINED_CODE } = require('../config/response');
 var { mailer } = require('../utils/nodemailer');
@@ -70,7 +71,8 @@ router.get('/getInfoUserByUsername/:username', async (req, res) => {
 })
 router.get('/getInfoUserByWalletId/:idWallet', async (req, res) => {
 
-    let idWallet = req.params.idWallet;
+    let idWallet = decodeWalletId( req.params.idWallet);
+    console.log('idWallet:', idWallet)
     if (idWallet) {
         const result = await userModel.getUserInfoByWalletId(idWallet)
         res.status(200).json({
@@ -116,6 +118,7 @@ const doTheMoney = async (username, money, res) => {
 }
 
 router.post('/addMoney', async (req, res) => {
+    console.log('req:', req)
     //const result = await moneyModel.addMoney(req.body)
 
     /*{

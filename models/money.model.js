@@ -36,10 +36,12 @@ module.exports = {
     return db.load(`select o.*, m.Number from otherbanktransaction as o, moneyaccount as m where user = ${id} and m.idParent = ${id}`);
   },
   getHistoryFromWallet: id => {
-    console.log("id: ", id)
+    console.log(`select  a.id,a.name,h.*,ma.Number,'Main Account' as name
+    from history as h,account as a,moneyaccount as ma  
+    where ma.idParent= a.id and ma.Number = h.user and a.id= ${id} and h.isSaving = 0;`)
     return db.load(`select  a.id,a.name,h.*,ma.Number,'Main Account' as name
         from history as h,account as a,moneyaccount as ma  
-        where ma.idParent= a.id and ma.idParent = h.user and a.id= ${id} and h.isSaving = 0;`)
+        where ma.idParent= a.id and ma.Number = h.user and a.id= ${id} and h.isSaving = 0;`)
   },
   getHistoryFromSaving: id => {
     console.log("id: ", id)

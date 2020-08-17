@@ -40,7 +40,7 @@ module.exports = {
     where a.id = ma.idParent and ma.Number =${id_wallet}`)
   },
   getUserInfoByUsername: async username => {
-    return db.load(`select a.username,a.name,a.email,a.phone,a.identity_number as idenityNumber,a.dob,m.Money as balance,m.Number as walletNumber
+    return db.load(`select a.username,a.role,a.name,a.email,a.phone,a.identity_number as idenityNumber,a.dob,m.Money as balance,m.Number as walletNumber
     from account as a,moneyaccount as m 
     where a.id = m.idParent and a.username = '${username}';`)
   },
@@ -143,9 +143,11 @@ module.exports = {
 
   updateUser: (username, entity) => {
     // return db.load(`update from account where username = '${entity.username}' set name = '${entity.name}', email = '${entity.email}', phone = '${entity.phone}', role = '${entity.role}', identity_number = '${entity.identity_number}'`)
+
     return db.edit(entity, {
       username
     }, 'account')
+
   },
 
   deleteUser: id => {

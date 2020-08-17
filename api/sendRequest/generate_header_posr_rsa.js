@@ -34,6 +34,7 @@ gP78h6zdxHh1xq/oLavoZue7xpP6nFMQmRrqPek8+A==
 -----END RSA PRIVATE KEY-----`
 
 function RSASign(data) {
+  console.log('data to sign: ', data)
   const privateKey = Info["bankdbb"].privateKey;
   // const privateKey = linhKey;
   const sign = crypto.createSign('RSA-SHA256')
@@ -44,12 +45,18 @@ function RSASign(data) {
 
 const secretKey = "Tj0xYDEDiQF9f2GYCxSv";
 const time = Math.floor(Date.now() / 1000);
+//const time = 1597631193;
 const body = {
-  "credit_number": 565572661049,
-  "amount": 20000
+  "credit_number": "565572661049",
+  "amount": 200000
 };
-//const dataToHash = time + secretKey + JSON.stringify(body);
-const dataToHash = '1589520986kQYtFpj7pJfi5VVfoeGD{"credit_number":"565572661049","amount":200000}';
+
+console.log('body string: ', JSON.stringify(body))
+console.log('{"credit_number":"565572661049","amount":200000}')
+console.log("is equal: ", JSON.stringify(body) === '{"credit_number":"565572661049","amount":200000}')
+
+const dataToHash = time + secretKey + JSON.stringify(body);
+//const dataToHash = '1589520986kQYtFpj7pJfi5VVfoeGD{"credit_number":"565572661049","amount":200000}';
 const hash = crypto.createHash('sha256').update(dataToHash).digest('base64');
 
 const signature =  RSASign(dataToHash);
@@ -60,8 +67,10 @@ function RSAVerify(publicKey, signature, data) {
   console.log(verify.verify(publicKey, signature, 'base64'));
 }
 
+const publicKey = Info["bankdbb"].publicKey;
+
 console.log("time: ", time);
 console.log("body: ", body);
 console.log("hash: ", hash);
 console.log("sig: ", signature);
-console.log('verify: ', RSAVerify(linhPublic, signature, dataToHash));
+console.log('verify: ', RSAVerify(publicKey, signature, dataToHash));
