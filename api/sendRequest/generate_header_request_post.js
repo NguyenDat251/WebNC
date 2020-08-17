@@ -38,11 +38,6 @@ const body = {
 const dataToHash = time + ":" + JSON.stringify(body) + ":" + secretKey;
 const hash = sha1(dataToHash);
 const sig = privateKey.sign(secretKey, 'base64', 'base64');
-console.log("time: " + time);
-console.log("secretKey: ", secretKey);
-console.log("body: ", JSON.stringify(body));
-console.log("hash: ", hash);
-console.log("sig: ", sig);
 
 const host = `http://localhost:8080`;
 
