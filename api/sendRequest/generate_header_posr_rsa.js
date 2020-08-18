@@ -48,7 +48,7 @@ const time = Math.floor(Date.now() / 1000);
 //const time = 1597631193;
 const body = {
   "credit_number": "565572661049",
-  "amount": 200000
+  "amount": 100000
 };
 
 console.log('body string: ', JSON.stringify(body))
