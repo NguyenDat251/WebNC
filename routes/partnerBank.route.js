@@ -13,10 +13,14 @@ const sha1 = require("sha1");
 const md5 = require("md5");
 const axios = require("axios");
 
-const hostPGP = "http://55a363d49088.ngrok.io";
+const hostPGP = "https://final-ib.herokuapp.com";
 
-const { promisify } = require("util");
-var { response } = require("../config/response");
+const {
+  promisify
+} = require("util");
+var {
+  response
+} = require("../config/response");
 
 let partnerInfoKey;
 
@@ -127,7 +131,9 @@ async function signPGP() {
   } = await openpgp.key.readArmored(MyprivateKeyArmored);
   await privateKey.decrypt(passphrase);
 
-  const { signature: cleartext } = await openpgp.sign({
+  const {
+    signature: cleartext
+  } = await openpgp.sign({
     message: openpgp.cleartext.fromText("thisisatokenfroma"), // CleartextMessage or Message object
     privateKeys: [privateKey], // for signing,
     detached: true,
@@ -149,14 +155,12 @@ const sendMoneyPGP = async (body) => {
 
   await signPGP().then((x) => {
     console.log("buffer: ", new Buffer.from(x).toString("base64"));
-
+    const url = hostPGP + '/api/account/money'
     return axios
       .post(
-        "http://55a363d49088.ngrok.io/api/account/money",
-        {
+        url, {
           bodyToSend,
-        },
-        {
+        }, {
           headers: {
             csi: sha1(time + JSON.stringify(bodyToSend) + "thisisatokenfroma"),
             partnerCode: "rsa-bank",
@@ -283,8 +287,7 @@ const getInfoRSA = (res, credit_number) => {
   axios
     .get(
       "http://bank-backend.khuedoan.com/api/partner/get-account-info?credit_number=" +
-        credit_number,
-      {
+      credit_number, {
         //axios.get('https://bankdbb.herokuapp.com/account/1', {
         headers: {
           "authen-hash": hash,
@@ -465,17 +468,25 @@ router.post("/add-money", async (req, res) => {
     return;
   }
 
-  // if (!checkTime(req.headers.ts)) {
-  //   console.log("The request is out of date!");
-  //   response(res, "err", "The request is out of date!");
-  //   return;
-  // }
+  if (!checkTime(req.headers.ts)) {
+    console.log("The request is out of date!");
+    response(res, "err", "The request is out of date!");
+    return;
+  }
+
+  console.log('body: ', req.body);
 
   //thực hiện api
   const idParent = req.body.number;
 
-  let CurrentMoney = await moneyModel.getCurrentMoneyFromIdUser(idParent);
-  CurrentMoney = parseInt(CurrentMoney[0].money);
+  const currentAccount = await moneyModel.getCurrentMoneyFromIdUser(idParent);
+
+  if (!currentAccount) {
+    response(req, 'err', 'user is not existed');
+    return;
+  }
+
+  let CurrentMoney = parseInt(currentAccount[0].money);
 
   if (!CurrentMoney) {
     response(res, "err", "error when getting money user");
