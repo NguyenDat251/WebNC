@@ -233,7 +233,7 @@ const sendMoneyRSA = async (data) => {
 
 const getInfoPGP = (res) => {
   const time = Math.floor(Date.now() / 1000);
-
+  console.log('time12345:', time)
   const url = hostPGP + "/api/account/info";
 
   axios
@@ -245,13 +245,15 @@ const getInfoPGP = (res) => {
       },
     })
     .then((result) => {
+      console.log('result:', result)
       response(res, "", "success", result.data);
       //response(res, '', 'transfer money successful')
 
-      console.log(result.data);
+      console.log("result: ",result.data);
       return result;
     })
     .catch((error) => {
+      console.log('error:', error)
       response(res, "err", "not success", error.data);
       console.log(error.data);
       return null;

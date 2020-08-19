@@ -13,7 +13,12 @@ module.exports = {
         return db.add(entity, 'recipients')
     },
     editRecipient: async (data) => {
-        let sqlUpdate = `UPDATE recipients set name_recipient = '${data.name_recipient}' where id='${data.id }' and id_recipient ='${data.id_recipient}'`
+        let sqlUpdate='';
+        if(data.id_recipient)
+         sqlUpdate = `UPDATE recipients set name_recipient = '${data.name_recipient}' where id='${data.id }' and id_recipient ='${data.id_recipient}'`;
+        else
+         sqlUpdate = `UPDATE recipients set name_recipient = '${data.name_recipient}' where id='${data.id }' and walletId = ${data.walletId}`;
+        console.log('sqlUpdate:', sqlUpdate)
         return db.load(sqlUpdate)
     },
     checkExistRecipient: async(id,id_recipient)=>{

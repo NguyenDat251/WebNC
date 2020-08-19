@@ -267,19 +267,24 @@ router.get('/historyLocal', async (req, res) => {
             }
             element.user = element.type == 2 ? element.name + ` (${element.user})`: element.user;
             element.partner = element.type == 1 ? element.name  + ` (${element.partner})`: element.partner;
-            element.time = moment(element.time * 1000).format("DD-MM-YYYY hh:mm a")
+            // element.time = moment(element.time * 1000).format("DD-MM-YYYY hh:mm a")
             element.type = (element.type == 1 ? 'Credited' : (element.type == 2 ? 'Transfer' : 'Debted'));
             
         });
         historyFromOtherBank.forEach(element=>{
             element.description = element.content;
-            element.time = moment(element.time * 1000).format("DD-MM-YYYY hh:mm a")
+            // element.time = moment(element.time * 1000).format("DD-MM-YYYY hh:mm a")
             element.money_transfer= element.money;
-            element.partner = element.partner+ ` ${element.bankcode} Bank`;
+            element.partner = element.partner+ ` (${element.bankcode} Bank)`;
+            element.type = (element.type == 1 ? 'Credited' : (element.type == 2 ? 'Transfer' : 'Debted'));
+
         })
         console.log('historyFromOtherBank:', historyFromOtherBank)
         result = _.concat(result, historyFromOtherBank);
-        
+        result = _.sortBy(result, [function(o) { return o.time; }]).reverse();
+        result.forEach(element=>{
+            element.time = moment(element.time * 1000).format("DD-MM-YYYY hh:mm a")
+        })
         response(res, '', 'Get history successfull', result)
     }
 })

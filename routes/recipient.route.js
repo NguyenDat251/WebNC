@@ -23,7 +23,7 @@ router.post('/addRecipientLocal', async (req, res) => {
                 res.status(201).json({
                     returnCode: -1,
                     message: `Your recipients already Exist!!`,
-        
+
                 })
             }
             else {
@@ -39,8 +39,7 @@ router.post('/addRecipientLocal', async (req, res) => {
         })
     }
     //add account la recipient
-    else
-    {
+    else {
         res.status(201).json({
             returnCode: -2,
             message: `You can't add yourself to recipients`,
@@ -52,7 +51,7 @@ router.post('/addRecipientLocal', async (req, res) => {
 })
 router.post('/addRecipientForeign', async (req, res) => {
     console.log('body:', req.body);
-    const { id, id_recipient ,walletId} = req.body;
+    const { id, id_recipient, walletId } = req.body;
     if (id != id_recipient) {
         RecipientModel.checkExistRecipientForegin(id, walletId).then(data => {
             console.log('data:', data);
@@ -61,7 +60,7 @@ router.post('/addRecipientForeign', async (req, res) => {
                 res.status(201).json({
                     returnCode: -1,
                     message: `Your recipients already Exist!!`,
-        
+
                 })
             }
             else {
@@ -77,8 +76,7 @@ router.post('/addRecipientForeign', async (req, res) => {
         })
     }
     //add account la recipient
-    else
-    {
+    else {
         res.status(201).json({
             returnCode: -2,
             message: `You can't add yourself to recipients`,
@@ -89,7 +87,7 @@ router.post('/addRecipientForeign', async (req, res) => {
 
 })
 router.put('/editRecipient', async (req, res) => {
-
+    console.log('req:', req.body)
     if (req.body) {
         RecipientModel.editRecipient(req.body).then(data => {
             res.status(201).json({
@@ -109,8 +107,8 @@ router.put('/editRecipient', async (req, res) => {
 
 })
 router.delete('/deleteRecipient', async (req, res) => {
-
-    req.body.walletId = decodeWalletId(req.body.walletId);
+    if (req.body.isLocal)
+        req.body.walletId = decodeWalletId(req.body.walletId);
     if (req.body) {
         RecipientModel.deleteRecipient(req.body).then(data => {
             res.status(201).json({
@@ -137,8 +135,8 @@ router.get('/getAllRecipient/:id', async (req, res) => {
         const result = await RecipientModel.getAllRecipients(id)
 
         result.forEach(element => {
-
-            element.walletId = encodeWalletId(element.walletId);
+            if (element.isLocal)
+                element.walletId = encodeWalletId(element.walletId);
 
         })
 
@@ -191,7 +189,7 @@ router.get('/getRecipientForeign/:id', async (req, res) => {
 
     if (id) {
         const result = await RecipientModel.getRecipientForeign(id)
-      
+
 
 
         res.status(200).json({
