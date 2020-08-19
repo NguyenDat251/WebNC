@@ -231,10 +231,10 @@ const sendMoneyRSA = async (data) => {
   return result;
 };
 
-const getInfoPGP = (res) => {
+const getInfoPGP = (res, number) => {
   const time = Math.floor(Date.now() / 1000);
-  console.log('time12345:', time)
-  const url = hostPGP + "/api/account/info";
+
+  const url = hostPGP + "/api/account/info/" + number;
 
   axios
     .get(url, {
@@ -255,7 +255,7 @@ const getInfoPGP = (res) => {
     .catch((error) => {
       console.log('error:', error)
       response(res, "err", "not success", error.data);
-      console.log(error.data);
+      console.log(error);
       return null;
     });
 };
@@ -346,7 +346,7 @@ router.get("/transaction", async (req, res) => {
   const toDate = parseInt(req.query.to || 0);
   const nameBank = req.query.name || "";
 
-  const month = parseInt(time.substr(0, 2));
+  const month = parseInt(time.substr(0, 2)) - 1;
   const year = parseInt(time.substr(2, 6));
 
   let nextMonth, nextYear;
@@ -363,6 +363,13 @@ router.get("/transaction", async (req, res) => {
       nextYear = year;
     }
   }
+
+  console.log('from year: ', year);
+  console.log('from month: ', month);
+  console.log('from date: ', fromDate);
+  console.log('from year: ', nextYear);
+  console.log('from year: ', nextMonth);
+  console.log('from year: ', toDate);
 
   const TimeFrom = new Date(year, month, fromDate).getTime() / 1000;
   const TimeTo = new Date(nextYear, nextMonth, toDate).getTime() / 1000;
@@ -587,8 +594,13 @@ router.post("/send-money", async (req, res) => {
 router.get("/info-partner/:idBank/:credit_number", async (req, res) => {
   const CodeBankPGP = "rsa-bank";
 
-  if (req.params.idBank == CodeBankPGP) getInfoPGP(res);
-  else getInfoRSA(res, req.params.credit_number);
+  if (req.params.idBank == CodeBankPGP) {
+    console.log('get info pgp');
+    getInfoPGP(res, req.params.credit_number);
+  } else {
+    console.log('get info rsa');
+    getInfoRSA(res, req.params.credit_number);
+  }
 });
 
 module.exports = router;
