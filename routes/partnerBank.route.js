@@ -344,7 +344,7 @@ router.get("/transaction", async (req, res) => {
   const toDate = parseInt(req.query.to || 0);
   const nameBank = req.query.name || "";
 
-  const month = parseInt(time.substr(0, 2));
+  const month = parseInt(time.substr(0, 2)) - 1;
   const year = parseInt(time.substr(2, 6));
 
   let nextMonth, nextYear;
@@ -361,6 +361,13 @@ router.get("/transaction", async (req, res) => {
       nextYear = year;
     }
   }
+
+  console.log('from year: ', year);
+  console.log('from month: ', month);
+  console.log('from date: ', fromDate);
+  console.log('from year: ', nextYear);
+  console.log('from year: ', nextMonth);
+  console.log('from year: ', toDate);
 
   const TimeFrom = new Date(year, month, fromDate).getTime() / 1000;
   const TimeTo = new Date(nextYear, nextMonth, toDate).getTime() / 1000;
