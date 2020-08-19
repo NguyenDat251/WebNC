@@ -231,10 +231,10 @@ const sendMoneyRSA = async (data) => {
   return result;
 };
 
-const getInfoPGP = (res) => {
+const getInfoPGP = (res, number) => {
   const time = Math.floor(Date.now() / 1000);
 
-  const url = hostPGP + "/api/account/info";
+  const url = hostPGP + "/api/account/info/" + number;
 
   axios
     .get(url, {
@@ -253,7 +253,7 @@ const getInfoPGP = (res) => {
     })
     .catch((error) => {
       response(res, "err", "not success", error.data);
-      console.log(error.data);
+      console.log(error);
       return null;
     });
 };
@@ -592,8 +592,13 @@ router.post("/send-money", async (req, res) => {
 router.get("/info-partner/:idBank/:credit_number", async (req, res) => {
   const CodeBankPGP = "rsa-bank";
 
-  if (req.params.idBank == CodeBankPGP) getInfoPGP(res);
-  else getInfoRSA(res, req.params.credit_number);
+  if (req.params.idBank == CodeBankPGP) {
+    console.log('get info pgp');
+    getInfoPGP(res, req.params.credit_number);
+  } else {
+    console.log('get info rsa');
+    getInfoRSA(res, req.params.credit_number);
+  }
 });
 
 module.exports = router;
