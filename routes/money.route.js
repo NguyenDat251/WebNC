@@ -271,8 +271,14 @@ router.get('/historyLocal', async (req, res) => {
             element.type = (element.type == 1 ? 'Credited' : (element.type == 2 ? 'Transfer' : 'Debted'));
             
         });
+        historyFromOtherBank.forEach(element=>{
+            element.description = element.content;
+            element.time = moment(element.time * 1000).format("DD-MM-YYYY hh:mm a")
+            element.money_transfer= element.money;
+            element.partner = element.partner+ ` ${element.bankcode} Bank`;
+        })
+        console.log('historyFromOtherBank:', historyFromOtherBank)
         result = _.concat(result, historyFromOtherBank);
-        console.log('result:', result)
         
         response(res, '', 'Get history successfull', result)
     }
