@@ -16,6 +16,11 @@ const axios = require("axios");
 const hostPGP = "https://final-ib.herokuapp.com";
 
 const {
+  encodeWalletId,
+  decodeWalletId
+} = require('../middlewares/convertWalletId.mdw.js');
+
+const {
   promisify
 } = require("util");
 var {
@@ -407,7 +412,7 @@ router.get("/info/:number", async (req, res) => {
     return;
   }
 
-  const resultInfo = await userModel.getUserInfoByWalletId(req.params.number);
+  const resultInfo = await userModel.getUserInfoByWalletId(decodeWalletId(req.params.number));
 
   if (!resultInfo) {
     response(res, "err", "Error when get infomation user");
@@ -462,7 +467,7 @@ router.post("/add-money", async (req, res) => {
   console.log('body: ', req.body);
 
   //thực hiện api
-  const idParent = req.body.number;
+  const idParent = decodeWalletId(req.body.number);
 
   const currentAccount = await moneyModel.getCurrentMoneyFromIdUser(idParent);
 
