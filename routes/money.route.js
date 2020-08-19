@@ -289,6 +289,81 @@ router.get('/historyLocal', async (req, res) => {
     }
 })
 
-
+router.get('/historyLocalByUsername', async (req, res) => {
+    //?id=&isAll=
+    const isAll = req.query.isAll === 'true';
+    const user = await userModel.getIdByUsername(req.query.username);
+    console.log('user:', user)
+    if(user.length>0)
+    {
+        const id = user[0].id;
+        const historyFromOtherBank = await moneyModel.getHistoryFromOtherBank(id);
+        historyFromOtherBank.forEach(element => {
+            element.user = encodeWalletId(element.user);
+            element.isSaving = false;
+        })
+    
+        const historyFromWallet = await moneyModel.getHistoryFromWallet(id);
+        const historyFromSaving = await moneyModel.getHistoryFromSaving(id);
+        if (historyFromWallet.length == 0 && historyFromSaving.length == 0 && historyFromOtherBank.length == 0) {
+            response(res, '', 'There is no exchange history')
+        } else {
+            let result = [];
+            //Concat 2 arrays by using lodash
+            //const limitTime = Date.now()/1000 - 2592000;
+            const limitTime = 1592047850;
+            result = _.concat(historyFromWallet, historyFromSaving);
+            result = _.sortBy(result, [function(o) { return o.time; }]).reverse();
+            if(!isAll) {
+                result = result.filter(el => el.time >= limitTime)
+            }
+    
+            //Encode id_saving and Number to walletId;
+            result.forEach(element => {
+                if (element.isSaving) {
+                    if (element.type == 2) {
+                        element.user = encodeWalletId(element.user, element.isSaving);
+                        element.partner = encodeWalletId(element.partner);
+                    }
+                    else {
+                        element.user = encodeWalletId(element.user);
+                        element.partner = encodeWalletId(element.partner, element.isSaving);
+                    }
+                }
+                else {
+                    element.user = encodeWalletId(element.user);
+                    element.partner = encodeWalletId(element.partner);
+    
+                }
+                element.user = element.type == 2 ? element.name + ` (${element.user})`: element.user;
+                element.partner = element.type == 1 ? element.name  + ` (${element.partner})`: element.partner;
+                // element.time = moment(element.time * 1000).format("DD-MM-YYYY hh:mm a")
+                element.type = (element.type == 1 ? 'Credited' : (element.type == 2 ? 'Transfer' : 'Debted'));
+                
+            });
+            historyFromOtherBank.forEach(element=>{
+                element.description = element.content;
+                // element.time = moment(element.time * 1000).format("DD-MM-YYYY hh:mm a")
+                element.money_transfer= element.money;
+                element.partner = element.partner+ ` (${element.bankcode} Bank)`;
+                element.type = (element.type == 1 ? 'Credited' : (element.type == 2 ? 'Transfer' : 'Debted'));
+    
+            })
+            console.log('historyFromOtherBank:', historyFromOtherBank)
+            result = _.concat(result, historyFromOtherBank);
+            result = _.sortBy(result, [function(o) { return o.time; }]).reverse();
+            result.forEach(element=>{
+                element.time = moment(element.time * 1000).format("DD-MM-YYYY hh:mm a")
+            })
+            response(res, '', 'Get history successfull', result)
+        }
+    }
+    else
+    {
+        response(res, '', 'Cannot find username have history');
+ 
+    }
+   
+})
 
 module.exports = router;

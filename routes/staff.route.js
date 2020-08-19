@@ -62,16 +62,29 @@ router.get('/getInfoUserByUsername/:username', async (req, res) => {
     console.log('username: ', username);
     if (username) {
         const result = await userModel.getUserInfoByUsername(username)
-        res.status(200).json({
-            returnCode: 1,
-            message: `Get Data Success by username: ${username}`,
-            data: result
-        });
+        console.log('result:', result)
+        if (result.length > 0) {
+            result[0].walletNumber = encodeWalletId(result[0].walletNumber);
+            res.status(200).json({
+                returnCode: 1,
+                message: `Get Data Success by username: ${username}`,
+                data: result
+            });
+        }
+        else {
+            res.status(200).json({
+                returnCode: 1,
+                message: `Empty data when get info username: ${username}`,
+
+            });
+        }
     }
+
+
 })
 router.get('/getInfoUserByWalletId/:idWallet', async (req, res) => {
 
-    let idWallet = decodeWalletId( req.params.idWallet);
+    let idWallet = decodeWalletId(req.params.idWallet);
     console.log('idWallet:', idWallet)
     if (idWallet) {
         const result = await userModel.getUserInfoByWalletId(idWallet)
