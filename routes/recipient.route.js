@@ -50,6 +50,44 @@ router.post('/addRecipientLocal', async (req, res) => {
 
 
 })
+router.post('/addRecipientForeign', async (req, res) => {
+    console.log('body:', req.body);
+    const { id, id_recipient ,walletId} = req.body;
+    if (id != id_recipient) {
+        RecipientModel.checkExistRecipientForegin(id, walletId).then(data => {
+            console.log('data:', data);
+            //Add recipient if not exist
+            if (data.length > 0) {
+                res.status(201).json({
+                    returnCode: -1,
+                    message: `Your recipients already Exist!!`,
+        
+                })
+            }
+            else {
+                RecipientModel.addRecipient(req.body).then(data => {
+                    res.status(201).json({
+                        returnCode: 1,
+                        message: `Add Recipient Successs`,
+                        data
+                    })
+                })
+            }
+
+        })
+    }
+    //add account la recipient
+    else
+    {
+        res.status(201).json({
+            returnCode: -2,
+            message: `You can't add yourself to recipients`,
+
+        })
+    }
+
+
+})
 router.put('/editRecipient', async (req, res) => {
 
     if (req.body) {
@@ -153,9 +191,7 @@ router.get('/getRecipientForeign/:id', async (req, res) => {
 
     if (id) {
         const result = await RecipientModel.getRecipientForeign(id)
-        result.forEach(element => {
-            element.walletId = encodeWalletId(element.walletId, false);
-        });
+      
 
 
         res.status(200).json({

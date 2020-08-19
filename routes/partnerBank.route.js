@@ -526,6 +526,7 @@ router.post("/send-money", async (req, res) => {
   //     money:
   //     content:
   // }
+  console.log('body:', req.body)
   partnerInfoKey = Info[req.body.idBank];
   console.log(partnerInfoKey);
 
