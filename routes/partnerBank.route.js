@@ -14,6 +14,7 @@ const md5 = require("md5");
 const axios = require("axios");
 
 const hostPGP = "https://final-ib.herokuapp.com";
+//const hostPGP = "http://a9b19e70fb9e.ngrok.io";
 
 const {
   encodeWalletId,
@@ -33,17 +34,13 @@ const MyprivateKeyArmored = Info["bankdbb"].privatePGPKey;
 const passphrase = `yourPassphrase`;
 
 const decrypt = (req) => {
-  console.log("sig: " + req.body.signature);
   let request;
   try {
     request = privateKey.decrypt(req.body.signature, "json");
   } catch (err) {
-    console.log(err);
-    console.log("Wrong key");
     return false;
   }
 
-  console.log(request);
   return request;
 };
 
@@ -51,8 +48,6 @@ const checkRSASig = (partnerInfo, sig) => {
   try {
     //const pubKey = config.
     publickeyParnter = new NodeRSA(partnerInfo.PublicRSAKey);
-    console.log("sig input: ", sig);
-    console.log("partnerInfo.SecretKey: ", partnerInfo.SecretKey);
 
     let res = publickeyParnter.verify(
       partnerInfo.SecretKey,
@@ -61,10 +56,8 @@ const checkRSASig = (partnerInfo, sig) => {
       "base64"
     );
 
-    console.log(res);
     return res;
   } catch (err) {
-    console.log("error verify: " + err);
     return false;
   }
 };
@@ -72,12 +65,8 @@ const generateRSASig = (secretKey) => {
   try {
     sig = privateKey.sign(secretKey, "base64", "base64");
 
-    console.log(sig);
-
     return sig;
-  } catch (err) {
-    console.log("error sig: " + err);
-  }
+  } catch (err) {}
 };
 const checkPGPSig = async (partnerInfo, verify) => {
   let publicKeyArmored = partnerInfo.PublicKey;
@@ -98,27 +87,16 @@ const checkTime = (time) => {
 };
 
 const checkHash = (hash, ts, data, secretKey) => {
-  console.log("hash: " + hash);
-
-  console.log("ts: " + ts);
 
   data = JSON.stringify(data);
-
-  console.log("data: " + data);
-
-  console.log("secretKey: " + secretKey);
-
-  console.log(sha1(ts + ":" + data + ":" + secretKey));
 
   return hash === sha1(ts + ":" + data + ":" + secretKey);
 };
 
 const createHash = (ts, data, secrectKey) => {
-  console.log("before hash: " + ts + ":" + data + ":" + secrectKey);
 
   const hash = sha1(ts + ":" + data + ":" + secrectKey);
 
-  console.log("hash: " + hash);
 
   return hash;
 };
@@ -147,16 +125,21 @@ async function signPGP() {
 }
 
 const sendMoneyPGP = async (body) => {
-  console.log("send money");
   let result;
   let time = Math.floor(Date.now() / 1000);
 
   const bodyToSend = {
-    fromAccountNumber: body.idUser,
+    fromAccountNumber: encodeWalletId(body.idUser),
     amount: body.money,
     content: body.content,
     toAccountNumber: body.credit_number,
   };
+
+  const hash = sha1(time + JSON.stringify(bodyToSend) + "thisisatokenfroma");
+  console.log("hash: ", hash);
+
+  console.log('body to send: ', JSON.stringify(bodyToSend));
+  console.log('data to hash: ', time + JSON.stringify(bodyToSend) + "thisisatokenfroma");
 
   await signPGP().then((x) => {
     console.log("buffer: ", new Buffer.from(x).toString("base64"));
@@ -164,10 +147,10 @@ const sendMoneyPGP = async (body) => {
     return axios
       .post(
         url, {
-          bodyToSend,
+          ...bodyToSend,
         }, {
           headers: {
-            csi: sha1(time + JSON.stringify(bodyToSend) + "thisisatokenfroma"),
+            csi: hash,
             partnerCode: "rsa-bank",
             timestamp: time,
             detachedSignature: new Buffer.from(x).toString("base64"),
@@ -176,7 +159,11 @@ const sendMoneyPGP = async (body) => {
       )
       .then((response) => {
         console.log("response: ");
-        console.log(response);
+        //console.log(response);
+        if (response.data.status === 'failed') {
+          result = false;
+          return;
+        }
         result = true;
         //return response.data;
       })
@@ -220,7 +207,9 @@ const sendMoneyRSA = async (data) => {
   let result;
 
   await axios
-    .post("http://bank-backend.khuedoan.com/api/partner/deposit", body, {
+    .post("http://bank-backend.khuedoan.com/api/partner/deposit", {
+      ...body
+    }, {
       //axios.get('https://bankdbb.herokuapp.com/account/1', {
       headers: {
         "authen-hash": hash,
@@ -230,6 +219,7 @@ const sendMoneyRSA = async (data) => {
       },
     })
     .then((responseR) => {
+      //console.log("response: ", responseR);
       result = true;
       return true;
     })
@@ -459,12 +449,9 @@ router.post("/add-money", async (req, res) => {
   }
 
   if (!checkTime(req.headers.ts)) {
-    console.log("The request is out of date!");
     response(res, "err", "The request is out of date!");
     return;
   }
-
-  console.log('body: ', req.body);
 
   //thực hiện api
   const idParent = decodeWalletId(req.body.number);
@@ -487,8 +474,6 @@ router.post("/add-money", async (req, res) => {
     return;
   }
 
-  console.log("CurrentMoney before: ", CurrentMoney);
-
   CurrentMoney += parseInt(req.body.money);
 
   const resultSetMoney = await moneyModel.setMoney({
@@ -496,15 +481,11 @@ router.post("/add-money", async (req, res) => {
     idParent,
   });
 
-  console.log("CurrentMoney after: ", CurrentMoney);
 
   if (!resultSetMoney) {
     response(res, "err", "error update money");
     return;
   }
-
-  console.log("partner: ", req.body.username);
-  console.log("bankName: ", req.headers.id);
 
   try {
     await partnerBankModel.addToHistory({
@@ -531,9 +512,7 @@ router.post("/send-money", async (req, res) => {
   //     money:
   //     content:
   // }
-  console.log('body:', req.body)
   partnerInfoKey = Info[req.body.idBank];
-  console.log(partnerInfoKey);
 
   const CodeBankPGP = "rsa-bank";
   const CodeBankRSA = "kianto";
@@ -550,10 +529,10 @@ router.post("/send-money", async (req, res) => {
     return;
   }
 
-  console.log(resultSendMoney);
 
   if (!resultSendMoney) {
     response(res, "err", "send money false", "");
+    return;
   }
 
   //minus money
@@ -571,7 +550,6 @@ router.post("/send-money", async (req, res) => {
     return;
   }
 
-  console.log("CurrentMoney before: ", CurrentMoney);
 
   CurrentMoney -= req.body.money;
 
@@ -580,7 +558,6 @@ router.post("/send-money", async (req, res) => {
     idParent,
   });
 
-  console.log("CurrentMoney after: ", CurrentMoney);
 
   if (!resultSetMoney) {
     response(res, "err", "error update money");
@@ -601,15 +578,12 @@ router.post("/send-money", async (req, res) => {
 
     response(res, "", "send money successfull", "");
   } catch (err) {
-    console.log("save failed: ", err);
     response(res, "err", "save to history false", "");
   }
 });
 
 router.get("/info-partner/:idBank/:credit_number", async (req, res) => {
   const CodeBankPGP = "rsa-bank";
-
-  console.log("req.params.credit_number:", req.params.credit_number);
 
   if (req.params.idBank == CodeBankPGP) getInfoPGP(res);
   else getInfoRSA(res, req.params.credit_number);
