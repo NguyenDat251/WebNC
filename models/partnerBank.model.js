@@ -8,7 +8,7 @@ module.exports = {
         t.user = a.id and
         t.bankcode = b.bankcode 
         and Time >= ${TimeFrom} 
-        and Time < ${TimeTo} 
+        and Time <= ${TimeTo} 
         and b.bankcode LIKE '%${nameBank}%'`);
   },
 
@@ -49,21 +49,6 @@ module.exports = {
       return;
     }
 
-    //check time
-
-    // if(sig.checkTime(req.headers.ts)){
-    //     res.json({
-    //         "returnCode": 0,
-    //         "returnMessage": "The request is out of date",
-    //         "data": null
-    //     })
-
-    //     return;
-    // }
-
-    //trả res
-
-    // if(sig.checkPGPSig(req.headers.sig)){
 
     let TransactionAccount = null;
     let SavingAccount = [];
@@ -116,14 +101,6 @@ module.exports = {
       });
     });
 
-    // }else{
-    //     console.log("Access denied!")
-    //     res.json({
-    //         "returnCode": 0,
-    //         "returnMessage": "Access denied!",
-    //         "data": null
-    //     })
-    // }
   },
   addMoney: async (req, res) => {
     let sql = "SELECT * FROM moneyaccount WHERE id=?";
@@ -198,7 +175,9 @@ module.exports = {
     let sql = "UPDATE member SET ? WHERE id = ?";
     db.query(sql, [data, memberId], (err, response) => {
       if (err) throw err;
-      res.json({ message: "Update success!" });
+      res.json({
+        message: "Update success!"
+      });
     });
   },
   addToHistory: (entity) => {

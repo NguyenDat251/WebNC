@@ -202,7 +202,7 @@ function RSASign(data) {
   return signature;
 }
 
-const sendMoneyRSA = async (res, data) => {
+const sendMoneyRSA = async (data) => {
   const secretKey = "Tj0xYDEDiQF9f2GYCxSv";
   const time = Math.floor(Date.now() / 1000);
   const body = {
@@ -211,11 +211,6 @@ const sendMoneyRSA = async (res, data) => {
   };
   const dataToHash = time + secretKey + JSON.stringify(body);
   const hash = crypto.createHash("sha256").update(dataToHash).digest("base64");
-
-  // console.log("dataToHash: ", dataToHash);
-  // console.log("time: ", time);
-  // console.log("hash: ", hash);
-  // console.log("sig: ", RSASign(dataToHash));
 
   let result;
 
@@ -230,20 +225,10 @@ const sendMoneyRSA = async (res, data) => {
       },
     })
     .then((responseR) => {
-      console.log("data");
-      console.log(responseR.data);
-      //console.log(response.data.data);
-      //response(res, "", "send money", responseR.data);
-
       result = true;
       return true;
     })
     .catch((error) => {
-      console.log("error: ");
-      //console.log("error: ", error.response);
-      //response(res, "err", "send money false", error);
-      //console.log(error);
-
       result = false;
       return false;
     });
@@ -544,7 +529,7 @@ router.post("/send-money", async (req, res) => {
   partnerInfoKey = Info[req.body.idBank];
   console.log(partnerInfoKey);
 
-  const CodeBankPGP = "thisisatokenfroma";
+  const CodeBankPGP = "rsa-bank";
   const CodeBankRSA = "kianto";
   const idBank = req.body.idBank;
   //const idParent = req.params.id;
@@ -616,7 +601,7 @@ router.post("/send-money", async (req, res) => {
 });
 
 router.get("/info-partner/:idBank/:credit_number", async (req, res) => {
-  const CodeBankPGP = "thisisatokenfroma";
+  const CodeBankPGP = "rsa-bank";
 
   console.log("req.params.credit_number:", req.params.credit_number);
 
