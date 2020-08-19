@@ -17,7 +17,11 @@ module.exports = {
         return db.load(sqlUpdate)
     },
     checkExistRecipient: async(id,id_recipient)=>{
-        return db.load(`SELECT * FROM recipients where id = '${id}' and id_recipient ='${id_recipient}'`);
+        return db.load(`SELECT * FROM recipients where id = '${id}' and  id_recipient ='${id_recipient}'`);
+
+    },
+    checkExistRecipientForegin: async(id,walletId)=>{
+        return db.load(`SELECT * FROM recipients where id = '${id}' and isLocal=0 and walletId =${walletId}`);
 
     },
     deleteRecipient: async (data) => {
@@ -67,7 +71,7 @@ module.exports = {
        
         select distinct r.name_recipient as fullname,r.bank_LinkId,ob.Name from recipients as r left join otherbank as ob on r.bank_LinkId = ob.BankCode
         where r.walletId = '${walletId}' and isLocal =0;`
- console.log('Track recipient Foreign:', query)
+        console.log('Track recipient Foreign:', query)
 
         return db.load(query);
     },

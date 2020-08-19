@@ -211,7 +211,7 @@ const sendMoneyRSA = async (res, data) => {
       console.log("data")
       console.log(responseR.data);
       //console.log(response.data.data);
-      response(res, '', 'send money', responseR.data);
+      response(res, '', 'Send Money to Kianto Bank Success', responseR.data);
 
       return true;
     })
@@ -256,7 +256,7 @@ const getInfoRSA = (res, credit_number) => {
   const dataToHash = time + 'Tj0xYDEDiQF9f2GYCxSv' + `{}`;
   const hash = crypto.createHash('sha256').update(dataToHash).digest('base64');
 
-  console.log("credit_number:", credit_number);
+  console.log("credit_number1234:", credit_number);
   axios.get('http://bank-backend.khuedoan.com/api/partner/get-account-info?credit_number=' + credit_number, {
       //axios.get('https://bankdbb.herokuapp.com/account/1', {
       headers: {
@@ -266,6 +266,7 @@ const getInfoRSA = (res, credit_number) => {
       }
     })
     .then(rp => {
+      console.log('rp:', rp)
       if (rp.data.returnCode == '0') {
         console.log("return code 0");
         console.log(rp.data)
@@ -490,6 +491,7 @@ router.post('/send-money', async (req, res) => {
   //     money:
   //     content:
   // }
+  console.log('body:', req.body)
   partnerInfoKey = Info[req.body.idBank];
   console.log(partnerInfoKey);
 
@@ -502,8 +504,7 @@ router.post('/send-money', async (req, res) => {
     resultSendMoney = await sendMoneyPGP(res, req.body)
   else
     resultSendMoney = await sendMoneyRSA(res, req.body)
-
-  console.log(resultSendMoney);
+    console.log('resultSendMoney:', resultSendMoney)
 
   if (resultSendMoney) {
     //add to history
