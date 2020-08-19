@@ -1,16 +1,15 @@
 module.exports = {
-
-    getInfo: () => {
-        return {
-            "rsa-bank": {
-                SecretKey: "thisisatokenfroma",
-                PublicRSAKey: `-----BEGIN PUBLIC KEY-----
+  getInfo: () => {
+    return {
+      "rsa-bank": {
+        SecretKey: "thisisatokenfroma",
+        PublicRSAKey: `-----BEGIN PUBLIC KEY-----
                             MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCEUZJwvTYorustQY+F3iqhJe+M
                             +vk10V1gd+tXAT5eQ6Bfx/EOEEoFiwnH/I5KmRx3D3a2GHgWYILDnCVo5Kn6HH/R
                             Iuvi11rlvK5C798WYRjvNkOlcfI3M6ixQf+fAJSnflOqCcoPp/RM0HgcywoTkNWK
                             PQYpPpk9tno/qlOcwwIDAQAB
                             -----END PUBLIC KEY-----`,
-                PublicKey: `-----BEGIN PGP PUBLIC KEY BLOCK-----
+        PublicKey: `-----BEGIN PGP PUBLIC KEY BLOCK-----
                             Version: Keybase OpenPGP v1.0.0
                             Comment: https://keybase.io/crypto
                             
@@ -65,27 +64,27 @@ module.exports = {
                             u5RMN8INapOvye5lCw==
                             =JFcr
                             -----END PGP PUBLIC KEY BLOCK-----`,
-                host: ''
-            },
-            kianto: {
-                SecretKey: "Tj0xYDEDiQF9f2GYCxSv",
-                PublicKey: `-----BEGIN PUBLIC KEY-----
+        host: "",
+      },
+      kianto: {
+        SecretKey: "Tj0xYDEDiQF9f2GYCxSv",
+        PublicKey: `-----BEGIN PUBLIC KEY-----
             MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJlQZ/m1+iLfK/lpYDmicle6v0
             llLWtdYhSkH6buiOrNbaXVH//ZcG9TpOLU1vL+PkvprCZ/N1Stqz0xNrzcdT0zFI
             xQSr31fB1qzD2+T4njBcGROStv0uxhaarmWVJwjLia0rlL7grRL0axw4rESM9nsN
             be8XnJGVKtFy9MXHBwIDAQAB
             -----END PUBLIC KEY-----`,
-                PublicRSAKey: `-----BEGIN PUBLIC KEY-----
+        PublicRSAKey: `-----BEGIN PUBLIC KEY-----
             MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCJlQZ/m1+iLfK/lpYDmicle6v0
             llLWtdYhSkH6buiOrNbaXVH//ZcG9TpOLU1vL+PkvprCZ/N1Stqz0xNrzcdT0zFI
             xQSr31fB1qzD2+T4njBcGROStv0uxhaarmWVJwjLia0rlL7grRL0axw4rESM9nsN
             be8XnJGVKtFy9MXHBwIDAQAB
             -----END PUBLIC KEY-----`,
-                host: 'http://bank-backend.khuedoan.com/'
-            },
-            bankdbb: {
-                SecretKey: "bankdbb",
-                privateKey: `-----BEGIN RSA PRIVATE KEY-----
+        host: "http://bank-backend.khuedoan.com/",
+      },
+      bankdbb: {
+        SecretKey: "bankdbb",
+        privateKey: `-----BEGIN RSA PRIVATE KEY-----
 MIICWwIBAAKBgHvGfCrOsLPolKTOprqzguNp85gkGdh/wbCBtXBtX7ObMSPqBN0a
 FgijRfn0NKolIn0ievEiab82ttBO57FGgNWG+fm/CqX72dOpit9A5WqdwKY5iI/0
 yO+WNMtJqLwJ5qs/Cp0EwFAbqMh/4Uxsyaiw029hX2IJEdW8oYb+0mwPAgMBAAEC
@@ -100,7 +99,15 @@ W4vRMjuB9VqKvrbzATHeVQj2T2/d1g8B/6+nTe6Wubuo2FMNhF3CkvZqpRQaMns1
 Pzego9xqi4i3BZDHAkEAjGkNaEYa9PiQiBUUY9po/7CzWsIdASxR+w4B4D2cHPhE
 Fv0qItIcqtVZynrY/Co62t5sF0fLBjBZb7X+h0F9jw==
 -----END RSA PRIVATE KEY-----`,
-                privatePGPKey: `-----BEGIN PGP PRIVATE KEY BLOCK-----
+        publicKey: `-----BEGIN PUBLIC KEY-----
+MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgHvGfCrOsLPolKTOprqzguNp85gk
+Gdh/wbCBtXBtX7ObMSPqBN0aFgijRfn0NKolIn0ievEiab82ttBO57FGgNWG+fm/
+CqX72dOpit9A5WqdwKY5iI/0yO+WNMtJqLwJ5qs/Cp0EwFAbqMh/4Uxsyaiw029h
+X2IJEdW8oYb+0mwPAgMBAAE=
+-----END PUBLIC KEY-----`,
+        // PublicRSAKey: `-----BEGIN PUBLIC KEY-----
+
+        privatePGPKey: `-----BEGIN PGP PRIVATE KEY BLOCK-----
 Version: Keybase OpenPGP v1.0.0
 Comment: https://keybase.io/crypto
 
@@ -158,18 +165,18 @@ ciwCLX6LYUgvz7Fi/MxthKboqA7t4rM7LWk=
 =Sghu
 -----END PGP PRIVATE KEY BLOCK-----
 `,
-                PublicKey: `-----BEGIN PUBLIC KEY-----
+        PublicKey: `-----BEGIN PUBLIC KEY-----
                             MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSHgxSkQ2wHFcV/lxVOZPOemKd
                             ho4Hpl95JSD0kUQE/3WYeroRUeGLNm86s8EWg5tREzLIi2CzJ1Q6fcHvPHjg8Mr/
                             WLU4YvS8h5i1Jk+Kd7lf5VEaWFuAX+bEuQ7qt0TAx07o3HOJDNfG/d6k1rLg346y
                             scQzONE8Ui++wGJM+wIDAQAB-----END PUBLIC KEY-----`,
-                PublicRSAKey: `-----BEGIN PUBLIC KEY-----
+        PublicRSAKey: `-----BEGIN PUBLIC KEY-----
+
                             MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSHgxSkQ2wHFcV/lxVOZPOemKd
                             ho4Hpl95JSD0kUQE/3WYeroRUeGLNm86s8EWg5tREzLIi2CzJ1Q6fcHvPHjg8Mr/
                             WLU4YvS8h5i1Jk+Kd7lf5VEaWFuAX+bEuQ7qt0TAx07o3HOJDNfG/d6k1rLg346y
-                            scQzONE8Ui++wGJM+wIDAQAB-----END PUBLIC KEY-----`
-            }
-        }
-
-    }
-}
+                            scQzONE8Ui++wGJM+wIDAQAB-----END PUBLIC KEY-----`,
+      },
+    };
+  },
+};
