@@ -3,8 +3,11 @@
 ![Badge](https://gitlab.com/khuedoan/internet-banking/badges/master/pipeline.svg)
 
 - [Internet Banking](#internet-banking)
+
   - [Hướng dẫn sử dụng api](#hướng-dẫn-sử-dụng-api)
+
     - [API dành cho partner](#api-dành-cho-partner)
+
       - [Lấy thông tin tài khoản khách hàng bằng số tài khoản](#lấy-thông-tin-tài-khoản-khách-hàng-bằng-số-tài-khoản)
       - [Chuyển tiền vào tài khoản](#nạp-tiền-vào-tài-khoản)
 
@@ -13,11 +16,18 @@
       - [Xem danh sách ngân hàng](#Xem-danh-sách-ngân-hàng)- [Internet Banking](#internet-banking)
     - [API dành cho USER](#api-dành-cho-user)
       - [Xem lịch sử giao dịch](#Xem-lịch-sử-giao-dịch)
-  
 
 ## Hướng dẫn sử dụng api
 
 ### API dành cho partner
+
+```json
+Danh sach tai khoan
+1208068
+1208054
+1208047
+1208096
+```
 
 #### Lấy thông tin tài khoản khách hàng bằng số tài khoản
 
@@ -31,7 +41,7 @@ HEADER
 
 ```
 
-- timestamp là thời điểm gởi request, format sử dụng unix utc second, có thể  xem ở [https://www.epochconverter.com/,](https://www.epochconverter.com/,) lưu ý timestamp không được **lớn hơn** hoặc nhỏ hơn quá **300**s so với thời gian thực
+- timestamp là thời điểm gởi request, format sử dụng unix utc second, có thể xem ở [https://www.epochconverter.com/,](https://www.epochconverter.com/,) lưu ý timestamp không được **lớn hơn** hoặc nhỏ hơn quá **300**s so với thời gian thực
 - partner-code là chuỗi code để xác định partner nào đã đăng kí api
 - authen-hash là chuỗi hash sha1 của **(timestamp+":"+JSON.stringify(body))+":"+secret**, nếu body empty thì là **{}**,sau đó được encode hex lại và gửi đi, ví dụ ở trên
 - Không yêu cầu **verify**
@@ -54,7 +64,7 @@ BODY
 - sig là chuỗi signature được tạo bởi thuật toán **RSA** của chuỗi **secret**, xem ví dụ sau:
 
 ```javascript
-sig = privateKey.sign(secretKey, 'base64', 'base64');
+sig = privateKey.sign(secretKey, "base64", "base64");
 ```
 
 -number: số tài khoản.
@@ -68,9 +78,8 @@ sig = privateKey.sign(secretKey, 'base64', 'base64');
 #### Xem lịch sử giao dịch với ngân hàng khác
 
 ```json
-GET /api/partner-bank/transaction
+GET / api / partner - bank / transaction
 //?time=062020&from=1&to=15&name=bankdbb
-
 ```
 
 - time: tháng muốn coi lịch sử, định dạng MMYYYY.
@@ -80,7 +89,7 @@ GET /api/partner-bank/transaction
 #### Xem danh sách ngân hàng
 
 ```json
-GET /api/partner-bank/banks
+GET / api / partner - bank / banks
 ```
 
 ### API giao dịch với ngân hàng khác
@@ -95,8 +104,8 @@ GET /api/partner-bank/info-partner/:idBank/:credit_number
 - idBank: id ngân hàng đối tác.
   Hiện có 2 id: kianto và rsa-bank
 - credit_number: số tài khoản.
-    kianto: 565572661049
-    rsa-bank: không cần truyền (tạm thời)
+  kianto: 565572661049
+  rsa-bank: không cần truyền (tạm thời)
 
 #### Chuyển tiền tới ngân hàng khác
 
@@ -111,7 +120,9 @@ body {
     "content": "(nội dung)"
 }
 ```
+
 ### API dành cho user
+
 #### Xem lịch sử
 
 ```json
