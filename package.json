@@ -30,7 +30,7 @@
     "nodemailer": "^6.4.8",
     "nodemon": "^2.0.2",
     "openpgp": "^4.10.4",
-    "otp-generator": "^1.1.0",
+    "otp-generator": "^3.0.0",
     "rand-token": "^1.0.1",
     "sha1": "^1.1.1"
   },
